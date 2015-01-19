@@ -1,0 +1,3 @@
+[submodule "ISRSpectrum/const"]
+	path = ISRSpectrum/const
+	url = https://github.com/jswoboda/PythonISRUtilities.git

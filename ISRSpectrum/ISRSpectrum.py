@@ -16,7 +16,7 @@ import numpy as np
 import scipy.special
 import pdb
 from const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-
+from const.mathutils
 class ISRSpectrum(object):
     """ Class to create the spectrum. The instance of the class will hold infomation on
     the radar system such as sample frequency, center frequency and number of points for
@@ -95,7 +95,7 @@ class ISRSpectrum(object):
         spec = iline+eline
         return (self.f,spec)
 
-    def __calcgordeyev__(self,dataline,alpha):
+    def __calcgordeyev__(self,dataline,alpha,alphdiff = 10.0):
         """ Performs the Gordeyve integral calculation.
         Inputs
         dataline: A numpy array of length that holds the plasma parameters needed
@@ -115,7 +115,7 @@ class ISRSpectrum(object):
         Ns: The density of the species in m^-3
         omeg_s: An array of the Doppler corrected radian frequency
         """
-        aldiff = np.abs(alpha*180.0/np.pi-90.0)<1;
+
         K = self.K
 
         (Ns,Ts,Vs,qs,ms,nus) = dataline[:7]
@@ -123,11 +123,43 @@ class ISRSpectrum(object):
         C = np.sqrt(v_Boltz*Ts/ms)
         omeg_s = self.omeg - K*Vs
         theta = omeg_s/(K*C*np.sqrt(2.0))
+        Om = qs*self.bMag/ms
+        # determine what integral is used
+        magbool = np.abs(alpha*180.0/np.pi-90.0)>alphdiff
+        collbool = K*C<10.0*nus
+        N
 
-
-        if K*C>10.0*nus and aldiff:
-            #for case with no collisions and magnetic field
+        if  not collbool and not magbool:
+            #for case with no collisions or magnetic field
             gord = (np.sqrt(np.pi)*np.exp(-theta**2)-1j*2.0*scipy.special.dawsn(theta))/(K*C*np.sqrt(2))
+            return (gord,hs,Ns,omeg_s)
+        elif collbool and not magbool:
+            gordfunc = collacf
+            exparams = (K,C,nus)
+        elif not collbool and magbool:
+            gordfunc = magacf
+            exparams = (K,C,alpha,Om)
+        else:
+            gordfunc = magncollacf
+            exparams = (K,C,alpha,Om,nu)
 
+        N_somm = 2**9
+        b1 = 100.0/(K*C*np.sqrt(2.0))
 
+        (gord,flag_c,outrep) = sommerfelderfrep(func,N_somm,omega_s,b1,Lmax=100,errF=1e-2,exparams=exparams):
         return (gord,hs,Ns,omeg_s)
+
+def magacf(tau,K,C,alpha,Om):
+    Kpar = np.sin(alpha)*K
+    Kperp = np.cos(alpha)*K
+    return np.exp(-np.power(C*Kpar*tau,2.0)/2.0-2.0*np.power(Kperp*C*np.sin(Om*tau/2.0)/Om,2.0))
+def collacf(tau,K,C,nu):
+    return np.exp(-np.power(K*C/nu,2.0)*(nu*tau-1+np.exp(-nu*tau)))
+def magncollacf(tau,K,C,alpha,Om,nu):
+    Kpar = np.sin(alpha)*K
+    Kperp = np.cos(alpha)*K
+    gam = np.arctan(nu/Om)
+
+    deltl = np.exp(-np.power(Kpar*C/nu,2.0)*(nu*tau-1+np.exp(-nu*tau)))
+    deltp = np.exp(-np.power(C*Kperp,2.0)/(Om*Om+nu*nu)*(np.cos(2*gam)+nu*tau-np.exp(-nu*tau)*(np.cos(Om*tau-2.0*gam))))
+    return deltl*deltp

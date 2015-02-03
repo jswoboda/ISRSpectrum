@@ -81,7 +81,7 @@ class ISRSpectrum(object):
             print "Calculating Gordeyev int for electons"
         (egord,h_e,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
 
-        sig_e = (1-1j*omeg_e*egord)/(self.K**2*h_e**2)
+        sig_e = (1j+omeg_e*egord)/(self.K**2*h_e**2)
         nte = 2*Ne*np.real(egord)
 
         #adjust ion stuff
@@ -89,23 +89,31 @@ class ISRSpectrum(object):
         ionstuff[:,4] = ionstuff[:,4]*v_amu
         ionden = np.sum(ionstuff[:,0])
         ionstuff[:,0] = (estuff[0]/ionden)*ionstuff[:,0]
+        # mu=Ti/Te, tempreture ratio
+        muvec = ionstuff[:,1]/estuff[1]
+        # ratio of charges between ion species and electrons
+        qrotvec = ionstuff[:,3]/estuff[3]
         firstion = True
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
                 print "Calculating Gordeyev int for ion species #{:d}".format(iion)
             (igord,h_i,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
-            sig_i = (1-1j*omeg_i*igord)/(self.K**2*h_i**2)
+            # sub out ion debye length because zero density of ion species can cause a divid by zero error.
+            mu = muvec[iion]
+            qrot = qrotvec[iion]
+            sig_i = (Ni/Ne)*(1j+omeg_i*igord)/(self.K**2*mu*h_e**2/qrot**2)
             nti = 2*Ni*np.real(igord)
             if firstion:
                 sig_sum =sig_i
                 nt_sum = nti
+                firstion=False
             else:
                 sig_sum = sig_i+sig_sum
                 nt_sum = nti+nt_sum
 
         inum = np.abs(sig_e)**2*nt_sum
-        enum = np.abs(1+sig_sum)**2*nte
-        den = np.abs(1 + sig_sum +sig_e)**2
+        enum = np.abs(1j+sig_sum)**2*nte
+        den = np.abs(1j + sig_sum +sig_e)**2
         iline = inum/den
         eline = enum/den
         spec = iline+eline

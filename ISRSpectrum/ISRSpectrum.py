@@ -12,7 +12,7 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
-import numpy as np
+import scipy as sp
 import scipy.special
 import pdb
 from const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
@@ -45,12 +45,12 @@ class ISRSpectrum(object):
         self.collfreqmin = collfreqmin
         self.alphamax = alphamax
 
-        self.K = 2.0*np.pi*2*centerFrequency/v_C_0 #The Bragg scattering vector, corresponds to half the radar wavelength.
+        self.K = 2.0*sp.pi*2*centerFrequency/v_C_0 #The Bragg scattering vector, corresponds to half the radar wavelength.
 
-        self.f = np.arange(-np.ceil((nspec-1.0)/2.0),np.floor((nspec-1.0)/2.0+1))*(sampfreq/(2*np.ceil((nspec-1.0)/2.0)))
-        self.omeg = 2.0*np.pi*self.f
+        self.f = sp.arange(-sp.ceil((nspec-1.0)/2.0),sp.floor((nspec-1.0)/2.0+1))*(sampfreq/(2*sp.ceil((nspec-1.0)/2.0)))
+        self.omeg = 2.0*sp.pi*self.f
 
-    def getspec(self,datablock,alphadeg=90.0):
+    def getspec(self,datablock,alphadeg=90.0,rcsflag=False):
         """ Gives the spectrum and the frequency vectors given the block of data and
         the magnetic aspect angle.
         Inputs
@@ -72,37 +72,41 @@ class ISRSpectrum(object):
         # perform a copy of the object to avoid it being written over with incorrect.
         datablock=datablock.copy()
         dFlag = self.dFlag
-        alpha = alphadeg*np.pi/180
+        alpha = alphadeg*sp.pi/180
         estuff = datablock[0]
         estuff[3] = -v_elemcharge
         estuff[4] = v_me
         ionstuff = datablock[1:]
         if dFlag:
             print "Calculating Gordeyev int for electons"
-        (egord,h_e,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
-
+        (egord,Te,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
+        h_e = sp.sqrt(v_epsilon0*v_Boltz*Te/(Ne*v_elemcharge*v_elemcharge))
         sig_e = (1j+omeg_e*egord)/(self.K**2*h_e**2)
-        nte = 2*Ne*np.real(egord)
+        nte = 2*Ne*sp.real(egord)
 
         #adjust ion stuff
         ionstuff[:,3] = ionstuff[:,3]*v_elemcharge
         ionstuff[:,4] = ionstuff[:,4]*v_amu
-        ionden = np.sum(ionstuff[:,0])
+        ionden = sp.sum(ionstuff[:,0])
         ionstuff[:,0] = (estuff[0]/ionden)*ionstuff[:,0]
-        # mu=Ti/Te, tempreture ratio
-        muvec = ionstuff[:,1]/estuff[1]
+
         # ratio of charges between ion species and electrons
         qrotvec = ionstuff[:,3]/estuff[3]
         firstion = True
+        wevec = sp.zeros((len(ionostuff)))
+        Tivec = sp.zeros((len(ionostuff)))
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
                 print "Calculating Gordeyev int for ion species #{:d}".format(iion)
-            (igord,h_i,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
+            (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
+            wevec[iion] = Ni/Ne
+            Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species can cause a divid by zero error.
-            mu = muvec[iion]
+            # mu=Ti/Te, tempreture ratio
+            mu = Ti/Te
             qrot = qrotvec[iion]
             sig_i = (Ni/Ne)*(1j+omeg_i*igord)/(self.K**2*mu*h_e**2/qrot**2)
-            nti = 2*Ni*np.real(igord)
+            nti = 2*Ni*sp.real(igord)
             if firstion:
                 sig_sum =sig_i
                 nt_sum = nti
@@ -111,13 +115,19 @@ class ISRSpectrum(object):
                 sig_sum = sig_i+sig_sum
                 nt_sum = nti+nt_sum
 
-        inum = np.abs(sig_e)**2*nt_sum
-        enum = np.abs(1j+sig_sum)**2*nte
-        den = np.abs(1j + sig_sum +sig_e)**2
+        inum = sp.absolute(sig_e)**2*nt_sum
+        enum = sp.absolute(1j+sig_sum)**2*nte
+        den = sp.absolute(1j + sig_sum +sig_e)**2
         iline = inum/den
         eline = enum/den
         spec = iline+eline
-        return (self.f,spec)
+        if rcsflag:
+            Tr = Te/sp.sum(wevec*Tivec)
+            rcs = Ne/((1+self.K**2*h_e**2)*(1+self.K**2*h_e**2+Tr))
+
+            return (self.f,spec,rcs)
+        else:
+            return (self.f,spec)
 
     def __calcgordeyev__(self,dataline,alpha,alphdiff = 10.0):
         """ Performs the Gordeyve integral calculation.
@@ -141,24 +151,21 @@ class ISRSpectrum(object):
         """
         dFlag = self.dFlag
         K = self.K
-
         (Ns,Ts,Vs,qs,ms,nus) = dataline[:7]
-        hs = np.sqrt(v_epsilon0*v_Boltz*Ts/(Ns*qs*qs))
-        C = np.sqrt(v_Boltz*Ts/ms)
+        C = sp.sqrt(v_Boltz*Ts/ms)
         omeg_s = self.omeg - K*Vs
-        theta = omeg_s/(K*C*np.sqrt(2.0))
+        theta = omeg_s/(K*C*sp.sqrt(2.0))
         Om = qs*self.bMag/ms
         # determine what integral is used
-        magbool = alpha*180.0/np.pi < self.alphamax
+        magbool = alpha*180.0/sp.pi < self.alphamax
         collbool = self.collfreqmin*K*C<nus
 
-#        pdb.set_trace()
         if  not collbool and not magbool:
             #for case with no collisions or magnetic field just use analytic method
-            gord = (np.sqrt(np.pi)*np.exp(-theta**2)-1j*2.0*scipy.special.dawsn(theta))/(K*C*np.sqrt(2))
+            gord = (sp.sqrt(sp.pi)*sp.exp(-theta**2)-1j*2.0*scipy.special.dawsn(theta))/(K*C*sp.sqrt(2))
             if dFlag:
                 print '\t No collisions No magnetic field'
-            return (gord,hs,Ns,omeg_s)
+            return (gord,Ts,Ns,omeg_s)
         elif collbool and not magbool:
             if dFlag:
                 print '\t With collisions No magnetic field'
@@ -176,14 +183,14 @@ class ISRSpectrum(object):
             exparams = (K,C,alpha,Om,nus)
 
         N_somm = 2**9
-        b1 = 100.0/(K*C*np.sqrt(2.0))
+        b1 = 100.0/(K*C*sp.sqrt(2.0))
 
         (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=100,errF=1e-2,exparams=exparams)
         if dFlag:
             yna = ['No','Yes']
             print '\t Converged: {:s}, Number of iterations: {:d}'.format(yna[flag_c],outrep)
 
-        return (gord,hs,Ns,omeg_s)
+        return (gord,Ts,Ns,omeg_s)
 
 def magacf(tau,K,C,alpha,Om):
     """ magacf(tau,K,C,alpha,Om)
@@ -199,9 +206,9 @@ def magacf(tau,K,C,alpha,Om):
         Output
         acf - The single particle acf.
         """
-    Kpar = np.sin(alpha)*K
-    Kperp = np.cos(alpha)*K
-    return np.exp(-np.power(C*Kpar*tau,2.0)/2.0-2.0*np.power(Kperp*C*np.sin(Om*tau/2.0)/Om,2.0))
+    Kpar = sp.sin(alpha)*K
+    Kperp = sp.cos(alpha)*K
+    return sp.exp(-sp.power(C*Kpar*tau,2.0)/2.0-2.0*sp.power(Kperp*C*sp.sin(Om*tau/2.0)/Om,2.0))
 def collacf(tau,K,C,nu):
     """ collacf(tau,K,C,nu)
         by John Swoboda
@@ -215,7 +222,7 @@ def collacf(tau,K,C,nu):
         Output
         acf - The single particle acf.
         """
-    return np.exp(-np.power(K*C/nu,2.0)*(nu*tau-1+np.exp(-nu*tau)))
+    return sp.exp(-sp.power(K*C/nu,2.0)*(nu*tau-1+sp.exp(-nu*tau)))
 def magncollacf(tau,K,C,alpha,Om,nu):
     """ magncollacf(tau,K,C,alpha,Om)
         by John Swoboda
@@ -231,10 +238,10 @@ def magncollacf(tau,K,C,alpha,Om,nu):
         Output
         acf - The single particle acf.
         """
-    Kpar = np.sin(alpha)*K
-    Kperp = np.cos(alpha)*K
-    gam = np.arctan(nu/Om)
+    Kpar = sp.sin(alpha)*K
+    Kperp = sp.cos(alpha)*K
+    gam = sp.arctan(nu/Om)
 
-    deltl = np.exp(-np.power(Kpar*C/nu,2.0)*(nu*tau-1+np.exp(-nu*tau)))
-    deltp = np.exp(-np.power(C*Kperp,2.0)/(Om*Om+nu*nu)*(np.cos(2*gam)+nu*tau-np.exp(-nu*tau)*(np.cos(Om*tau-2.0*gam))))
+    deltl = sp.exp(-sp.power(Kpar*C/nu,2.0)*(nu*tau-1+sp.exp(-nu*tau)))
+    deltp = sp.exp(-sp.power(C*Kperp,2.0)/(Om*Om+nu*nu)*(sp.cos(2*gam)+nu*tau-sp.exp(-nu*tau)*(sp.cos(Om*tau-2.0*gam))))
     return deltl*deltp

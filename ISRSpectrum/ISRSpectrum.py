@@ -74,6 +74,7 @@ class ISRSpectrum(object):
         dFlag = self.dFlag
         alpha = alphadeg*sp.pi/180
         estuff = datablock[0]
+        Nions = datablock.shape[0]-1
         estuff[3] = -v_elemcharge
         estuff[4] = v_me
         ionstuff = datablock[1:]
@@ -93,8 +94,8 @@ class ISRSpectrum(object):
         # ratio of charges between ion species and electrons
         qrotvec = ionstuff[:,3]/estuff[3]
         firstion = True
-        wevec = sp.zeros((len(ionostuff)))
-        Tivec = sp.zeros((len(ionostuff)))
+        wevec = sp.zeros(Nions)
+        Tivec = sp.zeros(Nions)
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
                 print "Calculating Gordeyev int for ion species #{:d}".format(iion)

@@ -129,7 +129,20 @@ class ISRSpectrum(object):
             return (self.f,spec,rcs)
         else:
             return (self.f,spec)
+    def getspecsep(self,datablock,species,vel = 0.0, alphadeg=90.0,rcsflag=False):
+        """ [Ns, Ts, Vs, qs, ms, nus]"""
 
+        infodict = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),'N+':sp.array([1,14]), 'H+':sp.array([1,1]),'e-':sp.array([-1,1])}
+        nspec = datablock.shape[0]
+        datablocknew = sp.zeros((nspec,6))
+
+        for nspec, ispec in enumerate(species):
+            datablocknew[nspec,:2] = datablock[nspec]
+            datablocknew[nspec,2] = vel
+            datablocknew[nspec,3:5] = infodict[ispec]
+            #XXX Need to add collision frequency
+
+        return self.getspec(datablocknew,alphadeg,rcsflag)
     def __calcgordeyev__(self,dataline,alpha,alphdiff = 10.0):
         """ Performs the Gordeyve integral calculation.
         Inputs

@@ -17,6 +17,11 @@ import scipy.special
 import pdb
 from const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 from const.mathutils import sommerfelderfrep
+
+INFODICT = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),
+                'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),
+                'N+':sp.array([1,14]), 'H+':sp.array([1,1]),
+                'e-':sp.array([-1,1])}
 class ISRSpectrum(object):
     """ Class to create the spectrum. The instance of the class will hold infomation on
     the radar system such as sample frequency, center frequency and number of points for
@@ -26,9 +31,9 @@ class ISRSpectrum(object):
     K - The Bragg scattering vector magnitude corresponds to 1/2 radar wavelength.
     f - Vector holding the frequency values in Hz
     omeg - Vector hold the frequency values in rad/s
-    self.collfreqmin - Minimum collision frequency before they are taken into account in the Gordeyev integral calculation
-    self.alphamax - The maximum aspect angle
-    self.dFlag - A debug flag."""
+    collfreqmin - Minimum collision frequency before they are taken into account in the Gordeyev integral calculation
+    alphamax - The maximum aspect angle
+    dFlag - A debug flag."""
     def __init__(self,centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=64, sampfreq=50e3,collfreqmin=1e-2,alphamax=30.0,dFlag=False):
         """ Constructor for the class.
         Inputs :
@@ -66,8 +71,11 @@ class ISRSpectrum(object):
             nus - Collision frequency for species in s^-1.
         alphadeg: The magnetic aspect angle in degrees.
         Outputs
-        freqvec: The frequency vector in Hz.
-        spec: the spectrum in a numpy array.
+        f - A numpy array that holds the frequency vector associated with the spectrum,
+            in Hz.
+        spec - The resulting ISR spectrum from the parameters with the max value set to 1.
+        rcs - The RCS from the parcle of plasma for the given parameters. The RCS is
+            in m.
         """
         # perform a copy of the object to avoid it being written over with incorrect.
         datablock=datablock.copy()
@@ -130,16 +138,36 @@ class ISRSpectrum(object):
         else:
             return (self.f,spec)
     def getspecsep(self,datablock,species,vel = 0.0, alphadeg=90.0,rcsflag=False):
-        """ [Ns, Ts, Vs, qs, ms, nus]"""
+        """ This function is a different way of getting the spectrums. A datablock is
+        still used, (Nsp x 2) numpy array, but it is filled in by using the species
+        listed as a string in the list speces.
+        inputs
+        datablock - A numpy array of size Nsp x2. The first element of the row is the
+            density of species in m^-3 and the second element is the Tempreture in
+            degrees K.
+        species - A Nsp list of strings that label each species.
+        vel - The line of site velocity of the ions in m/s, default = 0.0
+        alphadeg - The angle offset from the magnetic field in degrees, default is 90.0
+        rcsflag - If this flag is True then a third output of the rcs will be made.
+            Default value is False
+        Outputs
+        f - A numpy array that holds the frequency vector associated with the spectrum,
+            in Hz.
+        spec - The resulting ISR spectrum from the parameters with the max value set to 1.
+        rcs - The RCS from the parcle of plasma for the given parameters. The RCS is
+            in m.
 
-        infodict = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),'N+':sp.array([1,14]), 'H+':sp.array([1,1]),'e-':sp.array([-1,1])}
+        """
+
+        assert Islistofstr(species),"Species needs to be a list of strings"
+        assert not allin(species,INFODICT.keys()), "Have un named species in the list."
         nspec = datablock.shape[0]
         datablocknew = sp.zeros((nspec,6))
 
         for nspec, ispec in enumerate(species):
             datablocknew[nspec,:2] = datablock[nspec]
             datablocknew[nspec,2] = vel
-            datablocknew[nspec,3:5] = infodict[ispec]
+            datablocknew[nspec,3:5] = INFODICT[ispec]
             #XXX Need to add collision frequency
 
         return self.getspec(datablocknew,alphadeg,rcsflag)
@@ -259,3 +287,20 @@ def magncollacf(tau,K,C,alpha,Om,nu):
     deltl = sp.exp(-sp.power(Kpar*C/nu,2.0)*(nu*tau-1+sp.exp(-nu*tau)))
     deltp = sp.exp(-sp.power(C*Kperp,2.0)/(Om*Om+nu*nu)*(sp.cos(2*gam)+nu*tau-sp.exp(-nu*tau)*(sp.cos(Om*tau-2.0*gam))))
     return deltl*deltp
+
+def Islistofstr(inlist):
+    """ This function will determine if the input is a list of strings"""
+    if not type(inlist)==list:
+        return False
+    for item in inlist:
+        if type(item)!=str:
+            return False
+    return True
+
+def allin(input,reflist):
+    """ This function will determine if all of the strings in the list input are in
+    the list reflist."""
+    for item in input:
+        if item not in reflist:
+            return False
+    return True

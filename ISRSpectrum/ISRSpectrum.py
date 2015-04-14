@@ -158,9 +158,8 @@ class ISRSpectrum(object):
             in m.
 
         """
-
         assert Islistofstr(species),"Species needs to be a list of strings"
-        assert not allin(species,INFODICT.keys()), "Have un named species in the list."
+        assert allin(species,INFODICT.keys()), "Have un named species in the list."
         nspec = datablock.shape[0]
         datablocknew = sp.zeros((nspec,6))
 

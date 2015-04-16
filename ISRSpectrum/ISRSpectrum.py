@@ -60,7 +60,7 @@ class ISRSpectrum(object):
         the magnetic aspect angle.
         Inputs
         datablock: A numpy array of size 1+Nionsx6 that holds the plasma parameters needed
-        to create the spectrum. The first row will hold the information for the electrons.
+        to create the spectrum. The last row will hold the information for the electrons.
         Each row of the array will have the following set up.
             [Ns, Ts, Vs, qs, ms, nus]
             Ns - The density of the species in m^-3
@@ -81,11 +81,11 @@ class ISRSpectrum(object):
         datablock=datablock.copy()
         dFlag = self.dFlag
         alpha = alphadeg*sp.pi/180
-        estuff = datablock[0]
+        estuff = datablock[-1]
         Nions = datablock.shape[0]-1
         estuff[3] = -v_elemcharge
         estuff[4] = v_me
-        ionstuff = datablock[1:]
+        ionstuff = datablock[:-1]
         if dFlag:
             print "Calculating Gordeyev int for electons"
         (egord,Te,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
@@ -97,6 +97,7 @@ class ISRSpectrum(object):
         ionstuff[:,3] = ionstuff[:,3]*v_elemcharge
         ionstuff[:,4] = ionstuff[:,4]*v_amu
         ionden = sp.sum(ionstuff[:,0])
+        # normalize total ion density to be the same as electron density
         ionstuff[:,0] = (estuff[0]/ionden)*ionstuff[:,0]
 
         # ratio of charges between ion species and electrons

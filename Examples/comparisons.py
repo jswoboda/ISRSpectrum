@@ -7,12 +7,9 @@ Created on Tue Feb  3 09:39:46 2015
 
 import numpy as np
 import matplotlib.pylab as plt
-from matplotlib import rc
-import time
-import pdb
 import RadarDataSim.ISSpectrum as ISSorig
 import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from ISRSpectrum.const.physConstants import v_Boltz, v_me, v_amu #v_C_0, v_epsilon0, v_elemcharge,
 
 
 
@@ -78,7 +75,7 @@ if __name__== '__main__':
 
 
         datablock = np.array([[Ne,ite,0,1,1,0],[Ne,ite,0,1,mi,0]])
-        print "\n Evaluation with Te=Ti = {:.2f} K\n".format(iten)
+        print("\n Evaluation with Te=Ti = {:.2f} K\n".format(iten))
         (omega,specoll) = ISS2.getspec(datablock)
         axarr[1].plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$T_e = {:.2f}  ^\circK$'.format(ite))
         if iten ==0:
@@ -116,7 +113,7 @@ if __name__== '__main__':
 
 
         datablock = np.array([[Ne,ite,0,1,1,0],[Ne,ti,0,1,mi,0]])
-        print "\n Evaluation with Te=Ti = {:.2f} K\n".format(iten)
+        print("\n Evaluation with Te=Ti = {:.2f} K\n".format(iten))
         (omega,specoll) = ISS2.getspec(datablock)
         axarrf[1].plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$T_e = {:.2f}  ^\circK$'.format(ite))
         if iten ==0:
@@ -155,7 +152,7 @@ if __name__== '__main__':
 
 
         datablock = np.array([[Ne,te,0,1,1,0],[Ne,iti,0,1,mi,0]])
-        print "\n Evaluation with Te=Ti = {:.2f} K\n".format(iten)
+        print("\n Evaluation with Te=Ti = {:.2f} K\n".format(iten))
         (omega,specoll) = ISS2.getspec(datablock)
         axarrf[1].plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$T_i = {:.2f}  ^\circK$'.format(iti))
         if itin ==0:
@@ -215,7 +212,7 @@ if __name__== '__main__':
 
     datablock = np.array([[Ne,te,0,1,1,0],[Ne,ti,0,1,mi,0]])
     datablockn = datablock.copy()
-    print "\n Evaluation using Dawson's function\n"
+    print("\n Evaluation using Dawson's function\n")
     (omega,specorig) = ISS2.getspec(datablock.copy())
     #%% Vary collision freq
     nuvec = np.logspace(-2.0,2.0,10)
@@ -229,7 +226,7 @@ if __name__== '__main__':
     for inun, inu in enumerate(nuvec):
         datablockn[0,5] = inu*ISS2.K*Ce
         datablockn[1,5] = inu*ISS2.K*Ci
-        print "\n Evaluation with nu = {:.2f} KC\n".format(inu)
+        print("\n Evaluation with nu = {:.2f} KC\n".format(inu))
         (omega,specoll) = ISS2.getspec(datablockn)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\nu = {:.2f} KC$'.format(inu))
 
@@ -248,7 +245,7 @@ if __name__== '__main__':
     plt.grid(True)
     for ialn, ial in enumerate(alpha):
 
-        print "\n Evaluation with alpha = {:.2f} deg \n".format(ial)
+        print("\n Evaluation with alpha = {:.2f} deg \n".format(ial))
         (omega,specoll) = ISS2.getspec(datablock,ial)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\alpha = {:.0f}^\circ$'.format(ial))
     plt.legend()
@@ -263,7 +260,7 @@ if __name__== '__main__':
     datablockv = datablock.copy()
     for iveln, ivel in enumerate(vels):
 
-        print "\n Evaluation with Vs = {:.2f} m/s\n".format(ivel)
+        print("\n Evaluation with Vs = {:.2f} m/s\n".format(ivel))
         datablockv[:,2] = ivel
         (omega,specoll) = ISS2.getspec(datablockv)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$V_s = {:.0f}^\circ$'.format(ivel))

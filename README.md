@@ -26,6 +26,7 @@ Run the Python setup script, which should be run in develop mode.
 
 In order create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instanstance of the class.
 
+~~~python
 	import ISRSpectrum.ISRSpectrum as ISSnew
 	from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 	
@@ -41,10 +42,13 @@ In order create the spectrums, assuming the user installed the code, first impor
 
     datablock = np.array([[Ni,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
     (omega,specorig,rcs) = ISS2.getspec(datablock90, rcsflag = True)
+~~~
+
 Where each colum of the data block is represented as a the information for a ion/electron species. The list is in this order[density(m^-3),tempreture(K), Doppler velocity (m/s),charge in elementary charges, mass of the species in AMU, collision frequency in s^-1]. The info for the elctron species must be the last row also !
 
 Alternatively if you are using species that are the following types: O+,NO+,N2+,O2+,N+, H+, e-, the user can get spectrum in in the following way
 
+~~~python
 	import ISRSpectrum.ISRSpectrum as ISSnew
 	ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
 	ti = 1e3
@@ -55,6 +59,6 @@ Alternatively if you are using species that are the following types: O+,NO+,N2+,
    	species = ['0+','e-']
 	datablock = np.array([[Ni,ti],[Ne,te]])
 	(omega,specorig,rcs) = ISS2.getspecsep(datablock,species,vi,90,rcsflag = True)
-	
-	
+~~~	
+
 Further examples can be found in Examples/examplespectrums.py

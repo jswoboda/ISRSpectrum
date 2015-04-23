@@ -1,6 +1,7 @@
-# ISRSpectrum
+##ISRSpectrum
+by John Swoboda
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")
-# Overview
+#Overview
 This is a Python module to calculate an ISR spectrum  based off of Kudeki and Milla's 2011 IEEE Geophysics paper. 
 
 	Kudeki, E.; Milla, M.A., "Incoherent Scatter Spectral Theories—Part I: A General Framework and Results for Small Magnetic Aspect Angles," Geoscience and Remote Sensing, IEEE Transactions on , vol.49, no.1, pp.315,328, Jan. 2011
@@ -18,8 +19,9 @@ Then move to the const directory. This is a directory that was turned into a sub
 	$ cd ISRSpectrum/ISRSpectrum/const
 	$ git pull origin
 	
-Run the Python setup script, which should be run in develop mode.
+Then move to the main directory and run the Python setup script, which should be run in develop mode.
 
+	$ cd ../..
 	$ python setup.py develop
 	
 #Code Examples

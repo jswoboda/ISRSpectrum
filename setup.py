@@ -16,8 +16,8 @@ config = {
     'author': 'John Swoboda',
     'url': 'github.com/jswoboda/ISRSpectrum',
     'author_email': 'swoboj@bu.edu',
-    'version': '0.1',
-    'install_requires': ['numpy', 'scipy', 'tables'],
+    'version': '1.0',
+    'install_requires': ['numpy', 'scipy', 'tables','numba'],
     'packages': ['ISRSpectrum'],
     'scripts': [],
     'name': 'ISRSpectrum'

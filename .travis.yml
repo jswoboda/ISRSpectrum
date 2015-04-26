@@ -24,12 +24,12 @@ install:
   
  - python setup.py develop
 script:  
-#  - if [[ -z $pyv ]]; then
-#        echo "running coverage";
-#        coverage run test.py;
-#    else
-   -     python Test/test_isr.py;
-#    fi
+  - if [[ -z $pyv ]]; then
+        echo "running coverage";
+        coverage run test.py;
+    else
+        python Test/test_isr.py;
+    fi
     
 after_success:
   - if [[ -z $pyv ]]; then

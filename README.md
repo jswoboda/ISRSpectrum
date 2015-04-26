@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/scienceopen/ISRSpectrum.svg)](https://travis-ci.org/scienceopen/ISRSpectrum)
-
+[![Coverage Status](https://coveralls.io/repos/scienceopen/ISRSpectrum/badge.svg)](https://coveralls.io/r/scienceopen/ISRSpectrum)
 ##ISRSpectrum
 by John Swoboda
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")

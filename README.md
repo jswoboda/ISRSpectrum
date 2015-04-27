@@ -25,14 +25,17 @@ To install first clone repository:
 
 	$ git clone https://github.com/jswoboda/ISRSpectrum.git
 
-Then move to the const directory. This is a directory that was turned into a submodule because it was being used by multiple repositories.
+Then get the submodule housed in the const directory by using the following commands.
 
-	$ cd ISRSpectrum/ISRSpectrum/const
-	$ git pull origin
+	$ git submodule init
+	$ git submodule update
+Alternatively one can pass the `--recursive` option to the intial cloning of the repository.  
+
+	$ git clone --recursive  https://github.com/jswoboda/ISRSpectrum.git
 
 Then move to the main directory and run the Python setup script, which should be run in develop mode.
 
-	$ cd ../..
+	$ cd ISRSpectrum
 	$ python setup.py develop
 
 #Code Examples

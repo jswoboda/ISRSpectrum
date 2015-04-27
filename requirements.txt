@@ -1,0 +1,6 @@
+six
+numpy
+scipy
+pytables
+numba
+matplotlib

@@ -17,7 +17,7 @@ config = {
     'url': 'github.com/jswoboda/ISRSpectrum',
     'author_email': 'swoboj@bu.edu',
     'version': '1.0',
-    'install_requires': ['numpy', 'scipy', 'tables','numba'],
+    'install_requires': ['six','numpy', 'scipy', 'tables','numba','matplotlib'],
     'packages': ['ISRSpectrum'],
     'scripts': [],
     'name': 'ISRSpectrum'
@@ -27,5 +27,5 @@ curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()
 testpath = os.path.join(curpath,'Test')
 if not os.path.exists(testpath):
     os.mkdir(testpath)
-    print "Making a path for testing at "+testpath
+    print("Making a path for testing at "+testpath)
 setup(**config)

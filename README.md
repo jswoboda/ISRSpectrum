@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/scienceopen/ISRSpectrum.svg)](https://travis-ci.org/scienceopen/ISRSpectrum)
+[![Coverage Status](https://coveralls.io/repos/scienceopen/ISRSpectrum/badge.svg)](https://coveralls.io/r/scienceopen/ISRSpectrum)
 ##ISRSpectrum
 by John Swoboda
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")
@@ -26,9 +28,10 @@ Then move to the main directory and run the Python setup script, which should be
 	
 #Code Examples
 
-In order create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instanstance of the class.
+In order to create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instanstance of the class.
 
 ~~~python
+import numpy as np
 import ISRSpectrum.ISRSpectrum as ISSnew
 from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 	
@@ -42,7 +45,7 @@ mi = 16
 Ce = np.sqrt(v_Boltz*te/v_me)
 Ci = np.sqrt(v_Boltz*ti/(v_amu*mi))
 
-datablock = np.array([[Ni,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
+datablock90 = np.array([[Ni,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
 (omega,specorig,rcs) = ISS2.getspec(datablock90, rcsflag = True)
 ~~~
 

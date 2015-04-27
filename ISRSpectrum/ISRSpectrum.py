@@ -12,11 +12,12 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
+from __future__ import absolute_import
+from six import string_types
 import scipy as sp
 import scipy.special
-import pdb
-from const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-from const.mathutils import sommerfelderfrep
+from .const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from .const.mathutils import sommerfelderfrep
 
 INFODICT = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),
                 'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),
@@ -87,7 +88,7 @@ class ISRSpectrum(object):
         estuff[4] = v_me
         ionstuff = datablock[:-1]
         if dFlag:
-            print "Calculating Gordeyev int for electons"
+            print("Calculating Gordeyev int for electons")
         (egord,Te,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
         h_e = sp.sqrt(v_epsilon0*v_Boltz*Te/(Ne*v_elemcharge*v_elemcharge))
         sig_e = (1j+omeg_e*egord)/(self.K**2*h_e**2)
@@ -107,7 +108,7 @@ class ISRSpectrum(object):
         Tivec = sp.zeros(Nions)
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
-                print "Calculating Gordeyev int for ion species #{:d}".format(iion)
+                print("Calculating Gordeyev int for ion species #{:d}".format(iion))
             (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
             wevec[iion] = Ni/Ne
             Tivec[iion] = Ti
@@ -160,7 +161,7 @@ class ISRSpectrum(object):
 
         """
         assert Islistofstr(species),"Species needs to be a list of strings"
-        assert allin(species,INFODICT.keys()), "Have un named species in the list."
+        assert allin(species,list(INFODICT.keys())), "Have un named species in the list."
         nspec = datablock.shape[0]
         datablocknew = sp.zeros((nspec,6))
 
@@ -206,21 +207,21 @@ class ISRSpectrum(object):
             #for case with no collisions or magnetic field just use analytic method
             gord = (sp.sqrt(sp.pi)*sp.exp(-theta**2)-1j*2.0*scipy.special.dawsn(theta))/(K*C*sp.sqrt(2))
             if dFlag:
-                print '\t No collisions No magnetic field'
+                print('\t No collisions No magnetic field')
             return (gord,Ts,Ns,omeg_s)
         elif collbool and not magbool:
             if dFlag:
-                print '\t With collisions No magnetic field'
+                print('\t With collisions No magnetic field')
             gordfunc = collacf
             exparams = (K,C,nus)
         elif not collbool and magbool:
             if dFlag:
-                print '\t No collisions with magnetic field'
+                print('\t No collisions with magnetic field')
             gordfunc = magacf
             exparams = (K,C,alpha,Om)
         else:
             if dFlag:
-                print '\t With collisions with magnetic field'
+                print('\t With collisions with magnetic field')
             gordfunc = magncollacf
             exparams = (K,C,alpha,Om,nus)
 
@@ -230,7 +231,7 @@ class ISRSpectrum(object):
         (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=100,errF=1e-2,exparams=exparams)
         if dFlag:
             yna = ['No','Yes']
-            print '\t Converged: {:s}, Number of iterations: {:d}'.format(yna[flag_c],outrep)
+            print('\t Converged: {:s}, Number of iterations: {:d}'.format(yna[flag_c],outrep))
 
         return (gord,Ts,Ns,omeg_s)
 
@@ -290,17 +291,17 @@ def magncollacf(tau,K,C,alpha,Om,nu):
 
 def Islistofstr(inlist):
     """ This function will determine if the input is a list of strings"""
-    if not type(inlist)==list:
+    if not isinstance(inlist,list):
         return False
     for item in inlist:
-        if type(item)!=str:
+        if not isinstance(item,string_types):
             return False
     return True
 
-def allin(input,reflist):
+def allin(inp,reflist):
     """ This function will determine if all of the strings in the list input are in
     the list reflist."""
-    for item in input:
+    for item in inp:
         if item not in reflist:
             return False
     return True

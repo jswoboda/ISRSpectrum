@@ -194,7 +194,12 @@ class ISRSpectrum(object):
         """
         dFlag = self.dFlag
         K = self.K
-        (Ns,Ts,Vs,qs,ms,nus) = dataline[:7]
+        (Ns,Ts,Vs,qs,ms,nus) = dataline[:6]
+        if len(dataline)==7:
+            nuperp = dataline[-1]
+        else:
+            nuperp =nus
+
         C = sp.sqrt(v_Boltz*Ts/ms)
         omeg_s = self.omeg - K*Vs
         theta = omeg_s/(K*C*sp.sqrt(2.0))

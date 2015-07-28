@@ -21,10 +21,10 @@ import matplotlib.pylab as plt
 
 if __name__== '__main__':
 
-    ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
+    ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=100e3,dFlag=True)
 
-    ti = 1e3
-    te = 1e3
+    ti = 2.8e3
+    te = 2.8e3
     Ne = 1e11
     mi = 16
     Ce = np.sqrt(v_Boltz*te/v_me)

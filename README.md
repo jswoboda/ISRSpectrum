@@ -63,7 +63,7 @@ datablock90 = np.array([[Ni,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
 
 Where each colum of the data block is represented as a the information for a ion/electron species. The list is in this order[density(m^-3),tempreture(K), Doppler velocity (m/s),charge in elementary charges, mass of the species in AMU, collision frequency in s^-1]. The info for the elctron species must be the last row also !
 
-Alternatively if you are using species that are the following types: O+,NO+,N2+,O2+,N+, H+, e-, the user can get spectrum in in the following way
+Alternatively, if you are only using the following species: O+,NO+,N2+,O2+,N+, H+, e-, a simpler interface is avalible. Using this interface quasi-neutrality is assumed so the number of positive ions and electrons are the same. The user can get spectrum in the following way.
 
 ~~~python
 import ISRSpectrum.ISRSpectrum as ISSnew

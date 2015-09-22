@@ -28,7 +28,7 @@ def main():
     #make list of dictionaries
     biglist = [{'name':'AMISR','Fo':449e6,'Fs':50e3,'alpha':70.},
         {'name':'Sondrestrom','Fo':1290e6,'Fs':100e3,'alpha':80.},
-        {'name':'Haystack','Fo':440e6,'Fs':50e3,'alpha':54.},
+        {'name':'Haystack','Fo':440e6,'Fs':50e3,'alpha':65.},
         {'name':'Arecibo','Fo':430e6,'Fs':50e3,'alpha':45.},
         {'name':'Jicamarca','Fo':50e6,'Fs':10e3,'alpha':1.}]
 

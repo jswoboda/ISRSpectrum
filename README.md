@@ -15,6 +15,7 @@ This runs on Python 2.7.9. The packages required include
 * six
 * numpy
 * scipy
+* pandas
 * pytables
 * numba
 * matplotlib

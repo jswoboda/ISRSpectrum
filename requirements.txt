@@ -4,3 +4,4 @@ scipy
 pytables
 numba
 matplotlib
+pandas

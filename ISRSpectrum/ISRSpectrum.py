@@ -38,7 +38,7 @@ class ISRSpectrum(object):
     collfreqmin - Minimum collision frequency before they are taken into account in the Gordeyev integral calculation
     alphamax - The maximum aspect angle
     dFlag - A debug flag."""
-    def __init__(self,centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=64, sampfreq=50e3,collfreqmin=1e-2,alphamax=30.0,dFlag=False):
+    def __init__(self,centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=64, sampfreq=50e3,collfreqmin=1e-2,alphamax=30.0,dFlag=False,f=None):
         """ Constructor for the class.
         Inputs :
         centerFrequency: The radar center frequency in Hz.
@@ -48,15 +48,22 @@ class ISRSpectrum(object):
         collfreqmin: (Default 1e-2) The minimum collision frequency needed to incorporate it into Gordeyev
             integral calculations in units of K*sqrt(Kb*Ts/ms) for each ion species.
         alphamax: (Default 30)  The maximum magnetic aspect angle in which the B-field will be taken into account.
-        dFlag: A debug flag, if set true will output debug text. Default is false."""
+        dFlag: A debug flag, if set true will output debug text. Default is false.
+        f: A numpy array of frequeny points, in Hz, the spectrum will be formed over. Default is
+            None, at that point the frequency vector will be formed using the number of points for the spectrum
+            and the sampling frequency to create a linearly sampled frequency vector. """
         self.bMag = bMag
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
         self.alphamax = alphamax
 
         self.K = 2.0*sp.pi*2*centerFrequency/v_C_0 #The Bragg scattering vector, corresponds to half the radar wavelength.
-
-        self.f = sp.arange(-sp.ceil((nspec-1.0)/2.0),sp.floor((nspec-1.0)/2.0+1))*(sampfreq/(2*sp.ceil((nspec-1.0)/2.0)))
+        if f is None:
+            minfreq = -sp.ceil((nspec-1.0)/2.0)
+            maxfreq = sp.floor((nspec-1.0)/2.0+1)
+            self.f = sp.arange(minfreq,maxfreq)*(sampfreq/(2*sp.ceil((nspec-1.0)/2.0)))
+        else:
+            self.f=f
         self.omeg = 2.0*sp.pi*self.f
 
     def getspec(self,datablock,alphadeg=90.0,rcsflag=False):

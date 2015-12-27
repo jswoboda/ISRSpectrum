@@ -66,7 +66,7 @@ class ISRSpectrum(object):
             self.f=f
         self.omeg = 2.0*sp.pi*self.f
 
-    def getspec(self,datablock,alphadeg=90.0,rcsflag=False):
+    def getspec(self,datablock,alphadeg=90.0,rcsflag=False,seplines=False):
         """ Gives the spectrum and the frequency vectors given the block of data and
         the magnetic aspect angle.
         Inputs
@@ -81,6 +81,9 @@ class ISRSpectrum(object):
             ms - Mass of the species in AMU. (Value will be replaced for the electrons)
             nus - Collision frequency for species in s^-1.
         alphadeg: The magnetic aspect angle in degrees.
+        rcsflag: A bool that will determine if the reflected power is returned as well. (default is False)
+        seplines: A bool that will change the output, spec to a list of numpy arrays that include
+            return from the electron line and ion lines seperatly.
         Outputs
         f - A numpy array that holds the frequency vector associated with the spectrum,
             in Hz.
@@ -141,7 +144,10 @@ class ISRSpectrum(object):
         den = sp.absolute(1j + sig_sum +sig_e)**2
         iline = inum/den
         eline = enum/den
-        spec = iline+eline
+        if seplines:
+            spec=[iline,eline]
+        else:
+            spec = iline+eline
         if rcsflag:
             Tr = Te/sp.sum(wevec*Tivec)
             rcs = Ne/((1+self.K**2*h_e**2)*(1+self.K**2*h_e**2+Tr))
@@ -149,7 +155,7 @@ class ISRSpectrum(object):
             return (self.f,spec,rcs)
         else:
             return (self.f,spec)
-    def getspecsep(self,datablock,species,vel = 0.0, alphadeg=90.0,rcsflag=False,col_calc = False,n_datablock=None,n_species=None):
+    def getspecsep(self,datablock,species,vel = 0.0, alphadeg=90.0,rcsflag=False,col_calc = False,n_datablock=None,n_species=None,seplines=False):
         """ This function is a different way of getting the spectrums. A datablock is
         still used, (Nsp x 2) numpy array, but it is filled in by using the species
         listed as a string in the list speces.
@@ -167,6 +173,8 @@ class ISRSpectrum(object):
             the density of the neutral species in m^-3 and the second element is the
             Tempreture in degrees K.If set to None then (Default=None)
         n_species - A Nnsp list of strings that label each neutral species.(Default=None)
+        seplines: A bool that will change the output, spec to a list of numpy arrays that include
+            return from the electron line and ion lines seperatly.
         Outputs
         f - A numpy array that holds the frequency vector associated with the spectrum,
             in Hz.
@@ -189,7 +197,7 @@ class ISRSpectrum(object):
                 datablocknew[nspec,5] =nuparr[nspec]
                 datablocknew[nspec,6] =nuparr[nspec]
 
-        return self.getspec(datablocknew,alphadeg,rcsflag)
+        return self.getspec(datablocknew,alphadeg,rcsflag,seplines=seplines)
 
     def __calcgordeyev__(self,dataline,alpha,alphdiff = 10.0):
         """ Performs the Gordeyve integral calculation.

@@ -21,7 +21,7 @@ if __name__== '__main__':
     imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
 
     f = np.logspace(2,8,2**10)
-    ISpec = ISRSpectrum(nspec=2**16,sampfreq=15e6,alphamax=60,f=f)
+    ISpec = ISRSpectrum(nspec=2**16,sampfreq=15e6,alphamax=60,f=f,dFlag=True)
 
     species=['O+','e-']
     databloc = np.array([[1e11,1100.],[1e11,2500.]])
@@ -53,7 +53,8 @@ if __name__== '__main__':
 
     plt.savefig(os.path.join(imagepath,'elinilinenoB.png'),dpi=300)
     #%% With B-Field
-    f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=45,seplines=True)
+    aldeg =15.
+    f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=aldeg,seplines=True)
 
     plt.figure()
 
@@ -76,5 +77,5 @@ if __name__== '__main__':
 
     plt.grid(True)
 
-    plt.title('Spectrum in Log Log With B-field')
+    plt.title('Spectrum in Log Log With B-field at alpha at {0} deg'.format(int(aldeg)))
     plt.savefig(os.path.join(imagepath,'elinilinewB.png'),dpi=300)

@@ -257,8 +257,17 @@ class ISRSpectrum(object):
             gordfunc = magncollacf
             exparams = (K,C,alpha,Om,nus)
 
-        N_somm = 2**9
-        b1 = 100.0/(K*C*sp.sqrt(2.0))
+
+        maxf = sp.absolute(self.f).max()
+        T_s = 1./(2.*maxf)
+        mindif = sp.absolute(sp.diff(self.f)).min()
+
+        interval = 2./mindif
+#        N_somm = 2**15
+#        b1 = 10.0/(K*C*sp.sqrt(2.0))
+        # changed ot sample grid better
+        b1 = interval/10.
+        N_somm=sp.ceil(b1/T_s)
 
         (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=100,errF=1e-2,exparams=exparams)
         if dFlag:

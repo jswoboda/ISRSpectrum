@@ -267,9 +267,8 @@ class ISRSpectrum(object):
 #        b1 = 10.0/(K*C*sp.sqrt(2.0))
         # changed ot sample grid better
         b1 = interval/10.
-        N_somm=sp.ceil(b1/T_s)
-
-        (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=100,errF=1e-2,exparams=exparams)
+        N_somm=sp.minimum(2**10,sp.ceil(b1/T_s))
+        (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=500,errF=1e-7,exparams=exparams)
         if dFlag:
             yna = ['No','Yes']
             print('\t Converged: {:s}, Number of iterations: {:d}'.format(yna[flag_c],outrep))

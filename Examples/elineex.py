@@ -20,7 +20,7 @@ if __name__== '__main__':
 
     imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
 
-    f = np.logspace(2,8,2**10)
+    f = np.logspace(1,7,2**10)
     ISpec = ISRSpectrum(nspec=2**16,sampfreq=15e6,alphamax=60,f=f,dFlag=True)
 
     species=['O+','e-']
@@ -53,7 +53,7 @@ if __name__== '__main__':
 
     plt.savefig(os.path.join(imagepath,'elinilinenoB.png'),dpi=300)
     #%% With B-Field
-    aldeg =15.
+    aldeg =.01
     f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=aldeg,seplines=True)
 
     plt.figure()

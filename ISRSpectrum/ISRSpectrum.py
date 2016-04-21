@@ -259,15 +259,17 @@ class ISRSpectrum(object):
 
 
         maxf = sp.absolute(self.f).max()
-        T_s = 1./(2.*maxf)
+        T_s = 1./(4.*maxf)
         mindif = sp.absolute(sp.diff(self.f)).min()
 
         interval = 2./mindif
 #        N_somm = 2**15
 #        b1 = 10.0/(K*C*sp.sqrt(2.0))
         # changed ot sample grid better
-        b1 = interval/10.
-        N_somm=sp.minimum(2**10,sp.ceil(b1/T_s))
+        N_somm=2**10
+        b1 = T_s*N_somm
+#        b1 = interval/10.
+#        N_somm=sp.minimum(2**10,sp.ceil(b1/T_s))
         (gord,flag_c,outrep) = sommerfelderfrep(gordfunc,N_somm,omeg_s,b1,Lmax=500,errF=1e-7,exparams=exparams)
         if dFlag:
             yna = ['No','Yes']
@@ -291,7 +293,7 @@ def magacf(tau,K,C,alpha,Om):
         """
     Kpar = sp.sin(alpha)*K
     Kperp = sp.cos(alpha)*K
-    return sp.exp(-sp.power(C*Kpar*tau,2.0)/2.0-2.0*sp.power(Kperp*C*sp.sin(Om*tau/2.0)/Om,2.0))
+    return sp.exp(-sp.power(C*Kpar*tau,2.0)/2.0  -2.0*sp.power(Kperp*C*sp.sin(Om*tau/2.0)/Om,2.0))
 def collacf(tau,K,C,nu):
     """ collacf(tau,K,C,nu)
         by John Swoboda

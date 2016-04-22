@@ -260,9 +260,7 @@ class ISRSpectrum(object):
 
         maxf = sp.absolute(self.f).max()
         T_s = 1./(4.*maxf)
-        mindif = sp.absolute(sp.diff(self.f)).min()
 
-        interval = 2./mindif
 #        N_somm = 2**15
 #        b1 = 10.0/(K*C*sp.sqrt(2.0))
         # changed ot sample grid better

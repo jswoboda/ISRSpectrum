@@ -20,11 +20,11 @@ if __name__== '__main__':
 
     imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
 
-    f = np.linspace(0.,5e6,2**12)
-    ISpec = ISRSpectrum(nspec=2**16,sampfreq=15e6,alphamax=60,f=f,dFlag=True)
+    f = np.linspace(20e3,2.5e6,2**10)
+    ISpec = ISRSpectrum(nspec=2**16,bMag = 3.5e-5,sampfreq=15e6,alphamax=80,f=f,dFlag=True)
 
     species=['O+','e-']
-    databloc = np.array([[1e11,1100.],[1e11,2500.]])
+    databloc = np.array([[1.66e10,863.],[1.66e10,863.]])
     #%% No B-Field
     f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=90,seplines=True)
 
@@ -52,7 +52,7 @@ if __name__== '__main__':
 
     plt.savefig(os.path.join(imagepath,'eliniline2noB.png'),dpi=300)
     #%% With B-Field
-    aldeg = 20
+    aldeg = 30
     f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=aldeg,seplines=True)
 
     plt.figure()
@@ -69,8 +69,7 @@ if __name__== '__main__':
     plt.ylabel('Amplitude')
 
 
-    plt.yscale('log')
-    plt.ylim((maxy*1e-7,maxy))
+    plt.ylim((-maxy*1e-7,maxy*1.1))
     plt.legend(loc='lower left',handles=[l1,l2,l3])
 
     plt.grid(True)

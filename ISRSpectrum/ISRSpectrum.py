@@ -259,7 +259,7 @@ class ISRSpectrum(object):
 
 
         maxf = sp.absolute(self.f).max()
-        T_s = 1./(4.*maxf)
+        T_s = 1./(2.*maxf)
 
 #        N_somm = 2**15
 #        b1 = 10.0/(K*C*sp.sqrt(2.0))

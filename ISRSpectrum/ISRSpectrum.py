@@ -123,6 +123,11 @@ class ISRSpectrum(object):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
             (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
+            
+                        
+            too_big = self.f>1e5
+#            igord[too_big] = 0.
+            
             wevec[iion] = Ni/Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species can cause a divid by zero error.
@@ -131,6 +136,7 @@ class ISRSpectrum(object):
             qrot = qrotvec[iion]
             sig_i = (Ni/Ne)*(1j+omeg_i*igord)/(self.K**2*mu*h_e**2/qrot**2)
             nti = 2*Ni*sp.real(igord)
+#            nti[too_big] = 0.
             if firstion:
                 sig_sum =sig_i
                 nt_sum = nti

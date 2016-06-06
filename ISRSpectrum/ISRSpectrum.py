@@ -122,6 +122,7 @@ class ISRSpectrum(object):
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
+            
             (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
             
                         

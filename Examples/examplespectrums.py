@@ -32,7 +32,7 @@ if __name__== '__main__':
 
     datablock = np.array([[Ne,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
     datablockn = datablock.copy()
-    print "\n Evaluation using Dawson's function\n"
+    print("\n Evaluation using Dawson's function\n")
     (omega,specorig) = ISS2.getspec(datablock.copy())
     #%% Vary collision freq
     nuvec = np.logspace(-2.0,2.0,10)
@@ -46,12 +46,12 @@ if __name__== '__main__':
     for inun, inu in enumerate(nuvec):
         datablockn[0,5] = inu*ISS2.K*Ci
         datablockn[1,5] = inu*ISS2.K*Ce
-        print "\n Evaluation with nu = {:.2f} KC\n".format(inu)
+        print("\n Evaluation with nu = {:.2f} KC\n".format(inu))
         (omega,specoll) = ISS2.getspec(datablockn)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\nu = {:.2f} KC$'.format(inu))
 
     plt.legend()
-    plt.show(False)
+
 
     #%% vary magnetic field
 
@@ -65,11 +65,11 @@ if __name__== '__main__':
     plt.grid(True)
     for ialn, ial in enumerate(alpha):
 
-        print "\n Evaluation with alpha = {:.2f} deg \n".format(ial)
+        print("\n Evaluation with alpha = {:.2f} deg \n".format(ial))
         (omega,specoll) = ISS2.getspec(datablock,ial)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\alpha = {:.0f}^\circ$'.format(ial))
     plt.legend()
-    plt.show(False)
+
     #%% Adjust doppler
 
     dopmax = np.nanmax(omega)
@@ -80,7 +80,7 @@ if __name__== '__main__':
     datablockv = datablock.copy()
     for iveln, ivel in enumerate(vels):
 
-        print "\n Evaluation with Vs = {:.2f} m/s\n".format(ivel)
+        print("\n Evaluation with Vs = {:.2f} m/s\n".format(ivel))
         datablockv[:,2] = ivel
         (omega,specoll) = ISS2.getspec(datablockv)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$V_s = {:.0f}^\circ$'.format(ivel))
@@ -91,5 +91,5 @@ if __name__== '__main__':
     plt.title('Varying Doppler velocity for O+ plasma')
     plt.grid(True)
     plt.legend()
-    plt.show(False)
+    plt.show()
 

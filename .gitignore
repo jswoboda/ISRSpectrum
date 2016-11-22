@@ -1,3 +1,5 @@
+*.eps
+*.svg
 *.png
 
 # Created by http://www.gitignore.io

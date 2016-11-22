@@ -17,16 +17,19 @@ config = {
     'description': 'Creates ISR Spectrums',
     'author': 'John Swoboda',
     'url': 'github.com/jswoboda/ISRSpectrum',
-    'install_requires': ['PythonISRUtilties'],
-    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilties/tarball/master#egg=PythonISRUtilties'],
+    'install_requires': ['isrutilities'],
+    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=PythonISRUtilities'],
     'version': '1.0',
     'packages': ['ISRSpectrum'],
     'name': 'ISRSpectrum'
 }
 
-curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+curpath = os.path.dirname(__file__)
 testpath = os.path.join(curpath,'Test')
-if not os.path.exists(testpath):
+try:
     os.mkdir(testpath)
-    print("Making a path for testing at "+testpath)
+    print("created {}".format(testpath))
+except OSError:
+    pass
+    
 setup(**config)

@@ -4,23 +4,23 @@ Created on Fri Apr 22 14:42:49 2016
 
 @author: John Swoboda
 """
-
-import os
+from ISRSpectrum import Path
 import numpy as np
 import scipy.fftpack as fftsy
 import scipy.special
 import matplotlib.pylab as plt
 from matplotlib import rc
+#
 from ISRSpectrum.ISRSpectrum import magacf, collacf,magncollacf
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-from ISRSpectrum.const.mathutils import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from isrutilities.mathutils import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
 
 
 if __name__== '__main__':
     # directory stuff
-    curdir = os.path.dirname(os.path.realpath(__file__))
-    ISRdir = os.path.split(curdir)[0]
-    figsdir = os.path.join(ISRdir,'Doc','Figs')
+    curdir = Path(__file__).parent
+    ISRdir = curdir.parent
+
     #%% Sim set up
     centerFrequency = 440.2*1e6
     nspec=129
@@ -54,7 +54,7 @@ if __name__== '__main__':
     plt.title(r'Single Particle ACF for ' +pname)
     plt.grid(True)
     plt.show(False)
-    plt.savefig(os.path.join(figsdir,'ACF'+pname.replace(" ", "")+'.png'))
+    plt.savefig('ACF'+pname.replace(" ", "")+'.png')
 #%% With collisions
     nuvec = np.logspace(-2.0,2.0,10)*K*C
 
@@ -76,7 +76,7 @@ if __name__== '__main__':
     plt.title(r'Single Particle ACF W/ Collisions for '+pname)
     plt.legend()
     plt.show(False)
-    plt.savefig(os.path.join(figsdir,'ACFwcolls'+pname.replace(" ", "")+'.png'))
+    plt.savefig('ACFwcolls'+pname.replace(" ", "")+'.png')
 
 #%% With magnetic field
     alpha = np.linspace(19,1,10)
@@ -98,9 +98,8 @@ if __name__== '__main__':
     plt.title('Single Particle ACF W/ Mag for ' +pname)
     plt.legend()
     plt.show(False)
-    plt.savefig(os.path.join(figsdir,'ACFwmag'+pname.replace(" ", "")+'.png'))
+    plt.savefig('ACFwmag'+pname.replace(" ", "")+'.png')
     
-    gordfft = np.fft()
 
 #%% Error surface with both
     almat3d = np.tile(alpha[:,np.newaxis,np.newaxis],(1,len(nuvec),len(tau)))
@@ -129,4 +128,4 @@ if __name__== '__main__':
     cbar.set_label('% Error', rotation=270)
     cbar.ax.get_yaxis().labelpad = 15
     plt.title('Error between ideal ACF and with Collisions and B-field for '+pname)
-    plt.savefig(os.path.join(figsdir,'ACFerr'+pname.replace(" ", "")+'.png'))
+    plt.savefig('ACFerr'+pname.replace(" ", "")+'.png')

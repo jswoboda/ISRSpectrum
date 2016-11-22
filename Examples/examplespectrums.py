@@ -6,17 +6,11 @@ Created on Thu Jan 29 13:10:33 2015
 @author: John Swoboda
 """
 
-#!/usr/bin/env python
-"""
-Created on Thu Jan 15 15:38:46 2015
-
-@author: Bodangles
-"""
 
 import numpy as np
 import time
 import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 import matplotlib.pylab as plt
 
 if __name__== '__main__':

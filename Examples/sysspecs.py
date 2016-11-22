@@ -6,17 +6,17 @@ This script will create plots of ISR spectra for different radar systems
 """
 
 import scipy as sp
-import inspect
-import os
-import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 import matplotlib.pylab as plt
 import seaborn as sns
+sns.set_style("whitegrid")
+sns.set_context("notebook")
+#
+import ISRSpectrum.ISRSpectrum as ISSnew
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 
 
 def main():
-    sns.set_style("whitegrid")
-    sns.set_context("notebook")
+
     Ne = 1e11
     Ti = 3e3
     Te = 3e3
@@ -51,9 +51,7 @@ def main():
     figmplf.suptitle(r'Spectrums $N_e$ = {0:.1e}m$^{{-3}}$, $T_e$ = {1:.0f}$^o$K, $T_i$ = {2:.0f}$^o$K'.format(Ne,Te,Ti), fontsize=20)
     plt.figlegend( lines, labels, loc = 'lower center', ncol=5, labelspacing=0. )
 
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
-    plt.savefig(os.path.join(imagepath,'DifferentSystems.png'))
+    plt.savefig('DifferentSystems.png')
 if __name__== '__main__':
 
     main()

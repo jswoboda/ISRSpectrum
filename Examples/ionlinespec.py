@@ -5,17 +5,16 @@ Created on Mon Aug 29 16:29:42 2016
 @author: John Swoboda
 """
 import numpy as np
-import os,inspect
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
 import matplotlib.pylab as plt
 import seaborn as sns
-import pdb
-if __name__== '__main__':
-    sns.set_style("white")
-    sns.set_context("notebook")
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+sns.set_style("white")
+sns.set_context("notebook")
+#
+from ISRSpectrum.ISRSpectrum import ISRSpectrum
 
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
+
+if __name__== '__main__':
+
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     nspec=256
     ISpec_ion = ISRSpectrum(centerFrequency = 449e6, nspec=nspec, sampfreq=50e3,dFlag=True)
@@ -45,7 +44,7 @@ if __name__== '__main__':
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
 
-    plt.savefig(os.path.join(imagepath,'Specion.png'),dpi=300)
+    plt.savefig('Specion.png',dpi=300)
     
     #%% With random values
     n_pulse=np.array([50,200,500,1000])
@@ -76,4 +75,4 @@ if __name__== '__main__':
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
     ax.legend(hand,lab_strs,)
-    plt.savefig(os.path.join(imagepath,'Specionave.png'),dpi=300)
+    plt.savefig('Specionave.png',dpi=300)

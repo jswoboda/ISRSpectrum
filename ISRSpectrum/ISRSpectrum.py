@@ -372,7 +372,8 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
         nuparr - A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
         nuperp - A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
-    curpath = Path(__file__[0]).parent
+    curpath = Path(__file__).parent
+    print(curpath)
 
     nuperp = sp.zeros((datablock.shape[0]))
     nuparr = sp.zeros_like(nuperp)
@@ -382,9 +383,9 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
     Ti = datablock[:-1,1]
     Ne = datablock[-1,0] *1e-6
     Te = datablock[-1,1]
-    Bst = pd.read_csv(curpath/'ion2ion.csv',index_col=0)
+    Bst = pd.read_csv(str(curpath/'ion2ion.csv'),index_col=0)
 
-    Cin = pd.read_csv(curpath/'ion2neu.csv',index_col=0)
+    Cin = pd.read_csv(str(curpath/'ion2neu.csv'),index_col=0)
     # electron electron and electron ion collisions
     #Schunk and Nagy eq 4.144 and eq 4.145
     nuee = 54.5/sp.sqrt(2) * Ne/sp.power(Te,1.5)

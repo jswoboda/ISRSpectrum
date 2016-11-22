@@ -27,7 +27,7 @@ In order to create the spectrums, assuming the user installed the code, first im
 ~~~python
 import numpy as np
 import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 
 ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
 
@@ -61,4 +61,4 @@ datablock = np.array([[Ni,ti],[Ne,te]])
 (omega,specorig,rcs) = ISS2.getspecsep(datablock,species,vi,90,rcsflag = True)
 ~~~
 
-Further examples can be found in Examples/examplespectrums.py
+Further examples can be found in `Examples/examplespectrums.py`

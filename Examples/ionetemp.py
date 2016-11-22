@@ -6,16 +6,15 @@ Created on Thu Aug 25 21:43:45 2016
 """
 
 import scipy as sp
-import inspect
-import os
-import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 import matplotlib.pylab as plt
 import seaborn as sns
+sns.set_style("whitegrid")
+sns.set_context("notebook")
+
+import ISRSpectrum.ISRSpectrum as ISSnew
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 
 def main():
-    sns.set_style("whitegrid")
-    sns.set_context("notebook")
     Ne = 1e11
     Ti = 1.1e3
     Te = 3e3
@@ -49,10 +48,7 @@ def main():
         lines.append( axmat.stem(xloc*1e-3, sp.ones(2)*sp.amax(spec), linefmt='g--', markerfmt='go', basefmt=' ')[0])
         lines.append( axmat.plot(omeg*1e-3,spec,label='Output',linewidth=5)[0])
     
-
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
-    plt.savefig(os.path.join(imagepath,'DifferentTemps.png'))
+    plt.savefig('DifferentTemps.png')
 if __name__== '__main__':
 
     main()

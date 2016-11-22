@@ -7,18 +7,14 @@ This example shows everything up to electron line for magnitized and non-magniti
 """
 
 import numpy as np
-import os,inspect
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
 import matplotlib.pylab as plt
 import seaborn as sns
-
+sns.set_style("whitegrid")
+sns.set_context("notebook")
+#
+from ISRSpectrum.ISRSpectrum import ISRSpectrum
 
 if __name__== '__main__':
-    sns.set_style("whitegrid")
-    sns.set_context("notebook")
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
 
 
     ISS2 = ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)

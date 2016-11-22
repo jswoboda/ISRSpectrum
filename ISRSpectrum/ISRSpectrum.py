@@ -13,14 +13,14 @@ The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
 from __future__ import absolute_import
+from . import Path
 from six import string_types
-import os, inspect
 import scipy as sp
 import scipy.special
-import pdb
 import pandas as pd
-from .const.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-from .const.mathutils import sommerfelderfrep
+#
+from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from isrutilities.mathutils import sommerfelderfrep
 
 INFODICT = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),
                 'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),
@@ -122,13 +122,13 @@ class ISRSpectrum(object):
         for iion,iinfo in enumerate(ionstuff):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
-            
+
             (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
-            
-                        
+
+
             too_big = self.f>1e5
 #            igord[too_big] = 0.
-            
+
             wevec[iion] = Ni/Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species can cause a divid by zero error.
@@ -372,7 +372,7 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
         nuparr - A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
         nuperp - A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+    curpath = Path(__file__[0]).parent
 
     nuperp = sp.zeros((datablock.shape[0]))
     nuparr = sp.zeros_like(nuperp)
@@ -382,9 +382,9 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
     Ti = datablock[:-1,1]
     Ne = datablock[-1,0] *1e-6
     Te = datablock[-1,1]
-    Bst = pd.read_csv(os.path.join(curpath,'ion2ion.csv'),index_col=0)
+    Bst = pd.read_csv(curpath/'ion2ion.csv',index_col=0)
 
-    Cin = pd.read_csv(os.path.join(curpath,'ion2neu.csv'),index_col=0)
+    Cin = pd.read_csv(curpath/'ion2neu.csv',index_col=0)
     # electron electron and electron ion collisions
     #Schunk and Nagy eq 4.144 and eq 4.145
     nuee = 54.5/sp.sqrt(2) * Ne/sp.power(Te,1.5)

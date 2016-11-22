@@ -4,42 +4,23 @@
 by John Swoboda
 
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")
-#Overview
+## Overview
 This is a Python module to calculate an ISR spectrum  based off of Kudeki and Milla's 2011 IEEE Geophysics paper.
 
 	Kudeki, E.; Milla, M.A., "Incoherent Scatter Spectral Theories—Part I: A General Framework and Results for Small Magnetic Aspect Angles," Geoscience and Remote Sensing, IEEE Transactions on , vol.49, no.1, pp.315,328, Jan. 2011
 
 The code has been written to be able to produce a spectrum with an arbitrary number of ion species with an arbitrary collsion frequency and magnetic aspect angle. The only issue is that I will now promise that the code will run quickly at magnetic aspect angles <1 degree perp to B.
-# Requirements
-This runs on Python 2.7.9. The packages required include
-* six
-* numpy
-* scipy
-* pandas
-* pytables
-* numba
-* matplotlib
 
-#Installation
+## Requirements
 
-To install first clone repository:
+## Installation
 
-	$ git clone https://github.com/jswoboda/ISRSpectrum.git
+	 git clone https://github.com/jswoboda/ISRSpectrum.git
 
-Then get the submodule housed in the const directory by using the following commands.
+	 cd ISRSpectrum
+	 python setup.py develop
 
-	$ git submodule init
-	$ git submodule update
-Alternatively one can pass the `--recursive` option to the intial cloning of the repository.  
-
-	$ git clone --recursive  https://github.com/jswoboda/ISRSpectrum.git
-
-Then move to the main directory and run the Python setup script, which should be run in develop mode.
-
-	$ cd ISRSpectrum
-	$ python setup.py develop
-
-#Code Examples
+## Code Examples
 
 In order to create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instanstance of the class.
 

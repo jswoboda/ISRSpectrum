@@ -21,7 +21,7 @@ if __name__== '__main__':
     ISpec_ion = ISRSpectrum(centerFrequency = 449e6, nspec=nspec, sampfreq=50e3,dFlag=True)
     species=['O+','e-']
 #    databloc = np.array([[1.66e10,863.],[1.66e10,863.]])
-    
+    ylim=[0,1.4]
     
     flims=np.array([3.03e6,3.034e6])
     #%% With B-Field
@@ -44,7 +44,7 @@ if __name__== '__main__':
     ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5,\omega)|^2\rangle$',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
-
+    ax.set_ylim(ylim)
     plt.savefig(os.path.join(imagepath,'Specion.png'),dpi=300)
     
     #%% With random values
@@ -74,6 +74,7 @@ if __name__== '__main__':
     ax.set_xlabel('Frequency (kHz)',fontsize=14)
     ax.set_title(r'Ion Line Averaging',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
+    ax.set_ylim(ylim)
     plt.tight_layout()
     ax.legend(hand,lab_strs,)
     plt.savefig(os.path.join(imagepath,'Specionave.png'),dpi=300)

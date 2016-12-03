@@ -17,7 +17,7 @@ config = {
     'description': 'Creates ISR Spectrums',
     'author': 'John Swoboda',
     'url': 'github.com/jswoboda/ISRSpectrum',
-    'install_requires': ['isrutilities'],
+    'install_requires': ['isrutilities','pathlib2'],
     'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities'],
     'version': '1.0',
     'packages': ['ISRSpectrum'],

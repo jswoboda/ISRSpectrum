@@ -4,14 +4,13 @@ Created on Thu Nov 12 10:51:26 2015
 
 @author: John Swoboda
 """
-
-import scipy as sp
-import inspect
-import os
-import ISRSpectrum.ISRSpectrum as ISSnew
-from ISRSpectrum.ISRSpectrum import get_collisionfreqs
+from ISRSpectrum import Path
 import matplotlib.pylab as plt
 import seaborn as sns
+import scipy as sp
+#
+import ISRSpectrum.ISRSpectrum as ISSnew
+from ISRSpectrum.ISRSpectrum import get_collisionfreqs
 
 
 def main():
@@ -56,9 +55,7 @@ def main():
     figmplf.suptitle('Spectrums with and without collisions')
     plt.figlegend( lines, labels, loc = 'lower center', ncol=5, labelspacing=0. )
 
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
-    plt.savefig(os.path.join(imagepath,'Collisions.png'))
+    plt.savefig('Collisions.png')
 
 if __name__== '__main__':
 

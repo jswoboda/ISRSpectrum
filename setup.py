@@ -5,27 +5,31 @@ This is the setup file for the RadarDataSim python package
 
 @author: John Swoboda
 """
-import os, inspect
+import os,subprocess
+from setuptools import setup
+
 try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+    subprocess.call(['conda','install','--yes','--file','requirements.txt'])
+except Exception as e:
+    pass
 
 config = {
     'description': 'Creates ISR Spectrums',
     'author': 'John Swoboda',
     'url': 'github.com/jswoboda/ISRSpectrum',
-    'author_email': 'swoboj@bu.edu',
+    'install_requires': ['isrutilities'],
+    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=PythonISRUtilities'],
     'version': '1.0',
-    'install_requires': ['six','numpy', 'scipy', 'tables','numba','matplotlib'],
     'packages': ['ISRSpectrum'],
-    'scripts': [],
     'name': 'ISRSpectrum'
 }
 
-curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+curpath = os.path.dirname(__file__)
 testpath = os.path.join(curpath,'Test')
-if not os.path.exists(testpath):
+try:
     os.mkdir(testpath)
-    print("Making a path for testing at "+testpath)
+    print("created {}".format(testpath))
+except OSError:
+    pass
+    
 setup(**config)

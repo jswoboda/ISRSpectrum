@@ -6,17 +6,15 @@ Created on Mon Aug 29 16:29:42 2016
 """
 import numpy as np
 import scipy.fftpack as scfft
-import os,inspect
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
 import matplotlib.pylab as plt
 import seaborn as sns
-import pdb
-if __name__== '__main__':
-    sns.set_style("white")
-    sns.set_context("notebook")
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+sns.set_style("white")
+sns.set_context("notebook")
+#
+from ISRSpectrum.ISRSpectrum import ISRSpectrum
 
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
+
+if __name__== '__main__':
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     nspec=256
     spfreq=50e3
@@ -50,7 +48,7 @@ if __name__== '__main__':
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
     ax.set_ylim(ylim)
-    plt.savefig(os.path.join(imagepath,'Specion.png'),dpi=300)
+    plt.savefig('Specion.png',dpi=300)
     
     
     fig,ax = plt.subplots(1,1,sharey=True, figsize=(6,4),facecolor='w')
@@ -98,25 +96,4 @@ if __name__== '__main__':
     ax.set_ylim(ylim)
     plt.tight_layout()
     ax.legend(hand,lab_strs,)
-    plt.savefig(os.path.join(imagepath,'Specionave.png'),dpi=300)
-    
-    
-    
-    fig,ax = plt.subplots(1,1,sharey=True, figsize=(6,4),facecolor='w')
-    l1=ax.plot(tau[:64]*1e6,acf[:64]/acf[0],'-',lw=3,zorder=len(n_pulse))[0]
-    hand=[l1]
-    for iyn,iy in enumerate(ystatsacf):
-        l1=ax.plot(tau[:64]*1e6,iy[:64]/acf[0],'-',lw=3,zorder=iyn)[0]
-        hand.append(l1)
-    sns.despine()
-
-    ax.set_xlim([0,280])
-    ax.spines['right'].set_visible(False)
-
-    ax.set_xlabel(r'$\tau$ in $\mu$s ',fontsize=14)
-    ax.set_title(r'ACF Averaging',fontsize=18)
-    ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
-    plt.tight_layout()
-    ax.set_ylim(ylim2)
-    ax.legend(hand,lab_strs,)
-    plt.savefig(os.path.join(imagepath,'acfionave.png'),dpi=300)
+    plt.savefig('Specionave.png',dpi=300)

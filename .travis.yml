@@ -1,11 +1,10 @@
 git:
-   depth: 1
+   depth: 3
 language: python
 python:
-  - "3.4"
+  - "3.5"
   - "2.7"
 before_install: 
-  - git submodule update
   - if [[ $(python --version 2>&1) == "Python 3."* ]]; then
      pyv=3;
     fi
@@ -23,6 +22,7 @@ install:
    fi
   
  - python setup.py develop
+
 script:  
   - if [[ -z $pyv ]]; then
         echo "running coverage";

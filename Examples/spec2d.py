@@ -7,17 +7,15 @@ Created on Mon Aug 29 17:10:32 2016
 
 import numpy as np
 import os,inspect
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
-from ISRSpectrum.const.physConstants import v_C_0
 import matplotlib.pylab as plt
 import seaborn as sns
+sns.set_style("white")
+sns.set_context("notebook")
+#
+from ISRSpectrum.ISRSpectrum import ISRSpectrum
+from isrutilities.physConstants import v_C_0
 
 if __name__== '__main__':
-    sns.set_style("white")
-    sns.set_context("notebook")
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     species=['O+','e-']
     newcentfreq=    449e6 +np.linspace(-200,550,250)*1e6
@@ -48,7 +46,7 @@ if __name__== '__main__':
 
     
     
-    plt.savefig(os.path.join(imagepath,'Spec2dion.png'),dpi=300)
+    plt.savefig('Spec2dion.png',dpi=300)
     
     fig,ax = plt.subplots(1,1,sharey=True, figsize=(4,4),facecolor='w')
     l1=ax.pcolor(F*1e-3,1e-9*K_b*v_C_0/(2*2*np.pi),oution/oution.max(),cmap='viridis')
@@ -60,4 +58,4 @@ if __name__== '__main__':
     ax.set_title('Ion Line',fontsize=18)
     ax.set_ylabel(r'$f_0$ (GHz)',fontsize=14)
     plt.tight_layout()
-    plt.savefig(os.path.join(imagepath,'Spec2dionf0.png'),dpi=300)
+    plt.savefig('Spec2dionf0.png',dpi=300)

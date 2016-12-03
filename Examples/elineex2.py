@@ -7,18 +7,16 @@ This example shows everything up to electron line for magnitized and non-magniti
 """
 
 import numpy as np
-import os,inspect
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
 import matplotlib.pylab as plt
 import seaborn as sns
+#
+from ISRSpectrum.ISRSpectrum import ISRSpectrum
 
 
 if __name__== '__main__':
     sns.set_style("whitegrid")
     sns.set_context("notebook")
-    curpath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
-    imagepath = os.path.join(os.path.split(curpath)[0],'Doc','Figs')
 
     f = np.linspace(20e3,2.5e6,2**10)
     ISpec = ISRSpectrum(nspec=2**16,bMag = 3.5e-5,sampfreq=15e6,alphamax=80,f=f,dFlag=True)
@@ -50,7 +48,7 @@ if __name__== '__main__':
 
     plt.title('Spectrum in Log Y scale No B-field')
 
-    plt.savefig(os.path.join(imagepath,'eliniline2noB.png'),dpi=300)
+    plt.savefig('eliniline2noB.png',dpi=300)
     #%% With B-Field
     aldeg = 30
     f,[iline,eline] = ISpec.getspecsep(databloc,species,alphadeg=aldeg,seplines=True)
@@ -75,4 +73,4 @@ if __name__== '__main__':
     plt.grid(True)
 
     plt.title('Spectrum in Log Y scale With B-field at alpha at {0} deg'.format(int(aldeg)))
-    plt.savefig(os.path.join(imagepath,'eliniline2wB.png'),dpi=300)
+    plt.savefig('eliniline2wB.png',dpi=300)

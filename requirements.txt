@@ -5,3 +5,4 @@ pytables
 numba
 matplotlib
 pandas
+git+https://github.com/jswoboda/PythonISRUtilities.git

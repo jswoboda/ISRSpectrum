@@ -5,3 +5,4 @@ pytables
 numba
 matplotlib
 pandas
+pathlib2

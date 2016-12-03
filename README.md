@@ -12,7 +12,7 @@ This is a Python module to calculate an ISR spectrum  based off of Kudeki and Mi
 The code has been written to be able to produce a spectrum with an arbitrary number of ion species with an arbitrary collsion frequency and magnetic aspect angle. The only issue is that I will now promise that the code will run quickly at magnetic aspect angles <1 degree perp to B.
 
 ## Requirements
-
+Standard python package requirements such as scipy and matplotlib are stated specifially in requirements.txt. The package [isrutilities](https://github.com/jswoboda/PythonISRUtilities) also needs to be installed before hand.
 ## Installation
 
 	 git clone https://github.com/jswoboda/ISRSpectrum.git

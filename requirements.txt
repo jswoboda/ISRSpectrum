@@ -1,3 +1,5 @@
+setuptools
+nose
 six
 numpy
 scipy
@@ -5,3 +7,4 @@ pytables
 numba
 matplotlib
 pandas
+pathlib2

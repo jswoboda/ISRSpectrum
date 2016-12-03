@@ -6,7 +6,6 @@ Created on Mon Aug 29 17:10:32 2016
 """
 
 import numpy as np
-import os,inspect
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style("white")

@@ -373,7 +373,6 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
         nuperp - A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
     curpath = Path(__file__).parent
-    print(curpath)
 
     nuperp = sp.zeros((datablock.shape[0]))
     nuparr = sp.zeros_like(nuperp)

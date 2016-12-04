@@ -18,7 +18,7 @@ config = {
     'author': 'John Swoboda',
     'url': 'github.com/jswoboda/ISRSpectrum',
     'install_requires': ['isrutilities'],
-    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=PythonISRUtilities'],
+    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities'],
     'version': '1.0',
     'packages': ['ISRSpectrum'],
     'name': 'ISRSpectrum'
@@ -31,5 +31,5 @@ try:
     print("created {}".format(testpath))
 except OSError:
     pass
-    
+
 setup(**config)

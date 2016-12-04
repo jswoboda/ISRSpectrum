@@ -7,4 +7,5 @@ pytables
 numba
 matplotlib
 pathlib2
+pandas
 

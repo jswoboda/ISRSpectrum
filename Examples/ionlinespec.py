@@ -6,6 +6,7 @@ Created on Mon Aug 29 16:29:42 2016
 """
 import numpy as np
 import scipy.fftpack as scfft
+import matplotlib as mpl
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style("white")
@@ -15,6 +16,8 @@ from ISRSpectrum.ISRSpectrum import ISRSpectrum
 
 
 if __name__== '__main__':
+    mpl.rcParams['text.usetex'] = True
+    mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     nspec=256
     spfreq=50e3
@@ -44,7 +47,7 @@ if __name__== '__main__':
     ax.spines['right'].set_visible(False)
 
     ax.set_xlabel('Frequency (kHz)',fontsize=14)
-    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5,\omega)|^2\rangle$',fontsize=18)
+    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\omega)|^2\rangle$',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
     ax.set_ylim(ylim)
@@ -60,11 +63,11 @@ if __name__== '__main__':
     ax.spines['right'].set_visible(False)
 
     ax.set_xlabel(r'$\tau$ in $\mu$s ',fontsize=14)
-    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5,\tau)|^2\rangle$',fontsize=18)
+    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\tau)|^2\rangle$',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     plt.tight_layout()
     ax.set_ylim(ylim2)
-    plt.savefig(os.path.join(imagepath,'acfion.png'),dpi=300)
+    plt.savefig('acfion.png',dpi=300)
     #%% With random values
     n_pulse=np.array([1,10,50,200])
     lab_strs=['J={0}'.format(int(i))for i in n_pulse]

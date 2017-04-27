@@ -25,7 +25,7 @@ from isrutilities.mathutils import sommerfelderfrep
 INFODICT = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),
                 'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),
                 'N+':sp.array([1,14]), 'H+':sp.array([1,1]),
-                'e-':sp.array([-1,1])}
+                'He+':sp.array([1,2],'e-':sp.array([-1,1])}
 class ISRSpectrum(object):
     """ Class to create the spectrum. The instance of the class will hold infomation on
     the radar system such as sample frequency, center frequency and number of points for

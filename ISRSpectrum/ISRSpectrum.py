@@ -13,7 +13,7 @@ The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
 from __future__ import absolute_import
-from . import Path
+from ISRSpectrum import Path
 from six import string_types
 import scipy as sp
 import scipy.special
@@ -466,20 +466,19 @@ def e_neutral(t,Nn,Te):
     Te - electron tempreture K
     Outputs
     nu_ineu - collision frequency s^-1"""
-    if t=='N2':
-        return 2.33e-11 *Nn*(1-1.21e-4*Te)*Te
-    elif t=='O2':
-        return 1.82e-10 *Nn*(1-3.6e-2*Te**.5)*Te**.5
-    elif t=='O':
-        return 8.9e-11 *Nn*(1-5.7e-4*Te)*Te**.5
-    elif t=='He':
-        return 4.6e-10 *Nn*Te**.5
-    elif t=='H':
-        return 4.5e-9 *Nn*(1-1.35e-4*Te)*Te**.5
-    elif t=='CO':
-        return 2.34e-11 *Nn*(165+Te)
-    elif t=='CO2':
-        return 3.68e-8 *Nn*(1-4.1e-11*sp.absolute(4500-Te)**2.93)
+    if t == 'N2':
+        return 2.33e-11 * Nn * (1-1.21e-4 * Te) * Te
+    elif t == 'O2':
+        return 1.82e-10 * Nn * (1 - 3.6e-2 * Te**.5) * Te**.5
+    elif t == 'O':
+        return 8.9e-11 * Nn * (1 - 5.7e-4 * Te) * Te**.5
+    elif t == 'He':
+        return 4.6e-10 * Nn * Te**.5
+    elif t == 'H':
+        return 4.5e-9 * Nn * (1 - 1.35e-4 * Te) * Te**.5
+    elif t == 'CO':
+        return 2.34e-11 * Nn * (165 + Te)
+    elif t == 'CO2':
+        return 3.68e-8 *Nn*(1-4.1e-11 * sp.absolute(4500 - Te)**2.93)
     else:
         return 0.
-

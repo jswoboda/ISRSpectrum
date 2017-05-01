@@ -22,10 +22,10 @@ import pandas as pd
 from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 from isrutilities.mathutils import sommerfelderfrep
 
-INFODICT = {'O+':sp.array([1,16]),'NO+':sp.array([1,30]),
-                'N2+':sp.array([1,28]),'O2+':sp.array([1,32]),
-                'N+':sp.array([1,14]), 'H+':sp.array([1,1]),
-                'HE+':sp.array([1,2]), 'e-':sp.array([-1,1])}
+INFODICT = {'O+':sp.array([1, 16]), 'NO+':sp.array([1, 30]),
+            'N2+':sp.array([1, 28]), 'O2+':sp.array([1, 32]),
+            'N+':sp.array([1, 14]), 'H+':sp.array([1, 1]),
+            'HE+':sp.array([1, 2]), 'e-':sp.array([-1, 1])}
 
 class ISRSpectrum(object):
     """ Class to create the spectrum. The instance of the class will hold infomation on
@@ -379,13 +379,13 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
     nuparr = sp.zeros_like(nuperp)
 
 
-    Ni = datablock[:-1,0]* 1e-6
-    Ti = datablock[:-1,1]
-    Ne = datablock[-1,0] *1e-6
-    Te = datablock[-1,1]
-    Bst = pd.read_csv(str(curpath/'ion2ion.csv'),index_col=0)
+    Ni = datablock[:-1, 0]*1e-6
+    Ti = datablock[:-1, 1]
+    Ne = datablock[-1, 0]*1e-6
+    Te = datablock[-1, 1]
+    Bst = pd.read_csv(str(curpath/'ion2ion.csv'), index_col=0)
 
-    Cin = pd.read_csv(str(curpath/'ion2neu.csv'),index_col=0)
+    Cin = pd.read_csv(str(curpath/'ion2neu.csv'), index_col=0)
     # electron electron and electron ion collisions
     #Schunk and Nagy eq 4.144 and eq 4.145
     nuee = 54.5/sp.sqrt(2) * Ne/sp.power(Te,1.5)
@@ -401,8 +401,8 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
 
 
     if (n_datablock is not None) and (n_species is not None):
-        Nn = n_datablock[:,0]* 1e-6
-        Tn = n_datablock[:,1]
+        Nn = n_datablock[:, 0]*1e-6
+        Tn = n_datablock[:, 1]
         # ion neutral collisions
         for si, s in enumerate(species[:-1]):
             for ti, t in enumerate(n_species):
@@ -416,15 +416,15 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
                 nuparr[si ]=nuparr[si]+neuts
         # electron neutral collision frequencies
         for ti, t in enumerate(n_species):
-            nueneu =e_neutral(t,Nn[ti],Te)
+            nueneu = e_neutral(t, Nn[ti], Te)
             nuperp[-1] = nuperp[-1]+nueneu
-            nuparr[-1]  = nuparr[-1]+ nueneu
+            nuparr[-1] = nuparr[-1]+nueneu
 
 
     # according to milla and kudeki the collision for perpendicular and parrallel
     #directions only matter for the electrons
-    nuperp[:-1]=nuparr[:-1]
-    return(nuparr,nuperp)
+    nuperp[:-1] = nuparr[:-1]
+    return(nuparr, nuperp)
 
 def r_ion_neutral(s,t,Ni,Nn,Ti,Tn):
     """ This will calculate resonant ion - neutral reactions collision frequencies. See
@@ -439,22 +439,23 @@ def r_ion_neutral(s,t,Ni,Nn,Ti,Tn):
     Outputs
     nu_ineu - collision frequency s^-1
     """
-    Tr = (Ti+Tn)*0.5
-    sp1 = (s,t)
+    Tr = (Ti + Tn)*0.5
+    sp1 = (s, t)
     # from Schunk and Nagy table 4.5
-    nudict={('H+','H'):[2.65e-10,0.083],('He+','He'):[8.73e-11,0.093], ('N+','N'):[3.84e-11,0.063],
-            ('O+','O'):[3.67e-11,0.064], ('N2+','N'):[5.14e-11,0.069], ('O2+','O2'):[2.59e-11,0.073],
-            ('H+','O'):[6.61e-11,0.047],('O+','H'):[4.63e-12,0.],('CO+','CO'):[3.42e-11,0.085],
-            ('CO2+','CO'):[2.85e-11,0.083]}
+    nudict = {('H+', 'H'):[2.65e-10, 0.083], ('He+', 'He'):[8.73e-11, 0.093],
+              ('N+', 'N'):[3.84e-11, 0.063], ('O+', 'O'):[3.67e-11, 0.064],
+              ('N2+', 'N'):[5.14e-11, 0.069], ('O2+', 'O2'):[2.59e-11, 0.073],
+              ('H+', 'O'):[6.61e-11, 0.047], ('O+', 'H'):[4.63e-12, 0.],
+              ('CO+', 'CO'):[3.42e-11, 0.085], ('CO2+', 'CO'):[2.85e-11, 0.083]}
     A = nudict[sp1][0]
     B = nudict[sp1][1]
-    if sp1==('O+','H'):
+    if sp1 == ('O+','H'):
 
-        nu_ineu = A*Nn*sp.power(Ti/16.+Tn,.5)
-    elif sp1==('H+','O'):
-        nu_ineu = A*Nn*sp.power(Ti,.5)*(1-B*sp.log10(Ti))**2
+        nu_ineu = A*Nn*sp.power(Ti/16.+Tn, .5)
+    elif sp1 == ('H+', 'O'):
+        nu_ineu = A*Nn*sp.power(Ti, .5)*(1-B*sp.log10(Ti))**2
     else:
-        nu_ineu = A*Nn*sp.power(Tr,.5)*(1-B*sp.log10(Tr))**2
+        nu_ineu = A*Nn*sp.power(Tr, .5)*(1-B*sp.log10(Tr))**2
     return nu_ineu
 
 def e_neutral(t,Nn,Te):
@@ -480,6 +481,6 @@ def e_neutral(t,Nn,Te):
     elif t == 'CO':
         return 2.34e-11 * Nn * (165 + Te)
     elif t == 'CO2':
-        return 3.68e-8 *Nn*(1-4.1e-11 * sp.absolute(4500 - Te)**2.93)
+        return 3.68e-8 *Nn*(1-4.1e-11 * sp.absolute(4500. - Te)**2.93)
     else:
         return 0.

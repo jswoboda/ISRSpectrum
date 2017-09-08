@@ -15,10 +15,10 @@ import matplotlib.pylab as plt
 
 if __name__== '__main__':
 
-    ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=100e3,dFlag=True)
+    ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=256, sampfreq=50e3,dFlag=True)
 
-    ti = 2.8e3
-    te = 2.8e3
+    ti = 1.0e3
+    te = 2.0e3
     Ne = 1e11
     mi = 16
     Ce = np.sqrt(v_Boltz*te/v_me)
@@ -49,7 +49,8 @@ if __name__== '__main__':
 
     #%% vary magnetic field
 
-    alpha = np.linspace(19,1,10)
+    alpha = np.linspace(19,1,4)
+    alpha = np.append(alpha,[.5])
     plt.figure(facecolor='w', edgecolor='k')
     plt.plot(omega*1e-3,specorig/np.nanmax(specorig),marker='o', linestyle='--',linewidth=3,label="Original")
     plt.hold(True)
@@ -61,7 +62,7 @@ if __name__== '__main__':
 
         print("\n Evaluation with alpha = {:.2f} deg \n".format(ial))
         (omega,specoll) = ISS2.getspec(datablock,ial)
-        plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\alpha = {:.0f}^\circ$'.format(ial))
+        plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\alpha = {:.1f}^\circ$'.format(ial))
     plt.legend()
 
     #%% Adjust doppler

@@ -85,5 +85,4 @@ if __name__== '__main__':
     plt.title('Varying Doppler velocity for O+ plasma')
     plt.grid(True)
     plt.legend()
-    plt.show()
-
+    plt.show(False)

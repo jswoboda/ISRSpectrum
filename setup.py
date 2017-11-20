@@ -17,7 +17,7 @@ config = {
     'install_requires': ['isrutilities'],
     'python_requires': '>=2.7',
     'extras_require': {'plot':['matplotlib',],},
-    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities'],
+    'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities-999.0'],
     'version': '1.0.0',
     'packages': find_packages(),
     'name': 'ISRSpectrum'

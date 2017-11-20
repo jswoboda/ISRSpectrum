@@ -5,22 +5,21 @@ This is the setup file for the RadarDataSim python package
 
 @author: John Swoboda
 """
-import os,subprocess
-from setuptools import setup
+req = ['nose','six','numpy','scipy','tables','pathlib2','pandas']
 
-try:
-    subprocess.call(['conda','install','--yes','--file','requirements.txt'])
-except Exception as e:
-    pass
+import os
+from setuptools import setup,find_packages
 
 config = {
     'description': 'Creates ISR Spectrums',
     'author': 'John Swoboda',
-    'url': 'github.com/jswoboda/ISRSpectrum',
+    'url': 'https://github.com/jswoboda/ISRSpectrum',
     'install_requires': ['isrutilities'],
+    'python_requires': '>=2.7',
+    'extras_require': ['matplotlib',],
     'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities'],
-    'version': '1.0',
-    'packages': ['ISRSpectrum'],
+    'version': '1.0.0',
+    'packages': find_packages(),
     'name': 'ISRSpectrum'
 }
 

@@ -16,7 +16,7 @@ config = {
     'url': 'https://github.com/jswoboda/ISRSpectrum',
     'install_requires': ['isrutilities'],
     'python_requires': '>=2.7',
-    'extras_require': ['matplotlib',],
+    'extras_require': {'plot':['matplotlib',],},
     'dependency_links': ['https://github.com/jswoboda/PythonISRUtilities/tarball/master#egg=isrutilities'],
     'version': '1.0.0',
     'packages': find_packages(),

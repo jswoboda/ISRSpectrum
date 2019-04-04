@@ -16,7 +16,7 @@ from __future__ import absolute_import
 from ISRSpectrum import Path
 from six import string_types
 import scipy as sp
-import scipy.special
+import scipy.special as sp_spec
 import pandas as pd
 #
 from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
@@ -57,6 +57,10 @@ class ISRSpectrum(object):
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
         self.alphamax = alphamax
+        curpath = Path(__file__).parent
+        self.Bst = pd.read_csv(str(curpath/'ion2ion.csv'), index_col=0)
+
+        self.Cin = pd.read_csv(str(curpath/'ion2neu.csv'), index_col=0)
 
         self.K = 2.0*sp.pi*2*centerFrequency/v_C_0 #The Bragg scattering vector, corresponds to half the radar wavelength.
         if f is None:
@@ -93,7 +97,7 @@ class ISRSpectrum(object):
             in m.
         """
         # perform a copy of the object to avoid it being written over with incorrect.
-        datablock=datablock.copy()
+        datablock = datablock.copy()
         dFlag = self.dFlag
         alpha = alphadeg*sp.pi/180
         estuff = datablock[-1]
@@ -103,66 +107,65 @@ class ISRSpectrum(object):
         ionstuff = datablock[:-1]
         if dFlag:
             print("Calculating Gordeyev int for electons")
-        (egord,Te,Ne,omeg_e) = self.__calcgordeyev__(estuff,alpha)
+        (egord, Te, Ne, omeg_e) = self.__calcgordeyev__(estuff, alpha)
         h_e = sp.sqrt(v_epsilon0*v_Boltz*Te/(Ne*v_elemcharge*v_elemcharge))
         sig_e = (1j+omeg_e*egord)/(self.K**2*h_e**2)
         nte = 2*Ne*sp.real(egord)
 
         #adjust ion stuff
-        ionstuff[:,3] = ionstuff[:,3]*v_elemcharge
-        ionstuff[:,4] = ionstuff[:,4]*v_amu
-        ionden = sp.sum(ionstuff[:,0])
+        ionstuff[:, 3] = ionstuff[:, 3]*v_elemcharge
+        ionstuff[:, 4] = ionstuff[:, 4]*v_amu
+        ionden = sp.sum(ionstuff[:, 0])
         # normalize total ion density to be the same as electron density
-        ionstuff[:,0] = (estuff[0]/ionden)*ionstuff[:,0]
+        ionstuff[:, 0] = (estuff[0]/ionden)*ionstuff[:, 0]
 
         # ratio of charges between ion species and electrons
-        qrotvec = ionstuff[:,3]/estuff[3]
+        qrotvec = ionstuff[:, 3]/estuff[3]
         firstion = True
         wevec = sp.zeros(Nions)
         Tivec = sp.zeros(Nions)
-        for iion,iinfo in enumerate(ionstuff):
+        for iion, iinfo in enumerate(ionstuff):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
 
-            (igord,Ti,Ni,omeg_i) = self.__calcgordeyev__(iinfo,alpha)
+            (igord, Ti, Ni, omeg_i) = self.__calcgordeyev__(iinfo, alpha)
 
-
-            too_big = self.f>1e5
-#            igord[too_big] = 0.
 
             wevec[iion] = Ni/Ne
             Tivec[iion] = Ti
-            # sub out ion debye length because zero density of ion species can cause a divid by zero error.
-            # mu=Ti/Te, tempreture ratio
+            # sub out ion debye length because zero density of ion species
+            # can cause a divid by zero error.
+            # tempreture ratio
             mu = Ti/Te
             qrot = qrotvec[iion]
             sig_i = (Ni/Ne)*(1j+omeg_i*igord)/(self.K**2*mu*h_e**2/qrot**2)
             nti = 2*Ni*sp.real(igord)
-#            nti[too_big] = 0.
+
             if firstion:
-                sig_sum =sig_i
+                sig_sum = sig_i
                 nt_sum = nti
-                firstion=False
+                firstion = False
             else:
                 sig_sum = sig_i+sig_sum
                 nt_sum = nti+nt_sum
 
         inum = sp.absolute(sig_e)**2*nt_sum
         enum = sp.absolute(1j+sig_sum)**2*nte
-        den = sp.absolute(1j + sig_sum +sig_e)**2
+        den = sp.absolute(1j+sig_sum+sig_e)**2
         iline = inum/den
         eline = enum/den
         if seplines:
-            spec=[iline,eline]
+            spec = [iline, eline]
         else:
             spec = iline+eline
+
         if rcsflag:
             Tr = Te/sp.sum(wevec*Tivec)
             rcs = Ne/((1+self.K**2*h_e**2)*(1+self.K**2*h_e**2+Tr))
 
-            return (self.f,spec,rcs)
+            return (self.f, spec, rcs)
         else:
-            return (self.f,spec)
+            return (self.f, spec)
     def getspecsep(self,datablock,species,vel = 0.0, alphadeg=90.0,rcsflag=False,col_calc = False,n_datablock=None,n_species=None,seplines=False):
         """ This function is a different way of getting the spectrums. A datablock is
         still used, (Nsp x 2) numpy array, but it is filled in by using the species
@@ -196,7 +199,7 @@ class ISRSpectrum(object):
         nspec = datablock.shape[0]
         datablocknew = sp.zeros((nspec,7))
 
-        (nuparr,nuperp) = get_collisionfreqs(datablock,species,n_datablock, n_species)
+        (nuparr,nuperp) = get_collisionfreqs(datablock, species, self.Bst, self.Cin, n_datablock, n_species)
         for nspec, ispec in enumerate(species):
             datablocknew[nspec,:2] = datablock[nspec]
             datablocknew[nspec,2] = vel
@@ -207,7 +210,7 @@ class ISRSpectrum(object):
 
         return self.getspec(datablocknew,alphadeg,rcsflag,seplines=seplines)
 
-    def __calcgordeyev__(self,dataline,alpha,alphdiff = 10.0):
+    def __calcgordeyev__(self, dataline, alpha, alphdiff = 10.0):
         """ Performs the Gordeyve integral calculation.
         Inputs
         dataline: A numpy array of length that holds the plasma parameters needed
@@ -229,11 +232,11 @@ class ISRSpectrum(object):
         """
         dFlag = self.dFlag
         K = self.K
-        (Ns,Ts,Vs,qs,ms,nus) = dataline[:6]
+        (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
         if len(dataline)==7:
             nuperp = dataline[-1]
         else:
-            nuperp =nus
+            nuperp = nus
 
         C = sp.sqrt(v_Boltz*Ts/ms)
         omeg_s = self.omeg - K*Vs
@@ -241,29 +244,32 @@ class ISRSpectrum(object):
         Om = qs*self.bMag/ms
         # determine what integral is used
         magbool = alpha*180.0/sp.pi < self.alphamax
-        collbool = self.collfreqmin*K*C<nus
+        collbool = self.collfreqmin*K*C < nus
 
         if  not collbool and not magbool:
             #for case with no collisions or magnetic field just use analytic method
-            gord = (sp.sqrt(sp.pi)*sp.exp(-theta**2)-1j*2.0*scipy.special.dawsn(theta))/(K*C*sp.sqrt(2))
+            num_g = sp.sqrt(sp.pi)*sp.exp(-theta**2)-1j*2.0*sp_spec.dawsn(theta)
+            den_g = K*C*sp.sqrt(2)
+            gord = num_g/den_g
             if dFlag:
                 print('\t No collisions No magnetic field')
-            return (gord,Ts,Ns,omeg_s)
+            return (gord, Ts, Ns, omeg_s)
+
         elif collbool and not magbool:
             if dFlag:
                 print('\t With collisions No magnetic field')
             gordfunc = collacf
-            exparams = (K,C,nus)
+            exparams = (K, C, nus)
         elif not collbool and magbool:
             if dFlag:
                 print('\t No collisions with magnetic field')
             gordfunc = magacf
-            exparams = (K,C,alpha,Om)
+            exparams = (K, C, alpha, Om)
         else:
             if dFlag:
                 print('\t With collisions with magnetic field')
             gordfunc = magncollacf
-            exparams = (K,C,alpha,Om,nus)
+            exparams = (K, C, alpha, Om, nus)
 
 
         maxf = sp.absolute(self.f).max()
@@ -356,13 +362,15 @@ def allin(inp,reflist):
 
 #%% Collision frequencies
 
-def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
+def get_collisionfreqs(datablock,species, Bst, Cin, n_datablock=None, n_species=None):
     """ This function will calculate collision frequencies based off of the methods
     shown in Schunk and Nagy (2009) chapter 4.
         inputs
         datablock - A numpy array of size Nsp x2. The first element of the row is the
             density of species in m^-3 and the second element is the Tempreture in
-            degrees K.
+            degrees K
+        Bst - Ion ion collision constants read in from a file.
+        Cin - Ion neutral collision constants read in from a file.
         species - A Nsp list of strings that label each species.
         col_calc - If this flag is true then collisions will be calculated. (Default= False)
         n_datablock - A numpy array of size Nnsp x2. The first element of the row is
@@ -373,7 +381,7 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
         nuparr - A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
         nuperp - A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
-    curpath = Path(__file__).parent
+
 
     nuperp = sp.zeros((datablock.shape[0]))
     nuparr = sp.zeros_like(nuperp)
@@ -383,9 +391,7 @@ def get_collisionfreqs(datablock,species,n_datablock=None, n_species=None):
     Ti = datablock[:-1, 1]
     Ne = datablock[-1, 0]*1e-6
     Te = datablock[-1, 1]
-    Bst = pd.read_csv(str(curpath/'ion2ion.csv'), index_col=0)
 
-    Cin = pd.read_csv(str(curpath/'ion2neu.csv'), index_col=0)
     # electron electron and electron ion collisions
     #Schunk and Nagy eq 4.144 and eq 4.145
     nuee = 54.5/sp.sqrt(2) * Ne/sp.power(Te,1.5)

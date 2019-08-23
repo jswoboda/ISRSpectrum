@@ -13,12 +13,12 @@ notifications:
 
 git:
   depth: 3
-  
+
 before_install:
   - pip -q install coveralls
 
-install: pip install -e . --process-dependency-links
- 
+install: pip install -e .
+
 script: coverage run Test/test_isr.py -v
 
 after_success: coveralls

@@ -8,12 +8,12 @@ from ISRSpectrum import Path
 import numpy as np
 import scipy.fftpack as fftsy
 import scipy.special
+import scipy.constants as spconst
 import matplotlib.pylab as plt
 from matplotlib import rc
 #
 from ISRSpectrum.ISRSpectrum import magacf, collacf,magncollacf
-from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-from isrutilities.mathutils import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
+from ISRSpectrum.mathutils import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
 
 
 if __name__== '__main__':
@@ -27,15 +27,15 @@ if __name__== '__main__':
     sampfreq=50e3
     bMag = 0.4e-4
     Ts = 1e3
-    Partdict = {0:('Electron',v_me,v_elemcharge),1:('H+ Ion',v_amu,v_elemcharge),2:('O+ Ion',16*v_amu,v_elemcharge)}
+    Partdict = {0:('Electron',spconst.m_e,spconst.e),1:('H+ Ion',spconst.m_p,spconst.e),2:('O+ Ion',16*spconst.m_p,spconst.e)}
     particle = Partdict[0]
     pname = particle[0]
 
     ms = particle[1]
     q_ch = particle[2]
-    K = 2.0*np.pi*2*centerFrequency/v_C_0
+    K = 2.0*np.pi*2*centerFrequency/spconst.c
     f = np.arange(-np.ceil((nspec-1.0)/2.0),np.floor((nspec-1.0)/2.0+1))*(sampfreq/(2*np.ceil((nspec-1.0)/2.0)))
-    C = np.sqrt(v_Boltz*Ts/ms)
+    C = np.sqrt(spconst.k*Ts/ms)
     Om = q_ch*bMag/ms
 
     omeg_s = 2.0*np.pi*f
@@ -67,7 +67,7 @@ if __name__== '__main__':
     plt.figure()
     plt.plot(tau,gordnn,linestyle='--',color='b',linewidth=4,label=r'No Collisions')
     plt.hold(True)
-    
+
     for inun, inu in enumerate(nuvec):
         numult = inu/(K*C)
         plt.plot(tau,gordnun[inun].real,linewidth=3,label=r'$\nu = {:.2f} KC$'.format(numult))
@@ -90,7 +90,7 @@ if __name__== '__main__':
     plt.figure()
     plt.plot(tau,gordnn,linestyle='--',color='b',linewidth=4,label='No B-field')
     plt.hold(True)
-    
+
     for ialn, ial in enumerate(alpha):
         plt.plot(tau,gordmag[ialn].real,linewidth=3,label=r'$\alpha = {:.0f}^\circ$'.format(ial))
 
@@ -99,7 +99,7 @@ if __name__== '__main__':
     plt.legend()
     plt.show(False)
     plt.savefig('ACFwmag'+pname.replace(" ", "")+'.png')
-    
+
 
 #%% Error surface with both
     almat3d = np.tile(alpha[:,np.newaxis,np.newaxis],(1,len(nuvec),len(tau)))

@@ -9,8 +9,8 @@ Created on Thu Jan 29 13:10:33 2015
 
 import numpy as np
 import time
+import scipy.constants as spconst
 import ISRSpectrum.ISRSpectrum as ISSnew
-from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 import matplotlib.pylab as plt
 
 if __name__== '__main__':
@@ -21,8 +21,8 @@ if __name__== '__main__':
     te = 2.0e3
     Ne = 1e11
     mi = 16
-    Ce = np.sqrt(v_Boltz*te/v_me)
-    Ci = np.sqrt(v_Boltz*ti/(v_amu*mi))
+    Ce = np.sqrt(spconst.k*te/spconst.m_e)
+    Ci = np.sqrt(spconst.k*ti/(spconst.m_p*mi))
 
     datablock = np.array([[Ne,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
     datablockn = datablock.copy()

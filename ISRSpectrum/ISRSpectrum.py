@@ -18,9 +18,8 @@ from six import string_types
 import scipy as sp
 import scipy.special as sp_spec
 import pandas as pd
-#
-from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
-from isrutilities.mathutils import sommerfelderfrep
+import scipy.constants as spconst
+from ISRSpectrum.mathutils import sommerfelderfrep
 
 INFODICT = {'O+':sp.array([1, 16]), 'NO+':sp.array([1, 30]),
             'N2+':sp.array([1, 28]), 'O2+':sp.array([1, 32]),
@@ -62,7 +61,7 @@ class ISRSpectrum(object):
 
         self.Cin = pd.read_csv(str(curpath/'ion2neu.csv'), index_col=0)
 
-        self.K = 2.0*sp.pi*2*centerFrequency/v_C_0 #The Bragg scattering vector, corresponds to half the radar wavelength.
+        self.K = 2.0*sp.pi*2*centerFrequency/spconst.c #The Bragg scattering vector, corresponds to half the radar wavelength.
         if f is None:
             minfreq = -sp.ceil((nspec-1.0)/2.0)
             maxfreq = sp.floor((nspec-1.0)/2.0+1)
@@ -102,19 +101,19 @@ class ISRSpectrum(object):
         alpha = alphadeg*sp.pi/180
         estuff = datablock[-1]
         Nions = datablock.shape[0]-1
-        estuff[3] = -v_elemcharge
-        estuff[4] = v_me
+        estuff[3] = -spconst.e
+        estuff[4] = spconst.m_e
         ionstuff = datablock[:-1]
         if dFlag:
             print("Calculating Gordeyev int for electons")
         (egord, Te, Ne, omeg_e) = self.__calcgordeyev__(estuff, alpha)
-        h_e = sp.sqrt(v_epsilon0*v_Boltz*Te/(Ne*v_elemcharge*v_elemcharge))
+        h_e = sp.sqrt(spconst.epsilon_0*spconst.k*Te/(Ne*spconst.e*spconst.e))
         sig_e = (1j+omeg_e*egord)/(self.K**2*h_e**2)
         nte = 2*Ne*sp.real(egord)
 
         #adjust ion stuff
-        ionstuff[:, 3] = ionstuff[:, 3]*v_elemcharge
-        ionstuff[:, 4] = ionstuff[:, 4]*v_amu
+        ionstuff[:, 3] = ionstuff[:, 3]*spconst.e
+        ionstuff[:, 4] = ionstuff[:, 4]*spconst.m_p
         ionden = sp.sum(ionstuff[:, 0])
         # normalize total ion density to be the same as electron density
         ionstuff[:, 0] = (estuff[0]/ionden)*ionstuff[:, 0]
@@ -238,7 +237,7 @@ class ISRSpectrum(object):
         else:
             nuperp = nus
 
-        C = sp.sqrt(v_Boltz*Ts/ms)
+        C = sp.sqrt(spconst.k*Ts/ms)
         omeg_s = self.omeg - K*Vs
         theta = omeg_s/(K*C*sp.sqrt(2.0))
         Om = qs*self.bMag/ms

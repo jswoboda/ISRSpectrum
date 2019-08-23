@@ -6,13 +6,13 @@ This script will create plots of ISR spectra for different radar systems
 """
 
 import scipy as sp
+import scipy.constants as spconst
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style("whitegrid")
 sns.set_context("notebook")
 #
 import ISRSpectrum.ISRSpectrum as ISSnew
-from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
     databloc =  sp.array([[Ne,Ti],[Ne,Te]])
     species = ['O+','e-']
 
-    Cia = sp.sqrt(v_Boltz*(Te+3.*Ti)/16./v_amu)
+    Cia = sp.sqrt(spconst.k*(Te+3.*Ti)/16./spconst.m_p)
 
     #make list of dictionaries
     biglist = [{'name':'AMISR','Fo':449e6,'Fs':50e3,'alpha':70.},
@@ -38,7 +38,7 @@ def main():
     labels = ['Spectrum','Ion Acoustic Frequency']
     for ima,idict in enumerate(biglist):
         curax = axvec[ima]
-        k = 2.0*sp.pi*2*idict['Fo']/v_C_0
+        k = 2.0*sp.pi*2*idict['Fo']/spconst.c
         xloc = sp.array([-k*Cia,k*Cia])/2/sp.pi/2
         ISS1 = ISSnew.ISRSpectrum(centerFrequency = idict['Fo'], bMag = 0.4e-4, nspec=256, sampfreq=idict['Fs'],dFlag=True)
         (omeg,spec)=ISS1.getspecsep(databloc,species,vel = 0.0, alphadeg=idict['alpha'],rcsflag=False)

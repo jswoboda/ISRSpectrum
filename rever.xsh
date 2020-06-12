@@ -1,6 +1,5 @@
 $PROJECT = 'ISRSpectrum'
 $ACTIVITIES = [
-              'authors',
               'version_bump',  # Changes the version number in various source files (setup.py, __init__.py, etc)
               'changelog',  # Uses files in the news folder to create a changelog for release
               'tag',  # Creates a tag for the new version number

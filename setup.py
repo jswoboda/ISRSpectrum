@@ -17,7 +17,7 @@ config = dict(
     install_requires=req,
     python_requires='>=2.7',
     extras_require={'plot':['matplotlib','jupyter'],},
-    version='2.0.0',
+    version='2.0.1',
     packages= find_packages(),
     name= 'ISRSpectrum')
 

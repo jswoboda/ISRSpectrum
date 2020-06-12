@@ -12,7 +12,8 @@ $VERSION_BUMP_PATTERNS = [ ('setup.py', 'version\s*=.*,', "version='$VERSION',")
 
 $CHANGELOG_FILENAME = 'CHANGELOG.rst'  # Filename for the changelog
 $CHANGELOG_TEMPLATE = 'TEMPLATE.rst'  # Filename for the news template
-$PUSH_TAG_REMOTE = 'https://github.com/jswoboda/ISRSpectrum.git'  # Repo to push tags to
+$TAG_REMOTE = 'https://github.com/jswoboda/ISRSpectrum.git'  # Repo to push tags to
 
 $GITHUB_ORG = 'jswoboda'  # Github org for Github releases and conda-forge
 $GITHUB_REPO = 'ISRSpectrum '  # Github repo for Github releases  and conda-forge
+$TAG_TARGET='master'

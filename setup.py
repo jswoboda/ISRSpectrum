@@ -10,17 +10,16 @@ req = ['nose','six','numpy','scipy','tables','pathlib2','pandas']
 import os
 from setuptools import setup,find_packages
 
-config = {
-    'description': 'Creates ISR Spectrums',
-    'author': 'John Swoboda',
-    'url': 'https://github.com/jswoboda/ISRSpectrum',
-    'install_requires': req,
-    'python_requires': '>=2.7',
-    'extras_require': {'plot':['matplotlib',],},
-    'version': '1.0.0',
-    'packages': find_packages(),
-    'name': 'ISRSpectrum'
-}
+config = dict(
+    description='Creates ISR Spectrums',
+    author='John Swoboda',
+    url='https://github.com/jswoboda/ISRSpectrum',
+    install_requires=req,
+    python_requires='>=2.7',
+    extras_require={'plot':['matplotlib','jupyter'],},
+    version='2.0.0',
+    packages= find_packages(),
+    name= 'ISRSpectrum')
 
 curpath = os.path.dirname(__file__)
 testpath = os.path.join(curpath,'Test')

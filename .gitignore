@@ -66,3 +66,6 @@ docs/_build/
 *.png
 *.jpg
 .DS_Store
+
+# Rever
+rever/

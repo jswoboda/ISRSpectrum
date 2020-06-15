@@ -1,0 +1,36 @@
+
+package:
+  name: isrspectrum
+  version: 2.0.2
+
+source:
+  git_url: https://github.com/jswoboda/ISRSpectrum.git
+  git_rev: 2.0.2
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - numpy
+    - scipy
+    - six
+    - pathlib2
+    - nose
+    - pandas
+    - seaborn
+
+  run:
+    - python
+    - pandas
+    - scipy
+    - seaborn
+    - jupyter
+
+test:
+  imports:
+    - ISRSpectrum
+
+about:
+  home: https://github.com/jswoboda/ISRSpectrum
+  license: MIT License
+  summary: Creates IS spectra

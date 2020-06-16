@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/jswoboda/ISRSpectrum.svg)](https://travis-ci.org/jswoboda/ISRSpectrum)
 [![Coverage Status](https://coveralls.io/repos/jswoboda/ISRSpectrum/badge.svg)](https://coveralls.io/r/jswoboda/ISRSpectrum)
 
+[![Conda image](https://anaconda.org/swoboj/isrspectrum/badges/version.svg)](https://anaconda.org/swoboj/isrspectrum)
+
+
 ## ISRSpectrum
 by John Swoboda
 

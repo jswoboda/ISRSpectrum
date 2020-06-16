@@ -4,6 +4,15 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.0.1
+====================
+
+**Fixed:**
+
+* Fixed test code.
+
+
+
 v3.0.0
 ====================
 

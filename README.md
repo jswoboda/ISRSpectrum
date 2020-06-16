@@ -7,22 +7,29 @@ by John Swoboda
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")
 
 ## Overview
-This is a Python module to calculate an ISR spectrum  based off of Kudeki and Milla's 2011 IEEE Geophysics paper.
+This is a Python module to calculate an incoherent scatter spectrum based off of Kudeki and Milla's 2011 IEEE Geophysics paper.
 
 > Kudeki, E.; Milla, M.A., "Incoherent Scatter Spectral Theories—Part I: A General Framework and Results for Small Magnetic Aspect Angles," Geoscience and Remote Sensing, IEEE Transactions on , vol.49, no.1, pp.315,328, Jan. 2011
 
-The code has been written to be able to produce a spectrum with an arbitrary number of ion species with an arbitrary collsion frequency and magnetic aspect angle. The only issue is that I will now promise that the code will run quickly at magnetic aspect angles &lt; 1 degree perp to B.
+ Like the model covered in the paper the software can calculate a spectra given, any magnetic aspect angle not perpendicular to B, any number of ion species, and the collision frequencies associated with those ion species. As the magnetic aspect angles get closer to perpendicular to B, usually &lt; 1 degree perp to B, more and more calculations are needed for the Gordeyev to converge.
 
 ## Suggestions
-It is highly suggested that the [Anaconda](https://www.continuum.io/downloads) platform be used as the package manager.
-All of the development and testing has been done using this.
-Assuming the user has installed Anaconda a [set up bash script](https://github.com/jswoboda/AnacondaEnvUtilities), which can be used in Linux or Mac environments is avalible.
+It is highly suggested that the [Anaconda](https://www.continuum.io/downloads) platform be used as the package manager. All of the development and testing has been done using this package manager.
+Assuming the user has installed Anaconda a [set up bash script](https://github.com/jswoboda/AnacondaEnvUtilities), which can be used in Linux or Mac environments is available.
 
-The user can also take advantage of two different APIs to plot results using the SimISR. 
-The first is in Python and is called [GeoDataPython](https://github.com/jswoboda/GeoDataPython). 
-A MATLAB version of this API is also avalible called [GeoDataMATLAB](https://github.com/jswoboda/GeoDataMATLAB).
+The user can also take advantage of two different APIs to plot results using the SimISR.
+The first is in Python and is called [GeoDataPython](https://github.com/jswoboda/GeoDataPython).
+A MATLAB version of this API is also available called [GeoDataMATLAB](https://github.com/jswoboda/GeoDataMATLAB).
 
 ## Installation
+
+The package can be installed through anaconda through the following command
+
+```sh
+conda install -c swoboj isrspectrum
+```
+
+The user can also download the software and install it through pip or set up tools. It is suggested the software be installed locally as it can be updated.
 
 ```sh
 git clone https://github.com/jswoboda/ISRSpectrum.git
@@ -32,10 +39,10 @@ cd ISRSpectrum
 pip install -e .
 ```
 
-	 
+
 ## Code Examples
 
-In order to create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instanstance of the class.
+In order to create the spectrums, assuming the user installed the code, first import the ISRSpectrum class and create an instance of the class.
 
 ```python
 import numpy as np
@@ -63,12 +70,12 @@ Where each colum of the data block is represented as a the information for a ion
 3. Doppler velocity (m/s)
 4. charge in elementary charges
 5. mass of the species in AMU
-6. collision frequency in s^-1. 
+6. collision frequency in s^-1.
 
-The info for the elctron species must be the last row also !
+The info for the electron species must be the last row also !
 
-Alternatively, if you are only using the following species: O+,NO+,N2+,O2+,N+, H+, e-, a simpler interface is avalible. 
-Using this interface quasi-neutrality is assumed so the number of positive ions and electrons are the same. 
+Alternatively, if you are only using the following species: O+,NO+,N2+,O2+,N+, H+, e-, a simpler interface is available.
+Using this interface quasi-neutrality is assumed so the number of positive ions and electrons are the same.
 The user can get spectrum in the following way.
 
 ```python

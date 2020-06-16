@@ -12,8 +12,8 @@ import scipy.constants as spconst
 import matplotlib.pylab as plt
 from matplotlib import rc
 #
-from ISRSpectrum.ISRSpectrum import magacf, collacf,magncollacf
-from ISRSpectrum.mathutils import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
+from ISRSpectrum.ISRSpectrum import magacf, collacf, magncollacf
+from ISRSpectrum import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
 
 
 if __name__== '__main__':
@@ -53,7 +53,6 @@ if __name__== '__main__':
     plt.plot(tau,gordnn,linewidth=3)
     plt.title(r'Single Particle ACF for ' +pname)
     plt.grid(True)
-    plt.show(False)
     plt.savefig('ACF'+pname.replace(" ", "")+'.png')
 #%% With collisions
     nuvec = np.logspace(-2.0,2.0,10)*K*C
@@ -66,7 +65,6 @@ if __name__== '__main__':
 
     plt.figure()
     plt.plot(tau,gordnn,linestyle='--',color='b',linewidth=4,label=r'No Collisions')
-    plt.hold(True)
 
     for inun, inu in enumerate(nuvec):
         numult = inu/(K*C)
@@ -75,7 +73,6 @@ if __name__== '__main__':
     plt.grid(True)
     plt.title(r'Single Particle ACF W/ Collisions for '+pname)
     plt.legend()
-    plt.show(False)
     plt.savefig('ACFwcolls'+pname.replace(" ", "")+'.png')
 
 #%% With magnetic field
@@ -89,7 +86,6 @@ if __name__== '__main__':
     gordmag = magacf(taumat,K,C,d2r*almat,Om)
     plt.figure()
     plt.plot(tau,gordnn,linestyle='--',color='b',linewidth=4,label='No B-field')
-    plt.hold(True)
 
     for ialn, ial in enumerate(alpha):
         plt.plot(tau,gordmag[ialn].real,linewidth=3,label=r'$\alpha = {:.0f}^\circ$'.format(ial))
@@ -97,7 +93,6 @@ if __name__== '__main__':
     plt.grid(True)
     plt.title('Single Particle ACF W/ Mag for ' +pname)
     plt.legend()
-    plt.show(False)
     plt.savefig('ACFwmag'+pname.replace(" ", "")+'.png')
 
 
@@ -113,15 +108,16 @@ if __name__== '__main__':
 #    deltp = np.exp(-np.power(C*Kperp3d,2.0)/(Om*Om+numat3d*numat3d)*(np.cos(2*gam)+numat3d*taumat3d-np.exp(-numat3d*taumat3d)*(np.cos(Om*taumat3d-2.0*gam))))
 
 #    gordall = deltl*deltp
-    gordall=magncollacf(taumat3d,K,C,d2r*almat3d,Om,numat3d)
+    gordall = magncollacf(taumat3d,K,C,d2r*almat3d,Om,numat3d)
     gordnnmat = np.tile(gordnn[np.newaxis,np.newaxis,:],(len(alpha),len(nuvec),1))
 
     gorddiff = np.abs(gordall-gordnnmat)**2
-    err = np.sqrt(gorddiff.sum(2))/np.sqrt(np.power(gordnn,2.0).sum())
+    err = np.sqrt(gorddiff.mean(2))/np.sqrt(np.power(gordnn,2.0).sum())
     extent = [np.log10(nuvec[0]/(K*C)),np.log10(nuvec[-1]/(K*C)),alpha[0],alpha[-1]]
+
     plt.figure()
     myim = plt.imshow(err*100,extent = extent,origin='lower',aspect='auto')
-    myim.set_clim(0.0,5)
+    myim.set_clim(0.0,5.)
     plt.xlabel(r'$\log_{10}(\nu /KC)$')
     plt.ylabel(r'$^\circ\alpha$')
     cbar = plt.colorbar()

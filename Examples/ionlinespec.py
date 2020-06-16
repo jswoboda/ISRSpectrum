@@ -12,34 +12,31 @@ import seaborn as sns
 sns.set_style("white")
 sns.set_context("notebook")
 #
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
-
+from ISRSpectrum import Specinit
 
 if __name__== '__main__':
-    mpl.rcParams['text.usetex'] = True
-    mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     nspec=256
     spfreq=50e3
-    ISpec_ion = ISRSpectrum(centerFrequency = 449e6, nspec=nspec, sampfreq=spfreq,dFlag=True)
+    ISpec_ion = Specinit(centerFrequency = 449e6, nspec=nspec, sampfreq=spfreq,dFlag=True)
     species=['O+','e-']
 #    databloc = np.array([[1.66e10,863.],[1.66e10,863.]])
     ylim=[0,1.4]
     ylim2=[-.5,1.4]
     flims=np.array([3.03e6,3.034e6])
     #%% With B-Field
-    
-    
+
+
     fion,ionline= ISpec_ion.getspecsep(databloc,species)
-    
+
     acf=scfft.ifft(scfft.ifftshift(ionline)).real
     tau=scfft.ifftshift(np.arange(-np.ceil((float(nspec)-1)/2),np.floor((float(nspec)-1)/2)+1))/spfreq
-    
-    
-    
-    
+
+
+
+
     fig,ax = plt.subplots(1,1,sharey=True, figsize=(6,4),facecolor='w')
-    
+
     l1=ax.plot(fion*1e-3,ionline/ionline.max(),'-',lw=3)[0]
     sns.despine()
 
@@ -47,15 +44,14 @@ if __name__== '__main__':
     ax.spines['right'].set_visible(False)
 
     ax.set_xlabel('Frequency (kHz)',fontsize=14)
-    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\omega)|^2\rangle$',fontsize=18)
-    ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
-    plt.tight_layout()
+    #ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\omega)|^2\rangle$',fontsize=18)
+    ax.set_ylabel('Normalized Magnitude',fontsize=14)
     ax.set_ylim(ylim)
     plt.savefig('Specion.png',dpi=300)
-    
-    
+
+
     fig,ax = plt.subplots(1,1,sharey=True, figsize=(6,4),facecolor='w')
-    
+
     l1=ax.plot(tau[:64]*1e6,acf[:64]/acf[0],'-',lw=3)[0]
     sns.despine()
 
@@ -63,9 +59,8 @@ if __name__== '__main__':
     ax.spines['right'].set_visible(False)
 
     ax.set_xlabel(r'$\tau$ in $\mu$s ',fontsize=14)
-    ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\tau)|^2\rangle$',fontsize=18)
+    #ax.set_title(r'$\langle|n_e(|\mathbf{k}|=18.5\;\mathrm{ rad/m},\tau)|^2\rangle$',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
-    plt.tight_layout()
     ax.set_ylim(ylim2)
     plt.savefig('acfion.png',dpi=300)
     #%% With random values
@@ -73,7 +68,7 @@ if __name__== '__main__':
     lab_strs=['J={0}'.format(int(i))for i in n_pulse]
     lab_strs.insert(0,'Original')
     np_1=n_pulse.max()
-    
+
     x=(np.random.randn(np_1,nspec)+1j*np.random.randn(np_1,nspec))/np.sqrt(2.)
     filt=np.tile(np.sqrt(ionline[np.newaxis]),(np_1,1)).astype(x.dtype)
     y=x*filt
@@ -83,13 +78,13 @@ if __name__== '__main__':
     #ystatsacf=scfft.ifft(scfft.ifftshift(ystats,axes=-1),axis=-1).real
     ystatsacf=np.array([ysqrtfft[:i].mean(axis=0).real for i in n_pulse])
     fig,ax = plt.subplots(1,1,sharey=True, figsize=(6,4),facecolor='w')
-    
+
     l1=ax.plot(fion*1e-3,ionline/ionline.max(),'-',lw=3,zorder=len(n_pulse))[0]
     sns.despine()
 
     ax.set_xlim([-15,15])
     ax.spines['right'].set_visible(False)
-    hand=[l1]    
+    hand=[l1]
     for iyn,iy in enumerate(ystats):
         l1=ax.plot(fion*1e-3,iy/ionline.max(),'-',lw=3,zorder=iyn)[0]
         hand.append(l1)
@@ -97,6 +92,5 @@ if __name__== '__main__':
     ax.set_title(r'Ion Line Averaging',fontsize=18)
     ax.set_ylabel(r'Normalized Magnitude',fontsize=14)
     ax.set_ylim(ylim)
-    plt.tight_layout()
     ax.legend(hand,lab_strs,)
     plt.savefig('Specionave.png',dpi=300)

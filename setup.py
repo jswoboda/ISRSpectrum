@@ -5,7 +5,7 @@ This is the setup file for the RadarDataSim python package
 
 @author: John Swoboda
 """
-req = ['nose','six','numpy','scipy','pathlib2','pandas']
+req = ['nose','six','numpy','scipy','pandas','seaborn']
 
 import os
 from setuptools import setup,find_packages
@@ -15,7 +15,7 @@ config = dict(
     author='John Swoboda',
     url='https://github.com/jswoboda/ISRSpectrum',
     install_requires=req,
-    python_requires='>=2.7',
+    python_requires='>=3',
     extras_require={'plot':['matplotlib','jupyter','seaborn'],},
     version='2.0.2',
     packages= find_packages(),

@@ -10,8 +10,7 @@ import seaborn as sns
 sns.set_style("white")
 sns.set_context("talk",font_scale=1.25)
 #
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
-
+from ISRSpectrum import Specinit
 
 if __name__== '__main__':
 
@@ -19,13 +18,13 @@ if __name__== '__main__':
     f = np.linspace(3.03e6,3.034e6,256)
     f_n=-f[::-1]
 #    f = np.logspace(1,np.log10(8e3),2**10)
-    ISpec = ISRSpectrum(centerFrequency = 449e6,f=f,dFlag=True)
-    ISpec_n = ISRSpectrum(centerFrequency = 449e6,f=f_n,dFlag=True)
-    ISpec_ion = ISRSpectrum(centerFrequency = 449e6, nspec=256, sampfreq=50e3,dFlag=True)
-    species=['O+','e-']
+    ISpec = Specinit(centerFrequency = 449e6, f=f, dFlag=True)
+    ISpec_n = Specinit(centerFrequency = 449e6, f=f_n, dFlag=True)
+    ISpec_ion = Specinit(centerFrequency = 449e6, nspec=256, sampfreq=50e3, dFlag=True)
+    species=['O+', 'e-']
 #    databloc = np.array([[1.66e10,863.],[1.66e10,863.]])
 
-    flims=np.array([3.03e6,3.034e6])
+    flims = np.array([3.03e6, 3.034e6])
     #%% With B-Field
     eline = ISpec.getspecsep(databloc,species)[1]
     eline_neg = ISpec_n.getspecsep(databloc,species)[1]
@@ -74,5 +73,3 @@ if __name__== '__main__':
     fig.subplots_adjust(top=0.82)
 
     fig.savefig('Specwbreaks.eps',bbox_inches='tight')
-
-    show()

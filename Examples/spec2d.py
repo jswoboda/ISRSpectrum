@@ -6,14 +6,13 @@ Created on Mon Aug 29 17:10:32 2016
 """
 
 import numpy as np
-import scipy.const as spconst
+import scipy.constants as spconst
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style("white")
 sns.set_context("notebook")
 #
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
-
+from ISRSpectrum import Specinit
 if __name__== '__main__':
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     species=['O+','e-']
@@ -23,7 +22,7 @@ if __name__== '__main__':
     freq_lims=np.array([newcentfreq.min(),newcentfreq.max()])
     oution = []
     for i,if_0 in enumerate(newcentfreq):
-        ISpec_ion = ISRSpectrum(centerFrequency = if_0, nspec=256, sampfreq=50e3,dFlag=False)
+        ISpec_ion = Specinit(centerFrequency = if_0, nspec=256, sampfreq=50e3,dFlag=False)
         fion,ionline= ISpec_ion.getspecsep(databloc,species)
         oution.append(ionline)
     oution=np.array(oution)

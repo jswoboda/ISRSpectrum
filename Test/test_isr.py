@@ -3,9 +3,8 @@ import numpy as np
 from numpy.testing import assert_allclose
 import scipy.constants as spconst
 #
-import ISRSpectrum.ISRSpectrum as ISSnew
-
-ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
+from ISRSpectrum import Specinit
+ISS2 = Specinit(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
 
 ti = 1e3
 te = 1e3

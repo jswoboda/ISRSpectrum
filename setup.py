@@ -17,7 +17,7 @@ config = dict(
     install_requires=req,
     python_requires='>=3',
     extras_require={'plot':['matplotlib','jupyter','seaborn'],},
-    version='3.0.0',
+    version='3.0.1',
     packages= find_packages(),
     name= 'ISRSpectrum')
 

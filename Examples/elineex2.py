@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import seaborn as sns
 #
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
+from ISRSpectrum import Specinit
 
 
 if __name__== '__main__':
@@ -19,7 +19,7 @@ if __name__== '__main__':
 
 
     f = np.linspace(20e3,2.5e6,2**10)
-    ISpec = ISRSpectrum(nspec=2**16,bMag = 3.5e-5,sampfreq=15e6,alphamax=80,f=f,dFlag=True)
+    ISpec = Specinit(nspec=2**16,bMag = 3.5e-5,sampfreq=15e6,alphamax=80,f=f,dFlag=True)
 
     species=['O+','e-']
     databloc = np.array([[1.66e10,863.],[1.66e10,863.]])

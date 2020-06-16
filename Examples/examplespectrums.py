@@ -10,12 +10,12 @@ Created on Thu Jan 29 13:10:33 2015
 import numpy as np
 import time
 import scipy.constants as spconst
-import ISRSpectrum.ISRSpectrum as ISSnew
+from ISRSpectrum import Specinit
 import matplotlib.pylab as plt
 
 if __name__== '__main__':
 
-    ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=256, sampfreq=50e3,dFlag=True)
+    ISS2 = Specinit(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=256, sampfreq=50e3,dFlag=True)
 
     ti = 1.0e3
     te = 2.0e3
@@ -32,7 +32,6 @@ if __name__== '__main__':
     nuvec = np.logspace(-2.0,2.0,10)
     plt.figure(facecolor='w', edgecolor='k')
     plt.plot(omega*1e-3,specorig/np.nanmax(specorig),marker='o', linestyle='--',linewidth=3,label="Original")
-    plt.hold(True)
     plt.xlabel('Frequency (kHz)')
     plt.ylabel('Amplitude')
     plt.title('Varying Collision Frequency for O+ plasma')
@@ -53,7 +52,6 @@ if __name__== '__main__':
     alpha = np.append(alpha,[.5])
     plt.figure(facecolor='w', edgecolor='k')
     plt.plot(omega*1e-3,specorig/np.nanmax(specorig),marker='o', linestyle='--',linewidth=3,label="Original")
-    plt.hold(True)
     plt.xlabel('Frequency (kHz)')
     plt.ylabel('Amplitude')
     plt.title('Varying Magnetic aspect angle for O+ plasma')
@@ -79,11 +77,9 @@ if __name__== '__main__':
         datablockv[:,2] = ivel
         (omega,specoll) = ISS2.getspec(datablockv)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$V_s = {:.0f}^\circ$'.format(ivel))
-        if iveln==0:
-            plt.hold(True)
+
     plt.xlabel('Frequency (kHz)')
     plt.ylabel('Amplitude')
     plt.title('Varying Doppler velocity for O+ plasma')
     plt.grid(True)
     plt.legend()
-    plt.show(False)

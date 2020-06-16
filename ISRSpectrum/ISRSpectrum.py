@@ -506,7 +506,10 @@ def Islistofstr(inlist):
 
 def allin(inp, reflist):
     """ This function will determine if all of the strings in the list input are in
-    the list reflist."""
+    the list reflist.
+
+
+    """
     for item in inp:
         if item not in reflist:
             return False
@@ -517,23 +520,36 @@ def allin(inp, reflist):
 
 
 def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species=None):
-    """ This function will calculate collision frequencies based off of the methods
-    shown in Schunk and Nagy (2009) chapter 4.
-        inputs
-        datablock - A numpy array of size Nsp x2. The first element of the row is the
-            density of species in m^-3 and the second element is the Tempreture in
-            degrees K
-        Bst - Ion ion collision constants read in from a file.
-        Cin - Ion neutral collision constants read in from a file.
-        species - A Nsp list of strings that label each species.
-        col_calc - If this flag is true then collisions will be calculated. (Default= False)
-        n_datablock - A numpy array of size Nnsp x2. The first element of the row is
+    """Calculate collision frequencies
+    Uses the methods shown in Schunk and Nagy (2009) chapter 4.
+
+    Parameters
+    ----------
+    datablock : array_like
+        A numpy array of size Nsp x2. The first element of the row is the
+        density of species in m^-3 and the second element is the Tempreture in
+        degrees K.
+    Bst : array_like
+        Ion ion collision constants read in from a file.
+    Cin : array_like
+        Ion neutral collision constants read in from a file.
+    species : list
+        A Nsp list of strings that label each species.
+    col_calc : bool
+        If this flag is true then collisions will be calculated. (Default= False)
+    n_datablock : array_like
+        A numpy array of size Nnsp x2. The first element of the row is
             the density of the neutral species in m^-3 and the second element is the
             Tempreture in degrees K.If set to None then (Default=None)
-        n_species - A Nnsp list of strings that label each neutral species.(Default=None)
-        Outputs
-        nuparr - A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
-        nuperp - A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
+    n_species : array_like
+        A Nnsp list of strings that label each neutral species.(Default=None)
+
+    Returns
+    -------
+    nuparr : array_like
+        A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
+    nuperp : array_like
+        A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
 
     nuperp = np.zeros((datablock.shape[0]))
@@ -555,6 +571,7 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
     # ionion collisions
     for si, s in enumerate(species[:-1]):
         for ti, t in enumerate(species[:-1]):
+
             nuparr[si] = nuparr[si] + Bst[s][t] * Ni[ti] / np.power(Ti[ti], 1.5)
 
     if (n_datablock is not None) and (n_species is not None):

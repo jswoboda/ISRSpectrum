@@ -8,7 +8,7 @@ This example shows everything up to electron line for magnitized and non-magniti
 
 import numpy as np
 
-from ISRSpectrum.ISRSpectrum import ISRSpectrum
+from ISRSpectrum import Specinit
 import matplotlib.pylab as plt
 import seaborn as sns
 
@@ -21,7 +21,7 @@ if __name__== '__main__':
 #    f = np.lin(1,7,2**10)
     f = np.linspace(0.,5e6,2**12)
 
-    ISpec = ISRSpectrum(nspec=2**16,sampfreq=15e6,alphamax=60,f=f,dFlag=True)
+    ISpec = Specinit(nspec=2**16,sampfreq=15e6,alphamax=60,f=f,dFlag=True)
 
     species=['O+','e-']
     databloc = np.array([[1e11,1100.],[1e11,2500.]])

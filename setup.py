@@ -19,10 +19,10 @@ config = dict(
     extras_require={
         "plot": ["matplotlib", "jupyter", "seaborn"],
     },
-    version='3.0.2',
+    version='3.0.3',
     packages=find_packages(),
     name="ISRSpectrum",
-    package_data={'ISRSpectrum': ['ISRSpectrum/*.csv']}
+    package_data={'ISRSpectrum': ['*.csv']}
 )
 
 curpath = os.path.dirname(__file__)

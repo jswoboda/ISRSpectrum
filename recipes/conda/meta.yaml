@@ -5,10 +5,9 @@ package:
 
 source:
   git_url: https://github.com/jswoboda/ISRSpectrum.git
-  git_rev: 3.0.1
 
 build:
-  noarch: True
+  noarch: python
 
 requirements:
   build:

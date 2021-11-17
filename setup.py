@@ -19,7 +19,7 @@ config = dict(
     extras_require={
         "plot": ["matplotlib", "jupyter", "seaborn"],
     },
-    version='3.0.4',
+    version='3.1.0',
     packages=find_packages(),
     name="ISRSpectrum",
     package_data={'ISRSpectrum': ['*.csv']}

@@ -29,7 +29,7 @@ INFODICT = {
     "O2+": np.array([1, 32]),
     "N+": np.array([1, 14]),
     "H+": np.array([1, 1]),
-    "HE+": np.array([1, 2]),
+    "He+": np.array([1, 4]),
     "e-": np.array([-1, 1]),
 }
 

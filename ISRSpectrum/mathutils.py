@@ -8,7 +8,7 @@ import scipy.special
 
 
 def chirpz(Xn, A, W, M):
-    """ Chirpz calculation for a single array.
+    """Chirpz calculation for a single array.
 
     This function calculates the chirpz transfrom for the numpy array Xn given the
     complex constants A and W along with the length of the final array M.
@@ -51,7 +51,7 @@ def chirpz(Xn, A, W, M):
 def sommerfeldchirpz(
     func, N, M, dk, Lmax=1, errF=0.1, a=-1.0j, p=1.0, x0=None, exparams=()
 ):
-    """ Numerically integrate Sommerfeld like integral using chirpz.
+    """Numerically integrate Sommerfeld like integral using chirpz.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(awk)f(k),t=0..inf)
     using at most Lmax number of N length chirpz transforms to make an M length
@@ -116,7 +116,7 @@ def sommerfeldchirpz(
 
 
 def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
-    """  Numerically integrate Sommerfeld like integral using erf transform function loop.
+    """Numerically integrate Sommerfeld like integral using erf transform function loop.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf)
     using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference
@@ -159,7 +159,7 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
 
 
 def sommerfelderf(func, N, omega, a, b, exparams=()):
-    """ Integrate somerfeld integral using ERF transform for single portion.
+    """Integrate somerfeld integral using ERF transform for single portion.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=a..b)
     using the ERF transform and 2N+1 samples. This technique is from the paper B. L. Ooi 2007.

@@ -35,7 +35,7 @@ INFODICT = {
 
 
 class Specinit(object):
-    """ Class to create the spectrum.
+    """Class to create the spectrum.
 
     The instance of the class will hold infomation on the radar system such as
     sample frequency, center frequency and number of points for the spectrum.
@@ -68,7 +68,7 @@ class Specinit(object):
         dFlag=False,
         f=None,
     ):
-        """ Constructor for the class.
+        """Constructor for the class.
         Parameters
         ----------
         centerFrequency : float
@@ -89,7 +89,7 @@ class Specinit(object):
         f : array_like
             Array of frequeny points, in Hz, the spectrum will be formed over. Default is
             None, at that point the frequency vector will be formed using the number of points for the spectrum
-            and the sampling frequency to create a linearly sampled frequency vector. """
+            and the sampling frequency to create a linearly sampled frequency vector."""
         self.bMag = bMag
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
@@ -113,7 +113,7 @@ class Specinit(object):
         self.omeg = 2.0 * np.pi * self.f
 
     def getspec(self, datablock, alphadeg=90.0, rcsflag=False, seplines=False):
-        """ Gives the spectrum and the frequency vectors.
+        """Gives the spectrum and the frequency vectors.
 
         Get spectrum array given the block of data and the magnetic aspect angle.
 
@@ -125,7 +125,7 @@ class Specinit(object):
             Each row of the array will have the following set up.
                 [Ns, Ts, Vs, qs, ms, nus]
                 Ns - The density of the species in m^-3
-                Ts - Tempretur of the species in degrees K
+                Ts - Temperature of the species in degrees K
                 Vs - The Doppler velocity in m/s.
                 qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
                 ms - Mass of the species in AMU. (Value will be replaced for the electrons)
@@ -223,6 +223,74 @@ class Specinit(object):
         else:
             return (self.f, spec)
 
+    def getspecsimple(
+        self,
+        Ne,
+        Te,
+        Ti,
+        ionspecies,
+        ionfracs,
+        vel=0.0,
+        alphadeg=90.0,
+        rcsflag=False,
+        seplines=False,
+    ):
+        """Creates a spectrum using electron physical parameters not in a data block.
+
+        Assuming only the following ionspecies 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'
+
+        Parameters
+        ----------
+        Ne : float
+            electron density at the given altitude, m^-3
+        Te : float
+            electron temperature, K
+        Ti : float
+            ion temperature, K
+        ionspecies : list
+            Names of ionspecies used.
+        ionfracs : list
+            Fractions of each ionspecies. Will be normalized to sum to one.
+        vel : array_like
+            The line of site velocity of the ions in m/s, default = 0.0
+        alphadeg : float
+            The angle offset from the magnetic field in degrees, default is 90.0
+        rcsflag : bool
+            If this flag is True then a third output of the rcs will be made. Default value is False
+
+        Returns
+        -------
+        f : array_like
+            A numpy array that holds the frequency vector associated with the spectrum, in Hz.
+        spec : array_like
+            The resulting ISR spectrum from the parameters with the max value set to 1.
+        rcs : array_like
+            The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
+        """
+
+        # import ipdb
+        # ipdb.set_trace()
+        assert Islistofstr(ionspecies), "Species needs to be a list of strings"
+        assert allin(
+            ionspecies, list(INFODICT.keys())
+        ), "Have unnamed species in the list."
+        assert len(ionspecies) == len(
+            ionfracs
+        ), "Length of species names and fractions need to be same length"
+
+        nspec = len(ionspecies) + 1
+        datablock = np.zeros((nspec, 2))
+        ionfracs = np.array(ionfracs) / sum(ionfracs)
+
+        for inum, ifrac in enumerate(ionfracs):
+            datablock[inum, 0] = ifrac * Ne
+            datablock[inum, 1] = Ti
+
+        datablock[-1, 0] = Ne
+        datablock[-1, 1] = Ti
+        species = ionspecies + ["e-"]
+        return self.getspecsep(datablock, species, vel, alphadeg, rcsflag, seplines)
+
     def getspecsep(
         self,
         datablock,
@@ -235,17 +303,14 @@ class Specinit(object):
         n_species=None,
         seplines=False,
     ):
-        """ This function is a different way of getting the spectrums.
+        """This function is a different way of getting the spectrums.
 
-        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using
-        the species listed as a string in the list speces.
+        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces.
 
         Parameters
         ----------
         datablock : array_like
-            A numpy array of size Nsp x2. The first element of the row is the
-            density of species in m^-3 and the second element is the Tempreture in
-            degrees K.
+            A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the Tempreture in degrees K.
         species : array_like
             A Nsp list of strings that label each species.
         vel : array_like
@@ -257,14 +322,11 @@ class Specinit(object):
         col_calc : bool
             If this flag is true then collisions will be calculated. (Default= False)
         n_datablock : array_like
-            A numpy array of size Nnsp x2. The first element of the row is
-            the density of the neutral species in m^-3 and the second element is the
-            Tempreture in degrees K.  If set to None then (Default=None)
+            A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the Tempreture in degrees K.  If set to None then (Default=None)
         n_species : array_like
             A Nsp list of strings that label each neutral species.(Default=None)
         seplines : bool
-            A bool that will change the output, spec to a list of numpy arrays that include
-            return from the electron line and ion lines seperatly.
+            A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
 
         Returns
         -------
@@ -278,7 +340,7 @@ class Specinit(object):
         assert Islistofstr(species), "Species needs to be a list of strings"
         assert allin(
             species, list(INFODICT.keys())
-        ), "Have un named species in the list."
+        ), "Have unnamed species in the list."
         nspec = datablock.shape[0]
         datablocknew = np.zeros((nspec, 7))
 
@@ -296,7 +358,7 @@ class Specinit(object):
         return self.getspec(datablocknew, alphadeg, rcsflag, seplines=seplines)
 
     def __calcgordeyev__(self, dataline, alpha, alphdiff=10.0):
-        """ Performs the Gordeyve integral calculation.
+        """Performs the Gordeyve integral calculation.
 
         Parameters
         ----------
@@ -393,7 +455,7 @@ class Specinit(object):
 
 
 def magacf(tau, K, C, alpha, Om):
-    """ Create a single particle acf for a species with magnetic field but no collisions.
+    """Create a single particle acf for a species with magnetic field but no collisions.
 
     Parameters
     ----------
@@ -422,7 +484,7 @@ def magacf(tau, K, C, alpha, Om):
 
 
 def collacf(tau, K, C, nu):
-    """ Create a single particle acf for a species with collisions, no magnetic field.
+    """Create a single particle acf for a species with collisions, no magnetic field.
 
     Parameters
     ----------
@@ -444,7 +506,7 @@ def collacf(tau, K, C, nu):
 
 
 def magncollacf(tau, K, C, alpha, Om, nu):
-    """ Create a single particle acf for a species with magnetic field and collisions.
+    """Create a single particle acf for a species with magnetic field and collisions.
 
     Parameters
     ----------
@@ -484,7 +546,7 @@ def magncollacf(tau, K, C, alpha, Om, nu):
 
 
 def Islistofstr(inlist):
-    """ This function will determine if the input is a list of strings
+    """This function will determine if the input is a list of strings
 
     Parameters
     ----------
@@ -505,7 +567,7 @@ def Islistofstr(inlist):
 
 
 def allin(inp, reflist):
-    """ This function will determine if all of the strings in the list input are in
+    """This function will determine if all of the strings in the list input are in
     the list reflist.
 
 
@@ -601,7 +663,7 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
 
 
 def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
-    """ This will calculate resonant ion - neutral reactions collision frequencies. See
+    """This will calculate resonant ion - neutral reactions collision frequencies. See
     table 4.5 in Schunk and Nagy.
     Inputs
     s - Ion name string
@@ -641,7 +703,7 @@ def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
 
 
 def e_neutral(t, Nn, Te):
-    """ This will calculate electron - neutral reactions collision frequencies. See
+    """This will calculate electron - neutral reactions collision frequencies. See
     table 4.6 in Schunk and Nagy.
 
     Inputs

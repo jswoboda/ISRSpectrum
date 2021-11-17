@@ -1,13 +1,16 @@
 
+{% set version = "3.1.0" %}
 package:
   name: isrspectrum
-  version: 3.0.4
+  version: {{ version }}
 
 source:
   git_url: https://github.com/jswoboda/ISRSpectrum.git
+  git_rev: {{ version }}
 
 build:
   noarch: python
+  number: 0
 
 requirements:
   build:
@@ -35,3 +38,6 @@ about:
   home: https://github.com/jswoboda/ISRSpectrum
   license: MIT License
   summary: Creates IS spectra
+  description: |
+    This is a Python module to calculate an incoherent scatter spectrum based off of Kudeki and Milla's 2011 IEEE Geophysics paper.
+  dev_url: https://github.com/jswoboda/ISRSpectrum

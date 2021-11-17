@@ -1,8 +1,9 @@
 try:
     from pathlib import Path
+
     Path().expanduser()
-except (ImportError,AttributeError):
-    raise ValueError('Please use python 3.')
+except (ImportError, AttributeError):
+    raise ValueError("Please use python 3.")
 
 from ._version import get_versions
 

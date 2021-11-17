@@ -4,6 +4,23 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.1.0
+====================
+
+**Added:**
+
+* Added getspecsimple function so users can avoid using data blocks.
+
+**Changed:**
+
+* Applied black to mathutils.py
+
+**Fixed:**
+
+* String naming convention for ions. Second letters are always lower in the names.
+
+
+
 v3.0.4
 ====================
 

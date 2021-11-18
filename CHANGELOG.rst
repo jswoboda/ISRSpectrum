@@ -4,6 +4,16 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.2.0
+====================
+
+**Added:**
+
+* Added function to get atomic mass units for ion species.
+* Added function to check if valid ion species.
+
+
+
 v3.1.0
 ====================
 

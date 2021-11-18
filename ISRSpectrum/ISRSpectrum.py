@@ -34,6 +34,46 @@ INFODICT = {
 }
 
 
+def ioncheck(ionspecies):
+    """ Used for assert statments to check if species is valid.
+
+    Parameters
+    ----------
+    ionspecies : list
+        Names of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
+
+    Returns
+    -------
+    allgood : boolean
+        True if all list members are valid species.
+    """
+
+    maslist = INFODICT.keys()
+
+    allgood = True
+    for ion in ionspecies:
+        if not ion in maslist:
+            print("{} not a recognized ionspecies".format(ion))
+            allgood=False
+    return allgood
+
+def getionmass(ion):
+    """ Gets ion mass of a species.
+
+    Parameters
+    ----------
+    ion : str
+        Name of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
+
+    Returns
+    -------
+    int
+        Atomic mass of species.
+    """
+
+    assert ioncheck([ion])
+    return INFODICT[ion][-1]
+
 class Specinit(object):
     """Class to create the spectrum.
 
@@ -248,7 +288,7 @@ class Specinit(object):
         Ti : float
             ion temperature, K
         ionspecies : list
-            Names of ionspecies used.
+            Names of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
         ionfracs : list
             Fractions of each ionspecies. Will be normalized to sum to one.
         vel : array_like

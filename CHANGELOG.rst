@@ -4,6 +4,15 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.2.1
+====================
+
+**Fixed:**
+
+* Now importing ioncheck and the amu lookup into main package.
+
+
+
 v3.2.0
 ====================
 

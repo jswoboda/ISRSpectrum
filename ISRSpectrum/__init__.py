@@ -7,7 +7,7 @@ except (ImportError, AttributeError):
 
 from ._version import get_versions
 
-from .ISRSpectrum import Specinit
+from .ISRSpectrum import Specinit, ioncheck, getionmass
 
 from .mathutils import *
 

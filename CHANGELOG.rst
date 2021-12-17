@@ -4,6 +4,11 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.2.2
+====================
+
+
+
 v3.2.1
 ====================
 

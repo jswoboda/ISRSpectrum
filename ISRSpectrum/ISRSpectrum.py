@@ -327,7 +327,7 @@ class Specinit(object):
             datablock[inum, 1] = Ti
 
         datablock[-1, 0] = Ne
-        datablock[-1, 1] = Ti
+        datablock[-1, 1] = Te
         species = ionspecies + ["e-"]
         return self.getspecsep(datablock, species, vel, alphadeg, rcsflag, seplines)
 

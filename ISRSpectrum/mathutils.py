@@ -10,17 +10,23 @@ import scipy.special
 def chirpz(Xn, A, W, M):
     """Chirpz calculation for a single array.
 
-    This function calculates the chirpz transfrom for the numpy array Xn given the
-    complex constants A and W along with the length of the final array M.
+    This function calculates the chirpz transfrom for the numpy array Xn given the complex constants A and W along with the length of the final array M.
 
-    Args:
-        Xn (:obj:`numpy array`): The signal that the Chirp z transform will be calculated for.
-        A (:obj:`complex`): A complex constant used to determine the direction of the integration in Z.
-        W (:obj:`complex`): Another complex constant that will determine the direction of the integration in Z.
-        M (int): The length of the final chirpz transfrom.
+    Parameters
+    -----------
+    Xn : ndarray
+        The signal that the Chirp z transform will be calculated for.
+    A : float
+        A complex constant used to determine the direction of the integration in Z.
+    W : float
+        Another complex constant that will determine the direction of the integration in Z.
+    M : int
+        The length of the final chirpz transfrom.
 
-    Returns:
-        yk (:obj:`numpy array`): The M length chirp z tranfrom given Xn and the complex constants.
+    Returns
+    -------
+    yk : ndarray
+        The M length chirp z tranfrom given Xn and the complex constants.
     """
     N = Xn.shape[0]
     # Make an L length output so the circular convolution does not wrap. Added 1 extra sample to make coding easier.
@@ -34,16 +40,16 @@ def chirpz(Xn, A, W, M):
     yn = np.zeros(L) + 1j * np.zeros(L)
     # complex constants raised to power
     An = A ** (-n)
-    Wn = W ** (n ** 2 / 2.0)
+    Wn = W ** (n**2 / 2.0)
 
     xn[:N] = Xn * An * Wn
     # Make the chirp kernal
-    yn[:M] = W ** (-(k ** 2) / 2.0)
+    yn[:M] = W ** (-(k**2) / 2.0)
     nn = np.arange(L - N + 1, L)
     yn[L - N + 1 :] = W ** (-((L - nn) ** 2) / 2.0)
     # perform the circular convolution and multiply by chirp
     gk = fftsy.ifft(fftsy.fft(xn) * fftsy.fft(yn))[:M]
-    yk = gk * W ** (k ** 2 / 2.0)
+    yk = gk * W ** (k**2 / 2.0)
 
     return yk
 
@@ -53,29 +59,39 @@ def sommerfeldchirpz(
 ):
     """Numerically integrate Sommerfeld like integral using chirpz.
 
-    This function will numerically integrate a Sommerfeld like integral, int(exp(awk)f(k),t=0..inf)
-    using at most Lmax number of N length chirpz transforms to make an M length
-    array. If the normalized difference between the previous estimate of the output Xk is
-    less then the parameter errF then the loop stops and a flag that represents convergence is set to true.
-    A number of repeats are also output as well. This technique is based off the article
-    Li et. al Adaptive evaluation of the Sommerfeld-type integral using the chirp z-transform, 1991.
-    This function also uses a modified Simpsons rule for integration found in Milla PhD Thesis (2010).
+    This function will numerically integrate a Sommerfeld like integral, int(exp(awk)f(k),t=0..inf) using at most Lmax number of N length chirpz transforms to make an M length array. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of repeats are also output as well. This technique is based off the article Li et. al Adaptive evaluation of the Sommerfeld-type integral using the chirp z-transform, 1991. This function also uses a modified Simpsons rule for integration found in Milla PhD Thesis (2010).
 
-    Args:
-        func (func): A function that is used to create f(k).
-        N (int): The length of the chirp z transform used.
-        M (int): The length of the output array.
-        dk (float): The sample period of k.
-        Lmax (:obj:`int`, optional): default 1, The maximum number of repeats of the integration before the loop finishes.
-        errF (:obj:`float`, optional): default .1, The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration.
-        a (:obj:`complex`, optional): default -1.0*1j, A complex number that determines the trejectory of the integration on the z plane.
-        p (:obj:`float`, optional): default 1.0, A real number that helps to define the spacing on the omega plane.
-        x0(:obj:`complex`, optional): default p*np.pi/dk, The starting point on the omega plane.
-        exparams(:obj:`tuple`, optional): default (), Any extra params other then k to create f(k).
+    Parameters
+    -----------
+    func : func
+        A function that is used to create f(k).
+    N : int
+        The length of the chirp z transform used.
+    M : int
+        The length of the output array.
+    dk : float
+        The sample period of k.
+    Lmax : int
+        The maximum number of repeats of the integration before the loop finishes, default 1.
+    errF : float
+        The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.
+    a : float
+        A complex number that determines the trejectory of the integration on the z plane, default -1.0*1j.
+    p : float
+        A real number that helps to define the spacing on the omega plane.
+    x0 : float
+        The starting point on the omega plane, default p*np.pi/dk,
+    exparams :tuple
+        Any extra params other then k to create f(k), default ().
 
-    Returns:
-        (Xk (:obj:`numpy array`),flag_c (bool),irep (int)): The integrated data that is of length M.
-        A convergence flag. The number of repetitions until convergence.
+    Returns
+    -------
+    Xk : ndarray
+        The integrated data that is of length M.
+    flag_c : bool
+        A convergence flag.
+    outrep : int
+        The number of repetitions until convergence.
     """
 
     k = np.arange(N) * dk
@@ -118,34 +134,44 @@ def sommerfeldchirpz(
 def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
     """Numerically integrate Sommerfeld like integral using erf transform function loop.
 
-    This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf)
-    using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference
-    between the previous estimate of the output Xk is less then the parameter errF then the loop stops
-    and a flag that represents convergence is set to true. A number of loops is also output as well.
+    This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.
+    
     This function uses sommerfelderf to do the integration
 
-    Args:
-        func (func): A function that is used to create f(k).
-        N (int): The integration uses 2N+1 samples to do the integration.
-        omega (float): The Frequency array in radians per second.
-        b1 (int): The inital bounds of the first try and then step size for each subsiquent integral.
-        Lmax (:obj:`int`, optional): default 1, The maximum number of repeats of the integration before the loop finishes.
-        errF (:obj:`float`, optional): default .1, The threshold of the normalized difference between the new
-            iteration and the old to stop to stop the iteration.
-        exparams(:obj:`tuple`, optional): default (), Any extra params other then k to create f(k).
+    Parameters
+    -----------
+    func : func
+        A function that is used to create f(k).
+    N : int
+        The integration uses 2N+1 samples to do the integration.
+    omega : ndarray
+        The Frequency array in radians per second.
+    b1 : int
+        The inital bounds of the first try and then step size for each subsiquent integral.
+    Lmax : int
+        The maximum number of repeats of the integration before the loop finishes, default 1.
+    errF : float
+        The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.
+    exparams :tuple
+        Any extra params other then k to create f(k), default ().
 
-    Returns:
-        (Xk (:obj:`numpy array`),flag_c (bool),irep (int)): The integrated data that is of length M.
-        A convergence flag. The number of repetitions until convergence.
+    Returns
+    -------
+    Xk : ndarray
+        The integrated data that is of length M.
+    flag_c : bool
+        A convergence flag.
+    outrep : int
+        The number of repetitions until convergence.
     """
     Xk = np.zeros_like(omega) * (1 + 1j)
     flag_c = False
     for irep in range(Lmax):
 
         Xktemp = sommerfelderf(func, N, omega, b1 * irep, b1 * (irep + 1), exparams)
-        Xkdiff = Xktemp.real ** 2 + Xktemp.imag ** 2
+        Xkdiff = Xktemp.real**2 + Xktemp.imag**2
         Xk = Xk + Xktemp
-        Xkpow = Xk.real ** 2 + Xk.imag ** 2
+        Xkpow = Xk.real**2 + Xk.imag**2
         #        Xkdiff = np.sqrt(np.sum(np.power(np.abs(Xktemp),2.0)))
         #        Xkpow = np.sqrt(np.sum(np.power(np.abs(Xk+Xktemp),2.0)))
         #        Xk = Xk+Xktemp
@@ -161,19 +187,27 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
 def sommerfelderf(func, N, omega, a, b, exparams=()):
     """Integrate somerfeld integral using ERF transform for single portion.
 
-    This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=a..b)
-    using the ERF transform and 2N+1 samples. This technique is from the paper B. L. Ooi 2007.
+    This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=a..b) using the ERF transform and 2N+1 samples. This technique is from the paper B. L. Ooi 2007.
 
-    Args:
-        func (func): A function that is used to create f(k).
-        N (int): The integration uses 2N+1 samples to do the integration.
-        omega: The Frequency array in radians per second.
-        a (float): Lower bound of the integral.
-        b (float): Upper bound of teh integral.
-        exparams (:obj:`tuple`, optional): default (), Any extra params other then k to create f(k).
+    Parameters
+    -----------
+    func : func
+        A function that is used to create f(k).
+    N : int
+        The integration uses 2N+1 samples to do the integration.
+    omega : ndarray
+        The Frequency array in radians per second.
+    a : float
+        Lower bound of the integral.
+    b : float
+        Upper bound of teh integral.
+    exparams :tuple
+        Any extra params other then k to create f(k), default ().
 
-    Returns:
-        Xk (:obj:`numpy array`): The integrated data that is the same length as omega.
+    Returns
+    -------
+    Xk : ndarray
+        The integrated data that is of length of omega.
     """
 
     nvec = np.arange(-N, N + 1)

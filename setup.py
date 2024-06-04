@@ -8,6 +8,7 @@ This is the setup file for the RadarDataSim python package
 req = ["nose", "six", "numpy", "scipy", "pandas", "seaborn"]
 
 import os
+import versioneer
 from setuptools import setup, find_packages
 
 config = dict(
@@ -19,7 +20,8 @@ config = dict(
     extras_require={
         "plot": ["matplotlib", "jupyter", "seaborn"],
     },
-    version='3.2.2',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     name="ISRSpectrum",
     package_data={'ISRSpectrum': ['*.csv']}

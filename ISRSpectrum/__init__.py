@@ -1,16 +1,7 @@
-try:
-    from pathlib import Path
-
-    Path().expanduser()
-except (ImportError, AttributeError):
-    raise ValueError("Please use python 3.")
-
-from ._version import get_versions
-
 from .ISRSpectrum import Specinit, ioncheck, getionmass
 
 from .mathutils import *
 
-__version__ = get_versions()["version"]
+from . import _version
 
-del get_versions
+__version__ = _version.get_versions()["version"]

@@ -12,6 +12,7 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
+
 from __future__ import absolute_import
 from pathlib import Path
 from six import string_types
@@ -35,7 +36,7 @@ INFODICT = {
 
 
 def ioncheck(ionspecies):
-    """ Used for assert statments to check if species is valid.
+    """Used for assert statments to check if species is valid.
 
     Parameters
     ----------
@@ -54,11 +55,12 @@ def ioncheck(ionspecies):
     for ion in ionspecies:
         if not ion in maslist:
             print("{} not a recognized ionspecies".format(ion))
-            allgood=False
+            allgood = False
     return allgood
 
+
 def getionmass(ion):
-    """ Gets ion mass of a species.
+    """Gets ion mass of a species.
 
     Parameters
     ----------
@@ -73,6 +75,7 @@ def getionmass(ion):
 
     assert ioncheck([ion])
     return INFODICT[ion][-1]
+
 
 class Specinit(object):
     """Class to create the spectrum.
@@ -109,6 +112,7 @@ class Specinit(object):
         f=None,
     ):
         """Constructor for the class.
+
         Parameters
         ----------
         centerFrequency : float
@@ -129,7 +133,9 @@ class Specinit(object):
         f : array_like
             Array of frequeny points, in Hz, the spectrum will be formed over. Default is
             None, at that point the frequency vector will be formed using the number of points for the spectrum
-            and the sampling frequency to create a linearly sampled frequency vector."""
+            and the sampling frequency to create a linearly sampled frequency vector.
+        """
+
         self.bMag = bMag
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
@@ -159,32 +165,30 @@ class Specinit(object):
 
         Parameters
         ----------
-        datablock : array_like
-            A numpy array of size 1+Nionsx6 that holds the plasma parameters needed
-            to create the spectrum. The last row will hold the information for the electrons.
+        datablock : ndarray
+            A numpy array of size 1+Nionsx6 that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons.
             Each row of the array will have the following set up.
-                [Ns, Ts, Vs, qs, ms, nus]
-                Ns - The density of the species in m^-3
-                Ts - Temperature of the species in degrees K
-                Vs - The Doppler velocity in m/s.
-                qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
-                ms - Mass of the species in AMU. (Value will be replaced for the electrons)
-                nus - Collision frequency for species in s^-1.
+            [Ns, Ts, Vs, qs, ms, nus]
+            Ns - The density of the species in m^-3
+            Ts - Temperature of the species in degrees K
+            Vs - The Doppler velocity in m/s.
+            qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
+            ms - Mass of the species in AMU. (Value will be replaced for the electrons)
+            nus - Collision frequency for species in s^-1.
         alphadeg : float
             The magnetic aspect angle in degrees.
         rcsflag : float
             A bool that will determine if the reflected power is returned as well. (default is False)
         seplines :bool
-            A bool that will change the output, spec to a list of numpy arrays that include
-            return from the electron line and ion lines seperatly.
+            A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
 
         Returns
         -------
-        f : array_like
+        f : ndarray
             A numpy array that holds the frequency vector associated with the spectrum, in Hz.
-        spec : array_like
+        spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
-        rcs : array_like
+        rcs : ndarray
             The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
         """
         # perform a copy of the object to avoid it being written over with incorrect.
@@ -200,7 +204,7 @@ class Specinit(object):
             print("Calculating Gordeyev int for electons")
         (egord, Te, Ne, omeg_e) = self.__calcgordeyev__(estuff, alpha)
         h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
-        sig_e = (1j + omeg_e * egord) / (self.K ** 2 * h_e ** 2)
+        sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
 
         # adjust ion stuff
@@ -225,13 +229,11 @@ class Specinit(object):
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
             # can cause a divid by zero error.
-            # tempreture ratio
+            # temperature ratio
             mu = Ti / Te
             qrot = qrotvec[iion]
             sig_i = (
-                (Ni / Ne)
-                * (1j + omeg_i * igord)
-                / (self.K ** 2 * mu * h_e ** 2 / qrot ** 2)
+                (Ni / Ne) * (1j + omeg_i * igord) / (self.K**2 * mu * h_e**2 / qrot**2)
             )
             nti = 2 * Ni * np.real(igord)
 
@@ -255,9 +257,7 @@ class Specinit(object):
 
         if rcsflag:
             Tr = Te / np.sum(wevec * Tivec)
-            rcs = Ne / (
-                (1 + self.K ** 2 * h_e ** 2) * (1 + self.K ** 2 * h_e ** 2 + Tr)
-            )
+            rcs = Ne / ((1 + self.K**2 * h_e**2) * (1 + self.K**2 * h_e**2 + Tr))
 
             return (self.f, spec, rcs)
         else:
@@ -291,7 +291,7 @@ class Specinit(object):
             Names of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
         ionfracs : list
             Fractions of each ionspecies. Will be normalized to sum to one.
-        vel : array_like
+        vel : ndarray
             The line of site velocity of the ions in m/s, default = 0.0
         alphadeg : float
             The angle offset from the magnetic field in degrees, default is 90.0
@@ -300,11 +300,11 @@ class Specinit(object):
 
         Returns
         -------
-        f : array_like
+        f : ndarray
             A numpy array that holds the frequency vector associated with the spectrum, in Hz.
-        spec : array_like
+        spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
-        rcs : array_like
+        rcs : ndarray
             The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
         """
 
@@ -349,11 +349,11 @@ class Specinit(object):
 
         Parameters
         ----------
-        datablock : array_like
-            A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the Tempreture in degrees K.
-        species : array_like
+        datablock : ndarray
+            A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the temperature in degrees K.
+        species : ndarray
             A Nsp list of strings that label each species.
-        vel : array_like
+        vel : ndarray
             The line of site velocity of the ions in m/s, default = 0.0
         alphadeg : float
             The angle offset from the magnetic field in degrees, default is 90.0
@@ -361,20 +361,20 @@ class Specinit(object):
             If this flag is True then a third output of the rcs will be made. Default value is False
         col_calc : bool
             If this flag is true then collisions will be calculated. (Default= False)
-        n_datablock : array_like
-            A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the Tempreture in degrees K.  If set to None then (Default=None)
-        n_species : array_like
+        n_datablock : ndarray
+            A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K.  If set to None then (Default=None)
+        n_species : ndarray
             A Nsp list of strings that label each neutral species.(Default=None)
         seplines : bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
 
         Returns
         -------
-        f : array_like
+        f : ndarray
             A numpy array that holds the frequency vector associated with the spectrum, in Hz.
-        spec : array_like
+        spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
-        rcs : array_like
+        rcs : ndarray
             The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
         """
         assert Islistofstr(species), "Species needs to be a list of strings"
@@ -402,7 +402,7 @@ class Specinit(object):
 
         Parameters
         ----------
-        dataline : array_like
+        dataline : ndarray
             A numpy array of length that holds the plasma parameters needed
             to create the spectrum.
             Each row of the array will have the following set up.
@@ -418,13 +418,13 @@ class Specinit(object):
 
         Returns
         -------
-        gord : array_like
+        gord : ndarray
             The result of the Gordeyev integral over Doppler corrected radian frequency
-        hs : array_like
+        hs : ndarray
             The Debye length in m.
-        Ns : array_like
+        Ns : ndarray
             The density of the species in m^-3
-        omeg_s : array_like
+        omeg_s : ndarray
             An array of the Doppler corrected radian frequency
         """
         dFlag = self.dFlag
@@ -445,7 +445,7 @@ class Specinit(object):
 
         if not collbool and not magbool:
             # for case with no collisions or magnetic field just use analytic method
-            num_g = np.sqrt(np.pi) * np.exp(-(theta ** 2)) - 1j * 2.0 * sp_spec.dawsn(
+            num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
                 theta
             )
             den_g = K * C * np.sqrt(2)
@@ -476,7 +476,7 @@ class Specinit(object):
         #        N_somm = 2**15
         #        b1 = 10.0/(K*C*np.sqrt(2.0))
         # changed ot sample grid better
-        N_somm = 2 ** 10
+        N_somm = 2**10
         b1 = T_s * N_somm
         #        b1 = interval/10.
         #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
@@ -499,7 +499,7 @@ def magacf(tau, K, C, alpha, Om):
 
     Parameters
     ----------
-    tau : array_like
+    tau : ndarray
         The time vector for the acf.
     K : float
         Bragg scatter vector magnetude.
@@ -512,7 +512,7 @@ def magacf(tau, K, C, alpha, Om):
 
     Returns
     -------
-    acf : array_like
+    acf : ndarray
         The single particle acf.
     """
     Kpar = np.sin(alpha) * K
@@ -528,7 +528,7 @@ def collacf(tau, K, C, nu):
 
     Parameters
     ----------
-    tau : array_like
+    tau : ndarray
         The time vector for the acf.
     K : float
         Bragg scatter vector magnetude.
@@ -539,7 +539,7 @@ def collacf(tau, K, C, nu):
 
     Returns
     -------
-    acf : array_like
+    acf : ndarray
         The single particle acf.
     """
     return np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
@@ -550,7 +550,7 @@ def magncollacf(tau, K, C, alpha, Om, nu):
 
     Parameters
     ----------
-    tau : array_like
+    tau : ndarray
         The time vector for the acf.
     K : float
         Bragg scatter vector magnetude.
@@ -565,7 +565,7 @@ def magncollacf(tau, K, C, alpha, Om, nu):
 
     Returns
     -------
-    acf : array_like
+    acf : ndarray
         The single particle acf.
     """
     Kpar = np.sin(alpha) * K
@@ -618,7 +618,7 @@ def allin(inp, reflist):
     return True
 
 
-#%% Collision frequencies
+# %% Collision frequencies
 
 
 def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species=None):
@@ -627,28 +627,24 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
 
     Parameters
     ----------
-    datablock : array_like
-        A numpy array of size Nsp x2. The first element of the row is the
-        density of species in m^-3 and the second element is the Tempreture in
-        degrees K.
-    Bst : array_like
+    datablock : ndarray
+        A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the temperature in degrees K.
+    Bst : ndarray
         Ion ion collision constants read in from a file.
-    Cin : array_like
+    Cin : ndarray
         Ion neutral collision constants read in from a file.
     species : list
         A Nsp list of strings that label each species.
     col_calc : bool
         If this flag is true then collisions will be calculated. (Default= False)
-    n_datablock : array_like
-        A numpy array of size Nnsp x2. The first element of the row is
-            the density of the neutral species in m^-3 and the second element is the
-            Tempreture in degrees K.If set to None then (Default=None)
-    n_species : array_like
+    n_datablock : ndarray
+        A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K. If set to None then (Default=None)
+    n_species : ndarray
         A Nnsp list of strings that label each neutral species.(Default=None)
 
     Returns
     -------
-    nuparr : array_like
+    nuparr : ndarray
         A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
     nuperp : array_like
         A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
@@ -703,17 +699,27 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
 
 
 def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
-    """This will calculate resonant ion - neutral reactions collision frequencies. See
-    table 4.5 in Schunk and Nagy.
-    Inputs
-    s - Ion name string
-    t - neutral name string
-    Ni - Ion density cm^-3
-    Nn - Neutral density cm^-3
-    Ti - Ion tempreture K
-    Tn - Neutral tempreture K
-    Outputs
-    nu_ineu - collision frequency s^-1
+    """This will calculate resonant ion - neutral reactions collision frequencies. See table 4.5 in Schunk and Nagy.
+
+    Parameters
+    ----------
+    s : str
+        Ion species name
+    t : str
+        Neutral species name
+    Ni : float
+        Ion density cm^-3
+    Nn : float
+        Neutral density cm^-3
+    Ti : float
+        Ion temperature K
+    Tn float
+        Neutral temperature K
+
+    Returns
+    -------
+    nu_ineu : float
+        collision frequency s^-1
     """
     Tr = (Ti + Tn) * 0.5
     sp1 = (s, t)
@@ -746,22 +752,30 @@ def e_neutral(t, Nn, Te):
     """This will calculate electron - neutral reactions collision frequencies. See
     table 4.6 in Schunk and Nagy.
 
-    Inputs
-    t - neutral name string
-    Nn - Neutral density cm^-3
-    Te - electron tempreture K
-    Outputs
-    nu_ineu - collision frequency s^-1"""
+    Parameters
+    ----------
+    t : str
+        Neutral species name
+    Nn : float
+        Neutral density cm^-3
+    Te : float
+        electron temperature K
+
+    Returns
+    -------
+    nu_ineu : float
+        Collision frequency s^-1
+    """
     if t == "N2":
         return 2.33e-11 * Nn * (1 - 1.21e-4 * Te) * Te
     elif t == "O2":
-        return 1.82e-10 * Nn * (1 - 3.6e-2 * Te ** 0.5) * Te ** 0.5
+        return 1.82e-10 * Nn * (1 - 3.6e-2 * Te**0.5) * Te**0.5
     elif t == "O":
-        return 8.9e-11 * Nn * (1 - 5.7e-4 * Te) * Te ** 0.5
+        return 8.9e-11 * Nn * (1 - 5.7e-4 * Te) * Te**0.5
     elif t == "He":
-        return 4.6e-10 * Nn * Te ** 0.5
+        return 4.6e-10 * Nn * Te**0.5
     elif t == "H":
-        return 4.5e-9 * Nn * (1 - 1.35e-4 * Te) * Te ** 0.5
+        return 4.5e-9 * Nn * (1 - 1.35e-4 * Te) * Te**0.5
     elif t == "CO":
         return 2.34e-11 * Nn * (165 + Te)
     elif t == "CO2":

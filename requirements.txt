@@ -1,0 +1,6 @@
+nose 
+six
+numpy 
+scipy 
+pandas 
+seaborn

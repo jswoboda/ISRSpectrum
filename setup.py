@@ -7,7 +7,6 @@ This is the setup file for the RadarDataSim python package
 """
 req = ["nose", "six", "numpy", "scipy", "pandas", "seaborn"]
 
-import os
 import versioneer
 from setuptools import setup, find_packages
 

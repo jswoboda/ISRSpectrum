@@ -16,6 +16,7 @@ config = dict(
     author="John Swoboda",
     url="https://github.com/jswoboda/ISRSpectrum",
     install_requires=req,
+    setup_requires=req,
     python_requires=">=3",
     extras_require={
         "plot": ["matplotlib", "jupyter", "seaborn"],

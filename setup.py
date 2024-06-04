@@ -28,12 +28,5 @@ config = dict(
     package_data={'ISRSpectrum': ['*.csv']}
 )
 
-curpath = os.path.dirname(__file__)
-testpath = os.path.join(curpath, "Test")
-try:
-    os.mkdir(testpath)
-    print("created {}".format(testpath))
-except OSError:
-    pass
 
 setup(**config)

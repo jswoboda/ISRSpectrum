@@ -4,6 +4,17 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.2.3
+====================
+
+**Added:**
+
+* Applied black tool to main code.
+* Added versioneer.
+* Added Sphinx.
+
+
+
 v3.2.2
 ====================
 

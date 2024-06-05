@@ -1,6 +1,15 @@
 ISRSpectrum package
 ===================
 
+
+The ``Specinit`` class
+***********************************
+.. autoclass:: ISRSpectrum.Specinit
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 Submodules
 ----------
 
@@ -12,7 +21,7 @@ ISRSpectrum module
    :undoc-members:
    :show-inheritance:
 
-ISRSpectrum.mathutils module
+mathutils module
 ----------------------------
 
 .. automodule:: mathutils

@@ -1,4 +1,4 @@
-ISRSpectrum package
+Documentation
 ===================
 
 
@@ -21,7 +21,7 @@ ISRSpectrum module
 mathutils module
 ----------------------------
 
-.. automodule:: mathutils
+.. automodule:: ISRSpectrum.mathutils
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation &mdash; ISRSpectrum 3.2.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ISRSpectrum
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-specinit-class">The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum">ISRSpectrum module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum.mathutils">mathutils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ISRSpectrum</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ISRSpectrum.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h1>
+<section id="the-specinit-class">
+<h2>The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class<a class="headerlink" href="#the-specinit-class" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ISRSpectrum.</span></span><span class="sig-name descname"><span class="pre">Specinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centerFrequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">440200000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bMag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampfreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collfreqmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dFlag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to create the spectrum.</p>
+<p>The instance of the class will hold infomation on the radar system such as
+sample frequency, center frequency and number of points for the spectrum.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.bMag">
+<span class="sig-name descname"><span class="pre">bMag</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.bMag" title="Permalink to this definition"></a></dt>
+<dd><p>The magnetic field magnitude in Teslas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.K">
+<span class="sig-name descname"><span class="pre">K</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.K" title="Permalink to this definition"></a></dt>
+<dd><p>The Bragg scattering vector magnitude corresponds to 1/2 radar wavelength.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.f">
+<span class="sig-name descname"><span class="pre">f</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.f" title="Permalink to this definition"></a></dt>
+<dd><p>Vector holding the frequency values in Hz.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.omeg">
+<span class="sig-name descname"><span class="pre">omeg</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.omeg" title="Permalink to this definition"></a></dt>
+<dd><p>Vector hold the frequency values in rad/s</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.collfreqmin">
+<span class="sig-name descname"><span class="pre">collfreqmin</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.collfreqmin" title="Permalink to this definition"></a></dt>
+<dd><p>Minimum collision frequency before they are taken into account in the Gordeyev integral calculation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.alphamax">
+<span class="sig-name descname"><span class="pre">alphamax</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.alphamax" title="Permalink to this definition"></a></dt>
+<dd><p>The maximum aspect angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.dFlag">
+<span class="sig-name descname"><span class="pre">dFlag</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.dFlag" title="Permalink to this definition"></a></dt>
+<dd><p>A debug flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspec">
+<span class="sig-name descname"><span class="pre">getspec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspec" title="Permalink to this definition"></a></dt>
+<dd><p>Gives the spectrum and the frequency vectors.</p>
+<p>Get spectrum array given the block of data and the magnetic aspect angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datablock</strong> (<em>ndarray</em>) – A numpy array of size 1+Nionsx6 that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons.
+Each row of the array will have the following set up.
+[Ns, Ts, Vs, qs, ms, nus]
+Ns - The density of the species in m^-3
+Ts - Temperature of the species in degrees K
+Vs - The Doppler velocity in m/s.
+qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
+ms - Mass of the species in AMU. (Value will be replaced for the electrons)
+nus - Collision frequency for species in s^-1.</p></li>
+<li><p><strong>alphadeg</strong> (<em>float</em>) – The magnetic aspect angle in degrees.</p></li>
+<li><p><strong>rcsflag</strong> (<em>float</em>) – A bool that will determine if the reflected power is returned as well. (default is False)</p></li>
+<li><p><strong>seplines</strong> (<em>bool</em>) – A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f</strong> (<em>ndarray</em>) – A numpy array that holds the frequency vector associated with the spectrum, in Hz.</p></li>
+<li><p><strong>spec</strong> (<em>ndarray</em>) – The resulting ISR spectrum from the parameters with the max value set to 1.</p></li>
+<li><p><strong>rcs</strong> (<em>ndarray</em>) – The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspecsep">
+<span class="sig-name descname"><span class="pre">getspecsep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_datablock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspecsep" title="Permalink to this definition"></a></dt>
+<dd><p>This function is a different way of getting the spectrums.</p>
+<p>A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>datablock</strong> (<em>ndarray</em>) – A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the temperature in degrees K.</p></li>
+<li><p><strong>species</strong> (<em>ndarray</em>) – A Nsp list of strings that label each species.</p></li>
+<li><p><strong>vel</strong> (<em>ndarray</em>) – The line of site velocity of the ions in m/s, default = 0.0</p></li>
+<li><p><strong>alphadeg</strong> (<em>float</em>) – The angle offset from the magnetic field in degrees, default is 90.0</p></li>
+<li><p><strong>rcsflag</strong> (<em>bool</em>) – If this flag is True then a third output of the rcs will be made. Default value is False</p></li>
+<li><p><strong>col_calc</strong> (<em>bool</em>) – If this flag is true then collisions will be calculated. (Default= False)</p></li>
+<li><p><strong>n_datablock</strong> (<em>ndarray</em>) – A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K.  If set to None then (Default=None)</p></li>
+<li><p><strong>n_species</strong> (<em>ndarray</em>) – A Nsp list of strings that label each neutral species.(Default=None)</p></li>
+<li><p><strong>seplines</strong> (<em>bool</em>) – A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f</strong> (<em>ndarray</em>) – A numpy array that holds the frequency vector associated with the spectrum, in Hz.</p></li>
+<li><p><strong>spec</strong> (<em>ndarray</em>) – The resulting ISR spectrum from the parameters with the max value set to 1.</p></li>
+<li><p><strong>rcs</strong> (<em>ndarray</em>) – The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspecsimple">
+<span class="sig-name descname"><span class="pre">getspecsimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Te</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionspecies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionfracs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspecsimple" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a spectrum using electron physical parameters not in a data block.</p>
+<p>Assuming only the following ionspecies ‘O+’, ‘NO+’, ‘N2+’, ‘O2+’, ‘N+’, ‘H+’, ‘He+’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ne</strong> (<em>float</em>) – electron density at the given altitude, m^-3</p></li>
+<li><p><strong>Te</strong> (<em>float</em>) – electron temperature, K</p></li>
+<li><p><strong>Ti</strong> (<em>float</em>) – ion temperature, K</p></li>
+<li><p><strong>ionspecies</strong> (<em>list</em>) – Names of ionspecies used. Includes ‘O+’, ‘NO+’, ‘N2+’, ‘O2+’, ‘N+’, ‘H+’, ‘He+’.</p></li>
+<li><p><strong>ionfracs</strong> (<em>list</em>) – Fractions of each ionspecies. Will be normalized to sum to one.</p></li>
+<li><p><strong>vel</strong> (<em>ndarray</em>) – The line of site velocity of the ions in m/s, default = 0.0</p></li>
+<li><p><strong>alphadeg</strong> (<em>float</em>) – The angle offset from the magnetic field in degrees, default is 90.0</p></li>
+<li><p><strong>rcsflag</strong> (<em>bool</em>) – If this flag is True then a third output of the rcs will be made. Default value is False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f</strong> (<em>ndarray</em>) – A numpy array that holds the frequency vector associated with the spectrum, in Hz.</p></li>
+<li><p><strong>spec</strong> (<em>ndarray</em>) – The resulting ISR spectrum from the parameters with the max value set to 1.</p></li>
+<li><p><strong>rcs</strong> (<em>ndarray</em>) – The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="module-ISRSpectrum">
+<span id="isrspectrum-module"></span><h3>ISRSpectrum module<a class="headerlink" href="#module-ISRSpectrum" title="Permalink to this heading"></a></h3>
+</section>
+<section id="module-ISRSpectrum.mathutils">
+<span id="mathutils-module"></span><h3>mathutils module<a class="headerlink" href="#module-ISRSpectrum.mathutils" title="Permalink to this heading"></a></h3>
+<p>A number of mathematical tools needed to calculate the spectra.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ISRSpectrum.mathutils.chirpz">
+<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">chirpz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.chirpz" title="Permalink to this definition"></a></dt>
+<dd><p>Chirpz calculation for a single array.</p>
+<p>This function calculates the chirpz transfrom for the numpy array Xn given the complex constants A and W along with the length of the final array M.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Xn</strong> (<em>ndarray</em>) – The signal that the Chirp z transform will be calculated for.</p></li>
+<li><p><strong>A</strong> (<em>float</em>) – A complex constant used to determine the direction of the integration in Z.</p></li>
+<li><p><strong>W</strong> (<em>float</em>) – Another complex constant that will determine the direction of the integration in Z.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – The length of the final chirpz transfrom.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>yk</strong> – The M length chirp z tranfrom given Xn and the complex constants.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfeldchirpz">
+<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfeldchirpz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0</span> <span class="pre">-</span> <span class="pre">1j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfeldchirpz" title="Permalink to this definition"></a></dt>
+<dd><p>Numerically integrate Sommerfeld like integral using chirpz.</p>
+<p>This function will numerically integrate a Sommerfeld like integral, int(exp(awk)f(k),t=0..inf) using at most Lmax number of N length chirpz transforms to make an M length array. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of repeats are also output as well. This technique is based off the article Li et. al Adaptive evaluation of the Sommerfeld-type integral using the chirp z-transform, 1991. This function also uses a modified Simpsons rule for integration found in Milla PhD Thesis (2010).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – The length of the chirp z transform used.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – The length of the output array.</p></li>
+<li><p><strong>dk</strong> (<em>float</em>) – The sample period of k.</p></li>
+<li><p><strong>Lmax</strong> (<em>int</em>) – The maximum number of repeats of the integration before the loop finishes, default 1.</p></li>
+<li><p><strong>errF</strong> (<em>float</em>) – The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – A complex number that determines the trejectory of the integration on the z plane, default -1.0*1j.</p></li>
+<li><p><strong>p</strong> (<em>float</em>) – A real number that helps to define the spacing on the omega plane.</p></li>
+<li><p><strong>x0</strong> (<em>float</em>) – The starting point on the omega plane, default p*np.pi/dk,</p></li>
+<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Xk</strong> (<em>ndarray</em>) – The integrated data that is of length M.</p></li>
+<li><p><strong>flag_c</strong> (<em>bool</em>) – A convergence flag.</p></li>
+<li><p><strong>outrep</strong> (<em>int</em>) – The number of repetitions until convergence.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfelderf">
+<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfelderf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfelderf" title="Permalink to this definition"></a></dt>
+<dd><p>Integrate somerfeld integral using ERF transform for single portion.</p>
+<p>This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=a..b) using the ERF transform and 2N+1 samples. This technique is from the paper B. L. Ooi 2007.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – The integration uses 2N+1 samples to do the integration.</p></li>
+<li><p><strong>omega</strong> (<em>ndarray</em>) – The Frequency array in radians per second.</p></li>
+<li><p><strong>a</strong> (<em>float</em>) – Lower bound of the integral.</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Upper bound of teh integral.</p></li>
+<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Xk</strong> – The integrated data that is of length of omega.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfelderfrep">
+<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfelderfrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfelderfrep" title="Permalink to this definition"></a></dt>
+<dd><p>Numerically integrate Sommerfeld like integral using erf transform function loop.</p>
+<p>This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.</p>
+<p>This function uses sommerfelderf to do the integration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
+<li><p><strong>N</strong> (<em>int</em>) – The integration uses 2N+1 samples to do the integration.</p></li>
+<li><p><strong>omega</strong> (<em>ndarray</em>) – The Frequency array in radians per second.</p></li>
+<li><p><strong>b1</strong> (<em>int</em>) – The inital bounds of the first try and then step size for each subsiquent integral.</p></li>
+<li><p><strong>Lmax</strong> (<em>int</em>) – The maximum number of repeats of the integration before the loop finishes, default 1.</p></li>
+<li><p><strong>errF</strong> (<em>float</em>) – The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.</p></li>
+<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Xk</strong> (<em>ndarray</em>) – The integrated data that is of length M.</p></li>
+<li><p><strong>flag_c</strong> (<em>bool</em>) – A convergence flag.</p></li>
+<li><p><strong>outrep</strong> (<em>int</em>) – The number of repetitions until convergence.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, John Swoboda.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

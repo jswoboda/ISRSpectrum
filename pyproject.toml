@@ -5,6 +5,7 @@ requires = [
     "wheel",
     "numpy",
     "scipy"
+    "sphinx_rtd_theme"
 ]
 build-backend = "setuptools.build_meta"
 

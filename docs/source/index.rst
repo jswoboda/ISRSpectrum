@@ -10,7 +10,8 @@ Welcome to ISRSpectrum's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   ISRSpectrum
+intro
+ISRSpectrum
 
 
 Indices and tables

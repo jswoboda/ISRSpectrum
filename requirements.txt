@@ -4,5 +4,5 @@ numpy
 scipy 
 pandas 
 seaborn
-sphinx_rtd_theme
+sphinx-rtd-theme
 sphinx

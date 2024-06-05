@@ -11,7 +11,7 @@ Welcome to ISRSpectrum's documentation!
    :caption: Contents:
 
    intro
-   ISRSpectrum
+   modules
 
 
 Indices and tables

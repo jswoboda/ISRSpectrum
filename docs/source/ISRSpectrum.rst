@@ -10,9 +10,6 @@ The ``Specinit`` class
     :show-inheritance:
 
 
-Submodules
-----------
-
 ISRSpectrum module
 ------------------------------
 

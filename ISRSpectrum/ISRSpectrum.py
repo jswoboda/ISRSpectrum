@@ -89,9 +89,9 @@ class Specinit(object):
         The magnetic field magnitude in Teslas.
     K : float
         The Bragg scattering vector magnitude corresponds to 1/2 radar wavelength.
-    f : array_like
+    f : ndarray
         Vector holding the frequency values in Hz.
-    omeg : array_like
+    omeg : ndarray
         Vector hold the frequency values in rad/s
     collfreqmin : float
         Minimum collision frequency before they are taken into account in the Gordeyev integral calculation
@@ -124,16 +124,13 @@ class Specinit(object):
         sampfreq : float
             The sampling frequency of the A/Ds in Hz
         collfreqmin : float
-            (Default 1e-2) The minimum collision frequency needed to incorporate it into Gordeyev
-            integral calculations in units of K*sqrt(Kb*Ts/ms) for each ion species.
+            (Default 1e-2) The minimum collision frequency needed to incorporate it into Gordeyev integral calculations in units of K*sqrt(Kb*Ts/ms) for each ion species.
         alphamax : float
             (Default 30)  The maximum magnetic aspect angle in which the B-field will be taken into account.
         dFlag : float
             A debug flag, if set true will output debug text. Default is false.
-        f : array_like
-            Array of frequeny points, in Hz, the spectrum will be formed over. Default is
-            None, at that point the frequency vector will be formed using the number of points for the spectrum
-            and the sampling frequency to create a linearly sampled frequency vector.
+        f : ndarray
+            Array of frequeny points, in Hz, the spectrum will be formed over. Default is None, at that point the frequency vector will be formed using the number of points for the spectrum and the sampling frequency to create a linearly sampled frequency vector.
         """
 
         self.bMag = bMag
@@ -646,7 +643,7 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
     -------
     nuparr : ndarray
         A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
-    nuperp : array_like
+    nuperp : ndarray
         A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
     """
 

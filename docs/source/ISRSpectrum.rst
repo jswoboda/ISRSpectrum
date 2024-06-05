@@ -4,10 +4,10 @@ ISRSpectrum package
 Submodules
 ----------
 
-ISRSpectrum.ISRSpectrum module
+ISRSpectrum module
 ------------------------------
 
-.. automodule:: ISRSpectrum.ISRSpectrum
+.. automodule:: ISRSpectrum
    :members:
    :undoc-members:
    :show-inheritance:
@@ -15,15 +15,15 @@ ISRSpectrum.ISRSpectrum module
 ISRSpectrum.mathutils module
 ----------------------------
 
-.. automodule:: ISRSpectrum.mathutils
+.. automodule:: mathutils
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+.. Module contents
+.. ---------------
 
-.. automodule:: ISRSpectrum
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. .. automodule:: ISRSpectrum
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:

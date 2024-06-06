@@ -4,11 +4,13 @@
 [![Documentation Status](https://readthedocs.org/projects/isrspectrum/badge/?version=latest)](https://isrspectrum.readthedocs.io/en/latest/?badge=latest)
 
 ## ISRSpectrum
+
 by John Swoboda
 
 ![alt text](https://raw.github.com/jswoboda/ISRSpectrum/master/logofig.png "ISR Spectrum")
 
 ## Overview
+
 This is a Python module to calculate an incoherent scatter spectrum based off of Kudeki and Milla's 2011 IEEE Geophysics paper.
 
 > Kudeki, E.; Milla, M.A., "Incoherent Scatter Spectral Theories—Part I: A General Framework and Results for Small Magnetic Aspect Angles," Geoscience and Remote Sensing, IEEE Transactions on , vol.49, no.1, pp.315,328, Jan. 2011
@@ -16,6 +18,7 @@ This is a Python module to calculate an incoherent scatter spectrum based off of
  Like the model covered in the paper the software can calculate a spectra given, any magnetic aspect angle not perpendicular to B, any number of ion species, and the collision frequencies associated with those ion species. As the magnetic aspect angles get closer to perpendicular to B, usually &lt; 1 degree perp to B, more and more calculations are needed for the Gordeyev to converge.
 
 ## Suggestions
+
 It is highly suggested that the [Anaconda](https://www.continuum.io/downloads) platform be used as the package manager. All of the development and testing has been done using this package manager.
 Assuming the user has installed Anaconda a [set up bash script](https://github.com/jswoboda/AnacondaEnvUtilities), which can be used in Linux or Mac environments is available.
 
@@ -40,7 +43,6 @@ cd ISRSpectrum
 
 pip install -e .
 ```
-
 
 ## Code Examples
 

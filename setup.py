@@ -5,7 +5,9 @@ This is the setup file for the RadarDataSim python package
 
 @author: John Swoboda
 """
-req = ["nose", "six", "numpy", "scipy", "pandas", "seaborn"]
+with open('requirements.txt') as f:
+    req = f.read().splitlines()
+#req = ["nose", "six", "numpy", "scipy", "pandas", "seaborn"]
 
 import versioneer
 from setuptools import setup, find_packages

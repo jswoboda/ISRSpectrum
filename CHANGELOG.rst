@@ -4,6 +4,19 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v3.2.4
+====================
+
+**Added:**
+
+* Note to README about default branch change
+
+**Changed:**
+
+* Change default branch to main
+
+
+
 v3.2.3
 ====================
 

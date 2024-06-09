@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/jswoboda/ISRSpectrum/badge.svg)](https://coveralls.io/r/jswoboda/ISRSpectrum)
 [![Conda image](https://anaconda.org/swoboj/isrspectrum/badges/version.svg)](https://anaconda.org/swoboj/isrspectrum)
 [![Documentation Status](https://readthedocs.org/projects/isrspectrum/badge/?version=latest)](https://isrspectrum.readthedocs.io/en/latest/?badge=latest)
-[![GitHub version](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version.svg)](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version)
+[![GitHub version](https://badge.fury.io/gh/jswoboda%2FISRSpectrum.svg)](https://badge.fury.io/gh/jswoboda%2FISRSpectrum)
 
 by John Swoboda
 

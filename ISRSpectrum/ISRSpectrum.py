@@ -427,10 +427,7 @@ class Specinit(object):
         dFlag = self.dFlag
         K = self.K
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
-        if len(dataline) == 7:
-            nuperp = dataline[-1]
-        else:
-            nuperp = nus
+
 
         C = np.sqrt(spconst.k * Ts / ms)
         omeg_s = self.omeg - K * Vs

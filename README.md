@@ -97,3 +97,14 @@ datablock = np.array([[Ni,ti],[Ne,te]])
 ```
 
 Further examples can be found in `Examples/examplespectrums.py`
+
+## Note
+
+I switch the default branch to main. If you have a local copy of the software you can run the following commands to deal with the renaming
+
+```bash
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+git remote set-head origin -a
+```

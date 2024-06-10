@@ -199,7 +199,7 @@ class Specinit(object):
         ionstuff = datablock[:-1]
         if dFlag:
             print("Calculating Gordeyev int for electons")
-        (egord, Te, Ne, omeg_e) = self.__calcgordeyev__(estuff, alpha)
+        (egord, Te, Ne, omeg_e) = calcgordeyev(estuff, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
         h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
@@ -220,8 +220,7 @@ class Specinit(object):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
 
-            (igord, Ti, Ni, omeg_i) = self.__calcgordeyev__(iinfo, alpha)
-
+            (igord, Ti, Ni, omeg_i)=calcgordeyev(iinfo, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
             wevec[iion] = Ni / Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
@@ -394,98 +393,96 @@ class Specinit(object):
 
         return self.getspec(datablocknew, alphadeg, rcsflag, seplines=seplines)
 
-    def __calcgordeyev__(self, dataline, alpha, alphdiff=10.0):
-        """Performs the Gordeyve integral calculation.
+def calcgordeyev(dataline, alpha, K, omeg, bMag,collfreqmin=1e-2,alphamax=30,dFlag = False):
+    """Performs the Gordeyve integral calculation.
 
-        Parameters
-        ----------
-        dataline : ndarray
-            A numpy array of length that holds the plasma parameters needed
-            to create the spectrum.
-            Each row of the array will have the following set up.
-                [Ns, Ts, Vs, qs, ms, nus]
-                Ns - The density of the species in m^-3
-                Ts - Tempretur of the species in degrees K
-                Vs - The Doppler velocity in m/s.
-                qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
-                ms - Mass of the species in AMU. (Value will be replaced for the electrons)
-                nus - Collision frequency for species in s^-1.
-        alphadeg : float
-            The magnetic aspect angle in radians.
+    Parameters
+    ----------
+    dataline : ndarray
+        A numpy array of length that holds the plasma parameters needed
+        to create the spectrum.
+        Each row of the array will have the following set up.
+            [Ns, Ts, Vs, qs, ms, nus]
+            Ns - The density of the species in m^-3
+            Ts - Tempretur of the species in degrees K
+            Vs - The Doppler velocity in m/s.
+            qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
+            ms - Mass of the species in AMU. (Value will be replaced for the electrons)
+            nus - Collision frequency for species in s^-1.
+    alphadeg : float
+        The magnetic aspect angle in radians.
 
-        Returns
-        -------
-        gord : ndarray
-            The result of the Gordeyev integral over Doppler corrected radian frequency
-        hs : ndarray
-            The Debye length in m.
-        Ns : ndarray
-            The density of the species in m^-3
-        omeg_s : ndarray
-            An array of the Doppler corrected radian frequency
-        """
-        dFlag = self.dFlag
-        K = self.K
-        (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
+    Returns
+    -------
+    gord : ndarray
+        The result of the Gordeyev integral over Doppler corrected radian frequency
+    hs : ndarray
+        The Debye length in m.
+    Ns : ndarray
+        The density of the species in m^-3
+    omeg_s : ndarray
+        An array of the Doppler corrected radian frequency
+    """
+    (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
 
 
-        C = np.sqrt(spconst.k * Ts / ms)
-        omeg_s = self.omeg - K * Vs
-        theta = omeg_s / (K * C * np.sqrt(2.0))
-        Om = qs * self.bMag / ms
-        # determine what integral is used
-        magbool = alpha * 180.0 / np.pi < self.alphamax
-        collbool = self.collfreqmin * K * C < nus
+    C = np.sqrt(spconst.k * Ts / ms)
+    omeg_s = omeg - K * Vs
+    theta = omeg_s / (K * C * np.sqrt(2.0))
+    Om = qs * bMag / ms
+    # determine what integral is used
+    magbool = alpha * 180.0 / np.pi < alphamax
+    collbool = collfreqmin * K * C < nus
 
-        if not collbool and not magbool:
-            # for case with no collisions or magnetic field just use analytic method
-            num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
-                theta
-            )
-            den_g = K * C * np.sqrt(2)
-            gord = num_g / den_g
-            if dFlag:
-                print("\t No collisions No magnetic field")
-            return (gord, Ts, Ns, omeg_s)
-
-        elif collbool and not magbool:
-            if dFlag:
-                print("\t With collisions No magnetic field")
-            gordfunc = collacf
-            exparams = (K, C, nus)
-        elif not collbool and magbool:
-            if dFlag:
-                print("\t No collisions with magnetic field")
-            gordfunc = magacf
-            exparams = (K, C, alpha, Om)
-        else:
-            if dFlag:
-                print("\t With collisions with magnetic field")
-            gordfunc = magncollacf
-            exparams = (K, C, alpha, Om, nus)
-
-        maxf = np.abs(self.f).max()
-        T_s = 1.0 / (2.0 * maxf)
-
-        #        N_somm = 2**15
-        #        b1 = 10.0/(K*C*np.sqrt(2.0))
-        # changed ot sample grid better
-        N_somm = 2**10
-        b1 = T_s * N_somm
-        #        b1 = interval/10.
-        #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
-        (gord, flag_c, outrep) = sommerfelderfrep(
-            gordfunc, N_somm, omeg_s, b1, Lmax=500, errF=1e-7, exparams=exparams
+    if not collbool and not magbool:
+        # for case with no collisions or magnetic field just use analytic method
+        num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
+            theta
         )
+        den_g = K * C * np.sqrt(2)
+        gord = num_g / den_g
         if dFlag:
-            yna = ["No", "Yes"]
-            print(
-                "\t Converged: {:s}, Number of iterations: {:d}".format(
-                    yna[flag_c], outrep
-                )
-            )
-
+            print("\t No collisions No magnetic field")
         return (gord, Ts, Ns, omeg_s)
+
+    elif collbool and not magbool:
+        if dFlag:
+            print("\t With collisions No magnetic field")
+        gordfunc = collacf
+        exparams = (K, C, nus)
+    elif not collbool and magbool:
+        if dFlag:
+            print("\t No collisions with magnetic field")
+        gordfunc = magacf
+        exparams = (K, C, alpha, Om)
+    else:
+        if dFlag:
+            print("\t With collisions with magnetic field")
+        gordfunc = magncollacf
+        exparams = (K, C, alpha, Om, nus)
+
+    maxf = np.abs(omeg/(2*np.pi)).max()
+    T_s = 1.0 / (2.0 * maxf)
+
+    #        N_somm = 2**15
+    #        b1 = 10.0/(K*C*np.sqrt(2.0))
+    # changed ot sample grid better
+    N_somm = 2**10
+    b1 = T_s * N_somm
+    #        b1 = interval/10.
+    #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
+    (gord, flag_c, outrep) = sommerfelderfrep(
+        gordfunc, N_somm, omeg_s, b1, Lmax=500, errF=1e-7, exparams=exparams
+    )
+    if dFlag:
+        yna = ["No", "Yes"]
+        print(
+            "\t Converged: {:s}, Number of iterations: {:d}".format(
+                yna[flag_c], outrep
+            )
+        )
+
+    return (gord, Ts, Ns, omeg_s)
 
 
 def magacf(tau, K, C, alpha, Om):

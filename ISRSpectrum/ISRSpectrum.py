@@ -13,7 +13,6 @@ The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
 from pathlib import Path
-import importlib
 from six import string_types
 import numpy as np
 import pandas as pd
@@ -106,7 +105,6 @@ class Specinit(object):
         alphamax=30.0,
         dFlag=False,
         f=None,
-        plugins=[]
     ):
         """Constructor for the class.
 

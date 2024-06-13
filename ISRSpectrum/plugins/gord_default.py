@@ -1,10 +1,194 @@
 #!/usr/bin/env python
-"""
-A number of mathematical tools needed to calculate the spectra.
-"""
+import numpy as np
+import scipy.special as sp_spec
+import scipy.constants as spconst
 import numpy as np
 import scipy.fftpack as fftsy
-import scipy.special
+
+class GordPlug():
+
+    def calcgordeyev(self,dataline, alpha, K, omeg, bMag,collfreqmin=1e-2,alphamax=30,dFlag = False):
+        """Performs the Gordeyve integral calculation.
+
+        Parameters
+        ----------
+        dataline : ndarray
+            A numpy array of length that holds the plasma parameters needed
+            to create the spectrum.
+            Each row of the array will have the following set up.
+                [Ns, Ts, Vs, qs, ms, nus]
+                Ns - The density of the species in m^-3
+                Ts - Temperature of the species in degrees K
+                Vs - The Doppler velocity in m/s.
+                qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
+                ms - Mass of the species in AMU. (Value will be replaced for the electrons)
+                nus - Collision frequency for species in s^-1.
+        alphadeg : float
+            The magnetic aspect angle in radians.
+
+        Returns
+        -------
+        gord : ndarray
+            The result of the Gordeyev integral over Doppler corrected radian frequency
+        hs : ndarray
+            The Debye length in m.
+        Ns : ndarray
+            The density of the species in m^-3
+        omeg_s : ndarray
+            An array of the Doppler corrected radian frequency
+        """
+        (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
+
+
+        C = np.sqrt(spconst.k * Ts / ms)
+        omeg_s = omeg - K * Vs
+        theta = omeg_s / (K * C * np.sqrt(2.0))
+        Om = qs * bMag / ms
+        # determine what integral is used
+        magbool = alpha * 180.0 / np.pi < alphamax
+        collbool = collfreqmin * K * C < nus
+
+        if not collbool and not magbool:
+            # for case with no collisions or magnetic field just use analytic method
+            num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
+                theta
+            )
+            den_g = K * C * np.sqrt(2)
+            gord = num_g / den_g
+            if dFlag:
+                print("\t No collisions No magnetic field,again")
+            return (gord, Ts, Ns, omeg_s)
+
+        elif collbool and not magbool:
+            if dFlag:
+                print("\t With collisions No magnetic field")
+            gordfunc = collacf
+            exparams = (K, C, nus)
+        elif not collbool and magbool:
+            if dFlag:
+                print("\t No collisions with magnetic field")
+            gordfunc = magacf
+            exparams = (K, C, alpha, Om)
+        else:
+            if dFlag:
+                print("\t With collisions with magnetic field")
+            gordfunc = magncollacf
+            exparams = (K, C, alpha, Om, nus)
+
+        maxf = np.abs(omeg/(2*np.pi)).max()
+        T_s = 1.0 / (2.0 * maxf)
+
+        #        N_somm = 2**15
+        #        b1 = 10.0/(K*C*np.sqrt(2.0))
+        # changed ot sample grid better
+        N_somm = 2**10
+        b1 = T_s * N_somm
+        #        b1 = interval/10.
+        #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
+        (gord, flag_c, outrep) = sommerfelderfrep(
+            gordfunc, N_somm, omeg_s, b1, Lmax=500, errF=1e-7, exparams=exparams
+        )
+        if dFlag:
+            yna = ["No", "Yes"]
+            print(
+                "\t Converged: {:s}, Number of iterations: {:d}".format(
+                    yna[flag_c], outrep
+                )
+            )
+
+        return (gord, Ts, Ns, omeg_s)
+
+
+def magacf(tau, K, C, alpha, Om):
+    """Create a single particle acf for a species with magnetic field but no collisions.
+
+    Parameters
+    ----------
+    tau : ndarray
+        The time vector for the acf.
+    K : float
+        Bragg scatter vector magnetude.
+    C : float
+        Thermal speed of the species.
+    alpha : float
+        Magnetic aspect angle in radians.
+    Om : float
+        The gyrofrequency of the particle.
+
+    Returns
+    -------
+    acf : ndarray
+        The single particle acf.
+    """
+    Kpar = np.sin(alpha) * K
+    Kperp = np.cos(alpha) * K
+    return np.exp(
+        -np.power(C * Kpar * tau, 2.0) / 2.0
+        - 2.0 * np.power(Kperp * C * np.sin(Om * tau / 2.0) / Om, 2.0)
+    )
+
+
+def collacf(tau, K, C, nu):
+    """Create a single particle acf for a species with collisions, no magnetic field.
+
+    Parameters
+    ----------
+    tau : ndarray
+        The time vector for the acf.
+    K : float
+        Bragg scatter vector magnetude.
+    C : float
+        Thermal speed of the species.
+    nu : float
+        The collision frequency in collisions/sec
+
+    Returns
+    -------
+    acf : ndarray
+        The single particle acf.
+    """
+    return np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
+
+
+def magncollacf(tau, K, C, alpha, Om, nu):
+    """Create a single particle acf for a species with magnetic field and collisions.
+
+    Parameters
+    ----------
+    tau : ndarray
+        The time vector for the acf.
+    K : float
+        Bragg scatter vector magnetude.
+    C : float
+        Thermal speed of the species.
+    alpha : float
+        Magnetic aspect angle in radians.
+    Om : float
+        The gyrofrequency of the particle.
+    nu : float
+        The collision frequency in collisions/sec
+
+    Returns
+    -------
+    acf : ndarray
+        The single particle acf.
+    """
+    Kpar = np.sin(alpha) * K
+    Kperp = np.cos(alpha) * K
+    gam = np.arctan(nu / Om)
+
+    deltl = np.exp(-np.power(Kpar * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
+    deltp = np.exp(
+        -np.power(C * Kperp, 2.0)
+        / (Om * Om + nu * nu)
+        * (
+            np.cos(2 * gam)
+            + nu * tau
+            - np.exp(-nu * tau) * (np.cos(Om * tau - 2.0 * gam))
+        )
+    )
+    return deltl * deltp
+
 
 
 def chirpz(Xn, A, W, M):
@@ -213,7 +397,7 @@ def sommerfelderf(func, N, omega, a, b, exparams=()):
     nvec = np.arange(-N, N + 1)
 
     h = np.log(1.05 * np.sqrt(2 * N)) / N
-    kn = 0.5 * (b + a) + 0.5 * (b - a) * scipy.special.erf(np.sinh(nvec * h))
+    kn = 0.5 * (b + a) + 0.5 * (b - a) * sp_spec.erf(np.sinh(nvec * h))
 
     An = np.cosh(nvec * h) * np.exp(-np.power(np.sinh(nvec * h), 2))
 

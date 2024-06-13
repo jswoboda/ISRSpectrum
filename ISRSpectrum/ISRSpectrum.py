@@ -12,17 +12,13 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
-
-from __future__ import absolute_import
 from pathlib import Path
+import importlib
 from six import string_types
 import numpy as np
-import scipy as sp
-import scipy.special as sp_spec
 import pandas as pd
 import scipy.constants as spconst
-from .mathutils import sommerfelderfrep
-
+from .plugins import gordplugs
 INFODICT = {
     "O+": np.array([1, 16]),
     "NO+": np.array([1, 30]),
@@ -110,6 +106,7 @@ class Specinit(object):
         alphamax=30.0,
         dFlag=False,
         f=None,
+        plugins=[]
     ):
         """Constructor for the class.
 
@@ -131,8 +128,12 @@ class Specinit(object):
             A debug flag, if set true will output debug text. Default is false.
         f : ndarray
             Array of frequeny points, in Hz, the spectrum will be formed over. Default is None, at that point the frequency vector will be formed using the number of points for the spectrum and the sampling frequency to create a linearly sampled frequency vector.
+        plugin_folder : str
+            A folder for possible plugins.
         """
 
+        self._plugins=gordplugs 
+            
         self.bMag = bMag
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
@@ -155,7 +156,7 @@ class Specinit(object):
             self.f = f
         self.omeg = 2.0 * np.pi * self.f
 
-    def getspec(self, datablock, alphadeg=90.0, rcsflag=False, seplines=False):
+    def getspec(self, datablock, des_plug = 'default',alphadeg=90.0, rcsflag=False, seplines=False):
         """Gives the spectrum and the frequency vectors.
 
         Get spectrum array given the block of data and the magnetic aspect angle.
@@ -199,7 +200,8 @@ class Specinit(object):
         ionstuff = datablock[:-1]
         if dFlag:
             print("Calculating Gordeyev int for electons")
-        (egord, Te, Ne, omeg_e) = calcgordeyev(estuff, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
+        plug = self._plugins[des_plug]
+        (egord, Te, Ne, omeg_e) = plug.calcgordeyev(estuff, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
         h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
@@ -220,7 +222,7 @@ class Specinit(object):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
 
-            (igord, Ti, Ni, omeg_i)=calcgordeyev(iinfo, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
+            (igord, Ti, Ni, omeg_i)=plug.calcgordeyev(iinfo, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
             wevec[iion] = Ni / Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
@@ -391,189 +393,7 @@ class Specinit(object):
                 datablocknew[nspec, 5] = nuparr[nspec]
                 datablocknew[nspec, 6] = nuparr[nspec]
 
-        return self.getspec(datablocknew, alphadeg, rcsflag, seplines=seplines)
-
-def calcgordeyev(dataline, alpha, K, omeg, bMag,collfreqmin=1e-2,alphamax=30,dFlag = False):
-    """Performs the Gordeyve integral calculation.
-
-    Parameters
-    ----------
-    dataline : ndarray
-        A numpy array of length that holds the plasma parameters needed
-        to create the spectrum.
-        Each row of the array will have the following set up.
-            [Ns, Ts, Vs, qs, ms, nus]
-            Ns - The density of the species in m^-3
-            Ts - Tempretur of the species in degrees K
-            Vs - The Doppler velocity in m/s.
-            qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
-            ms - Mass of the species in AMU. (Value will be replaced for the electrons)
-            nus - Collision frequency for species in s^-1.
-    alphadeg : float
-        The magnetic aspect angle in radians.
-
-    Returns
-    -------
-    gord : ndarray
-        The result of the Gordeyev integral over Doppler corrected radian frequency
-    hs : ndarray
-        The Debye length in m.
-    Ns : ndarray
-        The density of the species in m^-3
-    omeg_s : ndarray
-        An array of the Doppler corrected radian frequency
-    """
-    (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
-
-
-    C = np.sqrt(spconst.k * Ts / ms)
-    omeg_s = omeg - K * Vs
-    theta = omeg_s / (K * C * np.sqrt(2.0))
-    Om = qs * bMag / ms
-    # determine what integral is used
-    magbool = alpha * 180.0 / np.pi < alphamax
-    collbool = collfreqmin * K * C < nus
-
-    if not collbool and not magbool:
-        # for case with no collisions or magnetic field just use analytic method
-        num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
-            theta
-        )
-        den_g = K * C * np.sqrt(2)
-        gord = num_g / den_g
-        if dFlag:
-            print("\t No collisions No magnetic field")
-        return (gord, Ts, Ns, omeg_s)
-
-    elif collbool and not magbool:
-        if dFlag:
-            print("\t With collisions No magnetic field")
-        gordfunc = collacf
-        exparams = (K, C, nus)
-    elif not collbool and magbool:
-        if dFlag:
-            print("\t No collisions with magnetic field")
-        gordfunc = magacf
-        exparams = (K, C, alpha, Om)
-    else:
-        if dFlag:
-            print("\t With collisions with magnetic field")
-        gordfunc = magncollacf
-        exparams = (K, C, alpha, Om, nus)
-
-    maxf = np.abs(omeg/(2*np.pi)).max()
-    T_s = 1.0 / (2.0 * maxf)
-
-    #        N_somm = 2**15
-    #        b1 = 10.0/(K*C*np.sqrt(2.0))
-    # changed ot sample grid better
-    N_somm = 2**10
-    b1 = T_s * N_somm
-    #        b1 = interval/10.
-    #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
-    (gord, flag_c, outrep) = sommerfelderfrep(
-        gordfunc, N_somm, omeg_s, b1, Lmax=500, errF=1e-7, exparams=exparams
-    )
-    if dFlag:
-        yna = ["No", "Yes"]
-        print(
-            "\t Converged: {:s}, Number of iterations: {:d}".format(
-                yna[flag_c], outrep
-            )
-        )
-
-    return (gord, Ts, Ns, omeg_s)
-
-
-def magacf(tau, K, C, alpha, Om):
-    """Create a single particle acf for a species with magnetic field but no collisions.
-
-    Parameters
-    ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
-    alpha : float
-        Magnetic aspect angle in radians.
-    Om : float
-        The gyrofrequency of the particle.
-
-    Returns
-    -------
-    acf : ndarray
-        The single particle acf.
-    """
-    Kpar = np.sin(alpha) * K
-    Kperp = np.cos(alpha) * K
-    return np.exp(
-        -np.power(C * Kpar * tau, 2.0) / 2.0
-        - 2.0 * np.power(Kperp * C * np.sin(Om * tau / 2.0) / Om, 2.0)
-    )
-
-
-def collacf(tau, K, C, nu):
-    """Create a single particle acf for a species with collisions, no magnetic field.
-
-    Parameters
-    ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
-    nu : float
-        The collision frequency in collisions/sec
-
-    Returns
-    -------
-    acf : ndarray
-        The single particle acf.
-    """
-    return np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
-
-
-def magncollacf(tau, K, C, alpha, Om, nu):
-    """Create a single particle acf for a species with magnetic field and collisions.
-
-    Parameters
-    ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
-    alpha : float
-        Magnetic aspect angle in radians.
-    Om : float
-        The gyrofrequency of the particle.
-    nu : float
-        The collision frequency in collisions/sec
-
-    Returns
-    -------
-    acf : ndarray
-        The single particle acf.
-    """
-    Kpar = np.sin(alpha) * K
-    Kperp = np.cos(alpha) * K
-    gam = np.arctan(nu / Om)
-
-    deltl = np.exp(-np.power(Kpar * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
-    deltp = np.exp(
-        -np.power(C * Kperp, 2.0)
-        / (Om * Om + nu * nu)
-        * (
-            np.cos(2 * gam)
-            + nu * tau
-            - np.exp(-nu * tau) * (np.cos(Om * tau - 2.0 * gam))
-        )
-    )
-    return deltl * deltp
+        return self.getspec(datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, seplines=seplines)
 
 
 def Islistofstr(inlist):

@@ -7,9 +7,27 @@ import scipy.constants as spconst
 import scipy.special as sp_spec
 
 
-class GordPlug():
+class GordPlug:
 
-    def calcgordeyev(self,dataline, K, omeg,dFlag):
+    def calcgordeyev(self, dataline, K, omeg, dFlag, *args, **kwargs):
+        """
+        Dirct calculation of Gordeyev integral with no magnetic field or collisions.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        gord : ndarray
+            The result of the Gordeyev integral over Doppler corrected radian frequency
+        hs : ndarray
+            The Debye length in m.
+        Ns : ndarray
+            The density of the species in m^-3
+        omeg_s : ndarray
+            An array of the Doppler corrected radian frequency
+
+        """
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
 
         C = np.sqrt(spconst.k * Ts / ms)

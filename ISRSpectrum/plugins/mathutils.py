@@ -136,7 +136,7 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
     """Numerically integrate Sommerfeld like integral using erf transform function loop.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.
-    
+
     This function uses sommerfelderf to do the integration
 
     Parameters

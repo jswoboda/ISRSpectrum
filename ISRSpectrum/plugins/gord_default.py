@@ -5,10 +5,13 @@ import scipy.constants as spconst
 import numpy as np
 import scipy.fftpack as fftsy
 
-class GordPlug():
 
-    def calcgordeyev(self,dataline, alpha, K, omeg, bMag,collfreqmin=1e-2,alphamax=30,dFlag = False):
-        """Performs the Gordeyve integral calculation.
+class GordPlug:
+
+    def calcgordeyev(
+        self, dataline, alpha, K, omeg, bMag, collfreqmin=1e-2, alphamax=30, dFlag=False
+    ):
+        """Performs the Gordeyve integral calculation for main cases from the first Kudeki/Milla paper.
 
         Parameters
         ----------
@@ -25,6 +28,18 @@ class GordPlug():
                 nus - Collision frequency for species in s^-1.
         alphadeg : float
             The magnetic aspect angle in radians.
+        K : float
+            K value of the radar in rad/m
+        omeg : ndarray
+            Radian frequency vector the integral will be evaluated over.
+        bMag : float
+            Magnetic field in Teslas
+        collfreqmin : float
+            (Default 1e-2) The minimum collision frequency needed to incorporate it into Gordeyev integral calculations in units of K*sqrt(Kb*Ts/ms) for each ion species.
+        alphamax : float
+            (Default 30)  The maximum magnetic aspect angle in which the B-field will be taken into account.
+        dFlag : float
+            A debug flag, if set true will output debug text. Default is false.
 
         Returns
         -------
@@ -38,7 +53,6 @@ class GordPlug():
             An array of the Doppler corrected radian frequency
         """
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
-
 
         C = np.sqrt(spconst.k * Ts / ms)
         omeg_s = omeg - K * Vs
@@ -75,7 +89,7 @@ class GordPlug():
             gordfunc = magncollacf
             exparams = (K, C, alpha, Om, nus)
 
-        maxf = np.abs(omeg/(2*np.pi)).max()
+        maxf = np.abs(omeg / (2 * np.pi)).max()
         T_s = 1.0 / (2.0 * maxf)
 
         #        N_somm = 2**15
@@ -188,7 +202,6 @@ def magncollacf(tau, K, C, alpha, Om, nu):
         )
     )
     return deltl * deltp
-
 
 
 def chirpz(Xn, A, W, M):
@@ -319,7 +332,7 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
     """Numerically integrate Sommerfeld like integral using erf transform function loop.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.
-    
+
     This function uses sommerfelderf to do the integration
 
     Parameters

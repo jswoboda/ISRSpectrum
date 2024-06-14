@@ -6,6 +6,19 @@ from .mathutils import sommerfelderfrep
 
 
 def load_module(p2):
+    """Load the plugin modules
+
+    Parameters
+    ----------
+    p2 : Path
+        File that contains the plugin.
+
+    Returns
+    -------
+    mod_name : str
+        Name of the module
+
+    """
     name = p2.stem
     mod_name = name.split("_")[-1]
     spec = util.spec_from_file_location("GordPlug", str(p2))
@@ -21,9 +34,7 @@ dirpath = p1.parent
 
 gordplugs = {}
 for fname in dirpath.glob("gord_*.py"):
-    # Load only "real modules"
+    # Load load the modles
 
     mod_name, mod_call = load_module(fname)
     gordplugs[mod_name] = mod_call.GordPlug()
-    # except Exception:
-    #     traceback.print_exc()

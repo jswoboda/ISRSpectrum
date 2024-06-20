@@ -21,7 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Introduction" href="intro.html" /> 
+    <link rel="next" title="Plugin" href="plugins.html" />
+    <link rel="prev" title="ISRSpectrum" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,14 +47,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-specinit-class">The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum">ISRSpectrum module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum.mathutils">mathutils module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">ISRSpectrum</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Documentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-specinit-class">The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-ISRSpectrum">ISRSpectrum module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mathutils-module">mathutils module</a></li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="plugins.html">Plugin</a></li>
 </ul>
 
         </div>
@@ -70,6 +75,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">ISRSpectrum</a></li>
       <li class="breadcrumb-item active">Documentation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/ISRSpectrum.rst.txt" rel="nofollow"> View page source</a>
@@ -170,7 +176,7 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspec">
-<span class="sig-name descname"><span class="pre">getspec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspec" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getspec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspec" title="Permalink to this definition"></a></dt>
 <dd><p>Gives the spectrum and the frequency vectors.</p>
 <p>Get spectrum array given the block of data and the magnetic aspect angle.</p>
 <dl class="field-list simple">
@@ -265,117 +271,8 @@ nus - Collision frequency for species in s^-1.</p></li>
 <section id="module-ISRSpectrum">
 <span id="isrspectrum-module"></span><h3>ISRSpectrum module<a class="headerlink" href="#module-ISRSpectrum" title="Permalink to this heading"></a></h3>
 </section>
-<section id="module-ISRSpectrum.mathutils">
-<span id="mathutils-module"></span><h3>mathutils module<a class="headerlink" href="#module-ISRSpectrum.mathutils" title="Permalink to this heading"></a></h3>
-<p>A number of mathematical tools needed to calculate the spectra.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.mathutils.chirpz">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">chirpz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Xn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.chirpz" title="Permalink to this definition"></a></dt>
-<dd><p>Chirpz calculation for a single array.</p>
-<p>This function calculates the chirpz transfrom for the numpy array Xn given the complex constants A and W along with the length of the final array M.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Xn</strong> (<em>ndarray</em>) – The signal that the Chirp z transform will be calculated for.</p></li>
-<li><p><strong>A</strong> (<em>float</em>) – A complex constant used to determine the direction of the integration in Z.</p></li>
-<li><p><strong>W</strong> (<em>float</em>) – Another complex constant that will determine the direction of the integration in Z.</p></li>
-<li><p><strong>M</strong> (<em>int</em>) – The length of the final chirpz transfrom.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>yk</strong> – The M length chirp z tranfrom given Xn and the complex constants.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfeldchirpz">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfeldchirpz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">0</span> <span class="pre">-</span> <span class="pre">1j</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfeldchirpz" title="Permalink to this definition"></a></dt>
-<dd><p>Numerically integrate Sommerfeld like integral using chirpz.</p>
-<p>This function will numerically integrate a Sommerfeld like integral, int(exp(awk)f(k),t=0..inf) using at most Lmax number of N length chirpz transforms to make an M length array. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of repeats are also output as well. This technique is based off the article Li et. al Adaptive evaluation of the Sommerfeld-type integral using the chirp z-transform, 1991. This function also uses a modified Simpsons rule for integration found in Milla PhD Thesis (2010).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – The length of the chirp z transform used.</p></li>
-<li><p><strong>M</strong> (<em>int</em>) – The length of the output array.</p></li>
-<li><p><strong>dk</strong> (<em>float</em>) – The sample period of k.</p></li>
-<li><p><strong>Lmax</strong> (<em>int</em>) – The maximum number of repeats of the integration before the loop finishes, default 1.</p></li>
-<li><p><strong>errF</strong> (<em>float</em>) – The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – A complex number that determines the trejectory of the integration on the z plane, default -1.0*1j.</p></li>
-<li><p><strong>p</strong> (<em>float</em>) – A real number that helps to define the spacing on the omega plane.</p></li>
-<li><p><strong>x0</strong> (<em>float</em>) – The starting point on the omega plane, default p*np.pi/dk,</p></li>
-<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>Xk</strong> (<em>ndarray</em>) – The integrated data that is of length M.</p></li>
-<li><p><strong>flag_c</strong> (<em>bool</em>) – A convergence flag.</p></li>
-<li><p><strong>outrep</strong> (<em>int</em>) – The number of repetitions until convergence.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfelderf">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfelderf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfelderf" title="Permalink to this definition"></a></dt>
-<dd><p>Integrate somerfeld integral using ERF transform for single portion.</p>
-<p>This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=a..b) using the ERF transform and 2N+1 samples. This technique is from the paper B. L. Ooi 2007.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – The integration uses 2N+1 samples to do the integration.</p></li>
-<li><p><strong>omega</strong> (<em>ndarray</em>) – The Frequency array in radians per second.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) – Lower bound of the integral.</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Upper bound of teh integral.</p></li>
-<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>Xk</strong> – The integrated data that is of length of omega.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.mathutils.sommerfelderfrep">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.mathutils.</span></span><span class="sig-name descname"><span class="pre">sommerfelderfrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errF</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exparams</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.mathutils.sommerfelderfrep" title="Permalink to this definition"></a></dt>
-<dd><p>Numerically integrate Sommerfeld like integral using erf transform function loop.</p>
-<p>This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.</p>
-<p>This function uses sommerfelderf to do the integration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>func</strong> (<em>func</em>) – A function that is used to create f(k).</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – The integration uses 2N+1 samples to do the integration.</p></li>
-<li><p><strong>omega</strong> (<em>ndarray</em>) – The Frequency array in radians per second.</p></li>
-<li><p><strong>b1</strong> (<em>int</em>) – The inital bounds of the first try and then step size for each subsiquent integral.</p></li>
-<li><p><strong>Lmax</strong> (<em>int</em>) – The maximum number of repeats of the integration before the loop finishes, default 1.</p></li>
-<li><p><strong>errF</strong> (<em>float</em>) – The threshold of the normalized difference between the new iteration and the old to stop to stop the iteration, default .1.</p></li>
-<li><p><strong>exparams</strong> (<em>tuple</em>) – Any extra params other then k to create f(k), default ().</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>Xk</strong> (<em>ndarray</em>) – The integrated data that is of length M.</p></li>
-<li><p><strong>flag_c</strong> (<em>bool</em>) – A convergence flag.</p></li>
-<li><p><strong>outrep</strong> (<em>int</em>) – The number of repetitions until convergence.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="mathutils-module">
+<h3>mathutils module<a class="headerlink" href="#mathutils-module" title="Permalink to this heading"></a></h3>
 </section>
 </section>
 </section>
@@ -384,7 +281,8 @@ nus - Collision frequency for species in s^-1.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="ISRSpectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plugins.html" class="btn btn-neutral float-right" title="Plugin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

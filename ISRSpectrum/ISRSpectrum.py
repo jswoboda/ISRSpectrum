@@ -18,6 +18,8 @@ import numpy as np
 import pandas as pd
 import scipy.constants as spconst
 from .plugins import gordplugs
+from .collision_calc import get_collisionfreqs
+
 INFODICT = {
     "O+": np.array([1, 16]),
     "NO+": np.array([1, 30]),
@@ -130,8 +132,8 @@ class Specinit(object):
             A folder for possible plugins.
         """
 
-        self._plugins=gordplugs 
-            
+        self._plugins = gordplugs
+
         self.bMag = bMag
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
@@ -154,7 +156,16 @@ class Specinit(object):
             self.f = f
         self.omeg = 2.0 * np.pi * self.f
 
-    def getspec(self, datablock, des_plug = 'default',alphadeg=90.0, rcsflag=False, seplines=False):
+    def getspec(
+        self,
+        datablock,
+        des_plug="default",
+        alphadeg=90.0,
+        rcsflag=False,
+        seplines=False,
+        *args,
+        **kwargs
+    ):
         """Gives the spectrum and the frequency vectors.
 
         Get spectrum array given the block of data and the magnetic aspect angle.
@@ -162,22 +173,20 @@ class Specinit(object):
         Parameters
         ----------
         datablock : ndarray
-            A numpy array of size 1+Nionsx6 that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons.
-            Each row of the array will have the following set up.
-            [Ns, Ts, Vs, qs, ms, nus]
-            Ns - The density of the species in m^-3
-            Ts - Temperature of the species in degrees K
-            Vs - The Doppler velocity in m/s.
-            qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
-            ms - Mass of the species in AMU. (Value will be replaced for the electrons)
-            nus - Collision frequency for species in s^-1.
+            A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. 
+        des_plug : str
+            The desired pluggin for the Gordeyev integral
         alphadeg : float
             The magnetic aspect angle in degrees.
         rcsflag : float
             A bool that will determine if the reflected power is returned as well. (default is False)
         seplines :bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
-
+        args : list
+            Any extra inputs needed for the Gordeyev integrals.
+        kwargs : dict
+            Extra inputs for the Gordeyev integrals.
+       
         Returns
         -------
         f : ndarray
@@ -199,7 +208,16 @@ class Specinit(object):
         if dFlag:
             print("Calculating Gordeyev int for electons")
         plug = self._plugins[des_plug]
-        (egord, Te, Ne, omeg_e) = plug.calcgordeyev(estuff, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
+        (egord, Te, Ne, omeg_e) = plug.calcgordeyev(
+            estuff,
+            alpha,
+            self.K,
+            self.omeg,
+            self.bMag,
+            self.collfreqmin,
+            self.alphamax,
+            self.dFlag,
+        )
         h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
@@ -220,7 +238,16 @@ class Specinit(object):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
 
-            (igord, Ti, Ni, omeg_i)=plug.calcgordeyev(iinfo, alpha, self.K, self.omeg, self.bMag,self.collfreqmin,self.alphamax,self.dFlag)
+            (igord, Ti, Ni, omeg_i) = plug.calcgordeyev(
+                iinfo,
+                alpha,
+                self.K,
+                self.omeg,
+                self.bMag,
+                self.collfreqmin,
+                self.alphamax,
+                self.dFlag,
+            )
             wevec[iion] = Ni / Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
@@ -293,7 +320,9 @@ class Specinit(object):
             The angle offset from the magnetic field in degrees, default is 90.0
         rcsflag : bool
             If this flag is True then a third output of the rcs will be made. Default value is False
-
+        seplines : bool
+            A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
+            
         Returns
         -------
         f : ndarray
@@ -341,7 +370,7 @@ class Specinit(object):
     ):
         """This function is a different way of getting the spectrums.
 
-        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces.
+        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum.
 
         Parameters
         ----------
@@ -391,7 +420,9 @@ class Specinit(object):
                 datablocknew[nspec, 5] = nuparr[nspec]
                 datablocknew[nspec, 6] = nuparr[nspec]
 
-        return self.getspec(datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, seplines=seplines)
+        return self.getspec(
+            datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, seplines=seplines
+        )
 
 
 def Islistofstr(inlist):
@@ -416,10 +447,14 @@ def Islistofstr(inlist):
 
 
 def allin(inp, reflist):
-    """This function will determine if all of the strings in the list input are in
-    the list reflist.
+    """This function will determine if all of the strings in the list input are in the list reflist.
 
-
+    Parameters
+    ----------
+    inp : list
+        Input list of strings.
+    reflist : list
+        List of strings that will be compared.
     """
     for item in inp:
         if item not in reflist:
@@ -427,167 +462,3 @@ def allin(inp, reflist):
     return True
 
 
-# %% Collision frequencies
-
-
-def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species=None):
-    """Calculate collision frequencies
-    Uses the methods shown in Schunk and Nagy (2009) chapter 4.
-
-    Parameters
-    ----------
-    datablock : ndarray
-        A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the temperature in degrees K.
-    Bst : ndarray
-        Ion ion collision constants read in from a file.
-    Cin : ndarray
-        Ion neutral collision constants read in from a file.
-    species : list
-        A Nsp list of strings that label each species.
-    col_calc : bool
-        If this flag is true then collisions will be calculated. (Default= False)
-    n_datablock : ndarray
-        A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K. If set to None then (Default=None)
-    n_species : ndarray
-        A Nnsp list of strings that label each neutral species.(Default=None)
-
-    Returns
-    -------
-    nuparr : ndarray
-        A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
-    nuperp : ndarray
-        A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
-    """
-
-    nuperp = np.zeros((datablock.shape[0]))
-    nuparr = np.zeros_like(nuperp)
-
-    Ni = datablock[:-1, 0] * 1e-6
-    Ti = datablock[:-1, 1]
-    Ne = datablock[-1, 0] * 1e-6
-    Te = datablock[-1, 1]
-
-    # electron electron and electron ion collisions
-    # Schunk and Nagy eq 4.144 and eq 4.145
-    nuee = 54.5 / np.sqrt(2) * Ne / np.power(Te, 1.5)
-    nuei = 54.5 * Ni / np.power(Te, 1.5)
-    nuei = nuei.sum()
-
-    nuperp[-1] = nuei + nuee
-    nuparr[-1] = nuei
-    # ionion collisions
-    for si, s in enumerate(species[:-1]):
-        for ti, t in enumerate(species[:-1]):
-
-            nuparr[si] = nuparr[si] + Bst[s][t] * Ni[ti] / np.power(Ti[ti], 1.5)
-
-    if (n_datablock is not None) and (n_species is not None):
-        Nn = n_datablock[:, 0] * 1e-6
-        Tn = n_datablock[:, 1]
-        # ion neutral collisions
-        for si, s in enumerate(species[:-1]):
-            for ti, t in enumerate(n_species):
-
-                curCin = Cin[s][t]
-
-                if np.isnan(curCin):
-                    neuts = r_ion_neutral(s, t, Ni[si], Nn[ti], Ti[si], Tn[ti])
-                else:
-                    neuts = curCin * Ni[si]
-                nuparr[si] = nuparr[si] + neuts
-        # electron neutral collision frequencies
-        for ti, t in enumerate(n_species):
-            nueneu = e_neutral(t, Nn[ti], Te)
-            nuperp[-1] = nuperp[-1] + nueneu
-            nuparr[-1] = nuparr[-1] + nueneu
-
-    # according to milla and kudeki the collision for perpendicular and parrallel
-    # directions only matter for the electrons
-    nuperp[:-1] = nuparr[:-1]
-    return (nuparr, nuperp)
-
-
-def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
-    """This will calculate resonant ion - neutral reactions collision frequencies. See table 4.5 in Schunk and Nagy.
-
-    Parameters
-    ----------
-    s : str
-        Ion species name
-    t : str
-        Neutral species name
-    Ni : float
-        Ion density cm^-3
-    Nn : float
-        Neutral density cm^-3
-    Ti : float
-        Ion temperature K
-    Tn float
-        Neutral temperature K
-
-    Returns
-    -------
-    nu_ineu : float
-        collision frequency s^-1
-    """
-    Tr = (Ti + Tn) * 0.5
-    sp1 = (s, t)
-    # from Schunk and Nagy table 4.5
-    nudict = {
-        ("H+", "H"): [2.65e-10, 0.083],
-        ("He+", "He"): [8.73e-11, 0.093],
-        ("N+", "N"): [3.84e-11, 0.063],
-        ("O+", "O"): [3.67e-11, 0.064],
-        ("N2+", "N"): [5.14e-11, 0.069],
-        ("O2+", "O2"): [2.59e-11, 0.073],
-        ("H+", "O"): [6.61e-11, 0.047],
-        ("O+", "H"): [4.63e-12, 0.0],
-        ("CO+", "CO"): [3.42e-11, 0.085],
-        ("CO2+", "CO"): [2.85e-11, 0.083],
-    }
-    A = nudict[sp1][0]
-    B = nudict[sp1][1]
-    if sp1 == ("O+", "H"):
-
-        nu_ineu = A * Nn * np.power(Ti / 16.0 + Tn, 0.5)
-    elif sp1 == ("H+", "O"):
-        nu_ineu = A * Nn * np.power(Ti, 0.5) * (1 - B * np.log10(Ti)) ** 2
-    else:
-        nu_ineu = A * Nn * np.power(Tr, 0.5) * (1 - B * np.log10(Tr)) ** 2
-    return nu_ineu
-
-
-def e_neutral(t, Nn, Te):
-    """This will calculate electron - neutral reactions collision frequencies. See
-    table 4.6 in Schunk and Nagy.
-
-    Parameters
-    ----------
-    t : str
-        Neutral species name
-    Nn : float
-        Neutral density cm^-3
-    Te : float
-        electron temperature K
-
-    Returns
-    -------
-    nu_ineu : float
-        Collision frequency s^-1
-    """
-    if t == "N2":
-        return 2.33e-11 * Nn * (1 - 1.21e-4 * Te) * Te
-    elif t == "O2":
-        return 1.82e-10 * Nn * (1 - 3.6e-2 * Te**0.5) * Te**0.5
-    elif t == "O":
-        return 8.9e-11 * Nn * (1 - 5.7e-4 * Te) * Te**0.5
-    elif t == "He":
-        return 4.6e-10 * Nn * Te**0.5
-    elif t == "H":
-        return 4.5e-9 * Nn * (1 - 1.35e-4 * Te) * Te**0.5
-    elif t == "CO":
-        return 2.34e-11 * Nn * (165 + Te)
-    elif t == "CO2":
-        return 3.68e-8 * Nn * (1 - 4.1e-11 * np.abs(4500.0 - Te) ** 2.93)
-    else:
-        return 0.0

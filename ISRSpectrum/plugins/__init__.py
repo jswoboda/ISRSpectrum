@@ -20,7 +20,8 @@ def load_module(p2):
 
     """
     name = p2.stem
-    mod_name = name.split("_")[-1]
+    mod_list = name.split("_")[1:]
+    mod_name = "_".join(mod_list)
     spec = util.spec_from_file_location("GordPlug", str(p2))
     module = util.module_from_spec(spec)
     spec.loader.exec_module(module)

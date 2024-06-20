@@ -1,12 +1,13 @@
 #!python
 
 import numpy as np
-
+from pathlib import Path
+import pandas as pd
 
 # %% Collision frequencies
 
 
-def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species=None):
+def get_collisionfreqs(datablock, species, Bstfile=None, Cinfile=None, n_datablock=None, n_species=None):
     """Calculate collision frequencies
     
     Uses the methods shown in Schunk and Nagy (2009) chapter 4.
@@ -15,14 +16,12 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
     ----------
     datablock : ndarray
         A numpy array of size Nsp x2. The first element of the row is the density of species in m^-3 and the second element is the temperature in degrees K.
-    Bst : ndarray
-        Ion ion collision constants read in from a file.
-    Cin : ndarray
-        Ion neutral collision constants read in from a file.
     species : list
         A Nsp list of strings that label each species.
-    col_calc : bool
-        If this flag is true then collisions will be calculated. (Default= False)
+    Bstfile : str
+        CSV file holding Ion ion collision constants 
+    Cinfile : ndarray
+        CSV file holding Ion neutral collision 
     n_datablock : ndarray
         A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K. If set to None then (Default=None)
     n_species : ndarray
@@ -43,7 +42,15 @@ def get_collisionfreqs(datablock, species, Bst, Cin, n_datablock=None, n_species
     Ti = datablock[:-1, 1]
     Ne = datablock[-1, 0] * 1e-6
     Te = datablock[-1, 1]
+    curpath = Path(__file__).parent
+    if Bstfile is None:
+        Bstfile = str(curpath.joinpath("ion2ion.csv"))
+    
+    Bst = pd.read_csv(Bstfile, index_col=0)
 
+    if Cinfile is None:
+        Cinfile = str(curpath.joinpath("ion2neu.csv"))
+    Cin = pd.read_csv(Cinfile, index_col=0)
     # electron electron and electron ion collisions
     # Schunk and Nagy eq 4.144 and eq 4.145
     nuee = 54.5 / np.sqrt(2) * Ne / np.power(Te, 1.5)

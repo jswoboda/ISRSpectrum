@@ -4,7 +4,7 @@ Created on Thu Nov 12 10:51:26 2015
 
 @author: John Swoboda
 """
-from ISRSpectrum import Path
+from pathlib import Path
 import matplotlib.pylab as plt
 import seaborn as sns
 import numpy as np
@@ -35,7 +35,7 @@ def main():
     datablock[-1,1] = Te
 
     #
-    ISS1 = Specinit(centerFrequency = 449e6, bMag = 0.4e-4, nspec=256, sampfreq=50e3,dFlag=True)
+    ISS1 = Specinit(centerFrequency = 449e6, bMag = 0.4e-4, nspec=512, sampfreq=25e3,dFlag=True)
 
     (omeg,spec_1)=ISS1.getspecsep(datablock,species,vel = 0.0,rcsflag=False)
     (omeg,spec_2)=ISS1.getspecsep(datablock,species,vel = 0.0,rcsflag=False,col_calc = True)
@@ -46,9 +46,9 @@ def main():
     curax = axmat
     lines = [None]*3
     labels = ['Spectrum','Spectrum with Coulomb Collisions','Spectrum with Columb and Neutral Collisions']
-    lines[0] = curax.plot(omeg*1e-3,spec_1,label='Output',linewidth=5)[0]
-    lines[1] = curax.plot(omeg*1e-3,spec_2,label='Output',linewidth=5)[0]
-    lines[2] = curax.plot(omeg*1e-3,spec_3,label='Output',linewidth=5)[0]
+    lines[0] = curax.plot(omeg*1e-3,spec_1/np.max(spec_1),label='Output',linewidth=5)[0]
+    lines[1] = curax.plot(omeg*1e-3,spec_2/np.max(spec_2),label='Output',linewidth=5)[0]
+    lines[2] = curax.plot(omeg*1e-3,spec_3/np.max(spec_3),label='Output',linewidth=5)[0]
 
     figmplf.suptitle('Spectrums with and without collisions')
     plt.figlegend( lines, labels, loc = 'lower center', ncol=5, labelspacing=0. )

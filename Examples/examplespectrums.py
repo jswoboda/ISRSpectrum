@@ -59,7 +59,7 @@ if __name__== '__main__':
     for ialn, ial in enumerate(alpha):
 
         print("\n Evaluation with alpha = {:.2f} deg \n".format(ial))
-        (omega,specoll) = ISS2.getspec(datablock,ial)
+        (omega,specoll) = ISS2.getspec(datablock,alphadeg=ial)
         plt.plot(omega*1e-3,specoll/np.nanmax(specoll),linewidth=3,label=r'$\alpha = {:.1f}^\circ$'.format(ial))
     plt.legend()
 

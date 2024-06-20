@@ -12,14 +12,13 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
-from pathlib import Path
 from six import string_types
 import numpy as np
-import pandas as pd
 import scipy.constants as spconst
 from .plugins import gordplugs
 from .collision_calc import get_collisionfreqs
 
+# AMU for important molicules.
 INFODICT = {
     "O+": np.array([1, 16]),
     "NO+": np.array([1, 30]),
@@ -138,10 +137,8 @@ class Specinit(object):
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
         self.alphamax = alphamax
-        curpath = Path(__file__).parent
-        self.Bst = pd.read_csv(str(curpath / "ion2ion.csv"), index_col=0)
+     
 
-        self.Cin = pd.read_csv(str(curpath / "ion2neu.csv"), index_col=0)
 
         self.K = (
             2.0 * np.pi * 2 * centerFrequency / spconst.c
@@ -333,8 +330,7 @@ class Specinit(object):
             The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
         """
 
-        # import ipdb
-        # ipdb.set_trace()
+
         assert Islistofstr(ionspecies), "Species needs to be a list of strings"
         assert allin(
             ionspecies, list(INFODICT.keys())
@@ -370,7 +366,7 @@ class Specinit(object):
     ):
         """This function is a different way of getting the spectrums.
 
-        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum.
+        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package
 
         Parameters
         ----------
@@ -410,7 +406,7 @@ class Specinit(object):
         datablocknew = np.zeros((nspec, 7))
 
         (nuparr, nuperp) = get_collisionfreqs(
-            datablock, species, self.Bst, self.Cin, n_datablock, n_species
+            datablock, species, n_datablock=n_datablock, n_species=n_species
         )
         for nspec, ispec in enumerate(species):
             datablocknew[nspec, :2] = datablock[nspec]

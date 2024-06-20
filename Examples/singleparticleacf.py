@@ -4,7 +4,7 @@ Created on Fri Apr 22 14:42:49 2016
 
 @author: John Swoboda
 """
-from ISRSpectrum import Path
+from pathlib import Path
 import numpy as np
 import scipy.fftpack as fftsy
 import scipy.special
@@ -12,14 +12,11 @@ import scipy.constants as spconst
 import matplotlib.pylab as plt
 from matplotlib import rc
 #
-from ISRSpectrum.ISRSpectrum import magacf, collacf, magncollacf
-from ISRSpectrum import chirpz, sommerfeldchirpz, sommerfelderf, sommerfelderfrep
+from ISRSpectrum.plugins.gord_default import magacf, collacf, magncollacf
 
 
 if __name__== '__main__':
-    # directory stuff
-    curdir = Path(__file__).parent
-    ISRdir = curdir.parent
+
 
     #%% Sim set up
     centerFrequency = 440.2*1e6

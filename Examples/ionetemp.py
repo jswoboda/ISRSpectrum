@@ -29,7 +29,7 @@ def main():
     dict1={'name':'AMISR','Fo':449e6,'Fs':50e3,'alpha':70.}
 
     ISS1 = Specinit(centerFrequency = dict1['Fo'], bMag = 0.4e-4, nspec=256, sampfreq=dict1['Fs'],dFlag=True)
-    (figmplf, axmat) = plt.subplots(1, 1,figsize=(8, 6), facecolor='w')
+    (figmplf, ax) = plt.subplots(2, 1,figsize=(8, 6), facecolor='w')
     lines = []
     labels = ['Spectrum','Ion Acoustic Frequency']
     for ima,imult in enumerate(mult):
@@ -42,11 +42,22 @@ def main():
 
         if ima==0:
 
-            axmat.set_xlabel('f in kHz')
-            axmat.set_ylabel('Amp')
-            axmat.set_title('Spectra')
-        lines.append( axmat.stem(xloc*1e-3, np.ones(2)*np.amax(spec), linefmt='g--', markerfmt='go', basefmt=' ')[0])
-        lines.append( axmat.plot(omeg*1e-3,spec,label='Output',linewidth=5)[0])
+            ax[0].set_xlabel('f in kHz')
+            ax[0].set_ylabel('Amp')
+            ax[0].set_title('Spectra')
+            ax[1].set_xlim([0,480])
+            ax[1].spines['right'].set_visible(False)
+
+            ax[1].set_xlabel('Lag in Microseconds ',fontsize=14)
+            ax[1].set_title('ACF K={:0.1f}'.format(kvec),fontsize=18)
+            ax[1].set_ylabel('Normalized Magnitude',fontsize=14)
+        
+        l1=ax[1].plot(tau[:64]*1e6,acf[:64]/acf[0],'-',lw=3)[0]
+        sns.despine()
+
+
+        lines.append( ax[0].stem(xloc*1e-3, np.ones(2)*np.amax(spec), linefmt='g--', markerfmt='go', basefmt=' ')[0])
+        lines.append( ax[0].plot(omeg*1e-3,spec,label='Output',linewidth=5)[0])
 
     plt.savefig('DifferentTemps.png')
 if __name__== '__main__':

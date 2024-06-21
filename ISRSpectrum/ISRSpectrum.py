@@ -202,6 +202,7 @@ class Specinit(object):
         estuff[3] = -spconst.e
         estuff[4] = spconst.m_e
         ionstuff = datablock[:-1]
+
         if dFlag:
             print("Calculating Gordeyev int for electons")
         plug = self._plugins[des_plug]

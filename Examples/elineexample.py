@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 """
-elineexample2.py
-Created on Sun Dec 27 15:28:19 2015
-This example shows everything up to electron line for magnitized and non-magnitized plasmas.
-@author: John Swoboda
+elineexample.py
+
+This set of eamples show how to break up the electron line and ion line from the spectrum.
 """
 
 import numpy as np

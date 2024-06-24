@@ -53,14 +53,14 @@ class GordPlug:
             An array of the Doppler corrected radian frequency
         """
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
-
+        nur = np.pi*2*nus
         C = np.sqrt(spconst.k * Ts / ms)
         omeg_s = omeg - K * Vs
         theta = omeg_s / (K * C * np.sqrt(2.0))
         Om = qs * bMag / ms
         # determine what integral is used
         magbool = alpha * 180.0 / np.pi < alphamax
-        collbool = collfreqmin * K * C < nus
+        collbool = collfreqmin * C*K < nur
 
         if not collbool and not magbool:
             # for case with no collisions or magnetic field just use analytic method
@@ -77,7 +77,7 @@ class GordPlug:
             if dFlag:
                 print("\t With collisions No magnetic field")
             gordfunc = collacf
-            exparams = (K, C, nus)
+            exparams = (K, C, nur)
         elif not collbool and magbool:
             if dFlag:
                 print("\t No collisions with magnetic field")
@@ -87,7 +87,7 @@ class GordPlug:
             if dFlag:
                 print("\t With collisions with magnetic field")
             gordfunc = magncollacf
-            exparams = (K, C, alpha, Om, nus)
+            exparams = (K, C, alpha, Om, nur)
 
         maxf = np.abs(omeg / (2 * np.pi)).max()
         T_s = 1.0 / (2.0 * maxf)
@@ -131,19 +131,20 @@ def magacf(tau, K, C, alpha, Om):
 
     Returns
     -------
-    acf : ndarray
+    spacf : ndarray
         The single particle acf.
     """
     Kpar = np.sin(alpha) * K
     Kperp = np.cos(alpha) * K
-    return np.exp(
-        -np.power(C * Kpar * tau, 2.0) / 2.0
-        - 2.0 * np.power(Kperp * C * np.sin(Om * tau / 2.0) / Om, 2.0)
-    )
+
+    par_ex = -np.power(C * Kpar * tau, 2.0) / 2.0
+    perp_ex = - 2.0 * np.power((Kperp * C * np.sin(Om * tau / 2.0)) / Om, 2.0)
+    spacf = np.exp(par_ex+perp_ex)
+    return spacf
 
 
 def collacf(tau, K, C, nu):
-    """Create a single particle acf for a species with collisions, no magnetic field.
+    """Create a single particle acf for a species with collisions, no magnetic field. See equation 48 in Kudeki and milla 2011.
 
     Parameters
     ----------
@@ -154,14 +155,15 @@ def collacf(tau, K, C, nu):
     C : float
         Thermal speed of the species.
     nu : float
-        The collision frequency in collisions/sec
+        The collision frequency in collisions*radians/sec
 
     Returns
     -------
-    acf : ndarray
+    spacf : ndarray
         The single particle acf.
     """
-    return np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
+    spacf =  np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
+    return spacf
 
 
 def magncollacf(tau, K, C, alpha, Om, nu):
@@ -180,7 +182,7 @@ def magncollacf(tau, K, C, alpha, Om, nu):
     Om : float
         The gyrofrequency of the particle.
     nu : float
-        The collision frequency in collisions/sec
+        The collision frequency in collisions*radians/sec
 
     Returns
     -------

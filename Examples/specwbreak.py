@@ -72,4 +72,4 @@ if __name__== '__main__':
     fig.tight_layout()
     fig.subplots_adjust(top=0.82)
 
-    fig.savefig('Specwbreaks.eps',bbox_inches='tight')
+    fig.savefig('Specwbreaks.png',bbox_inches='tight')

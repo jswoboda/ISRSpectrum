@@ -24,7 +24,7 @@ if __name__== '__main__':
     Ce = np.sqrt(spconst.k*te/spconst.m_e)
     Ci = np.sqrt(spconst.k*ti/(spconst.m_p*mi))
 
-    datablock = np.array([[Ne,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
+    datablock = np.array([[Ne,ti,0,1,mi,0],[Ne,te,0,-1,1,0]])
     datablockn = datablock.copy()
     print("\n Evaluation using Dawson's function\n")
     (omega,specorig) = ISS2.getspec(datablock.copy())

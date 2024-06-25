@@ -7,6 +7,60 @@ import pandas as pd
 # %% Collision frequencies
 
 
+# AMU for important molicules.
+INFODICT = {
+    "O+": np.array([1, 16]),
+    "NO+": np.array([1, 30]),
+    "N2+": np.array([1, 28]),
+    "O2+": np.array([1, 32]),
+    "N+": np.array([1, 14]),
+    "H+": np.array([1, 1]),
+    "He+": np.array([1, 4]),
+    "e-": np.array([-1, 1]),
+}
+
+
+def ioncheck(ionspecies):
+    """Used for assert statments to check if species is valid.
+
+    Parameters
+    ----------
+    ionspecies : list
+        Names of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
+
+    Returns
+    -------
+    allgood : boolean
+        True if all list members are valid species.
+    """
+
+    maslist = INFODICT.keys()
+
+    allgood = True
+    for ion in ionspecies:
+        if not ion in maslist:
+            print("{} not a recognized ionspecies".format(ion))
+            allgood = False
+    return allgood
+
+
+def getionmass(ion):
+    """Gets ion mass of a species.
+
+    Parameters
+    ----------
+    ion : str
+        Name of ionspecies used. Includes 'O+', 'NO+', 'N2+', 'O2+', 'N+', 'H+', 'He+'.
+
+    Returns
+    -------
+    int
+        Atomic mass of species.
+    """
+
+    assert ioncheck([ion])
+    return INFODICT[ion][-1]
+
 def get_collisionfreqs(datablock, species, Bstfile=None, Cinfile=None, n_datablock=None, n_species=None):
     """Calculate collision frequencies
     

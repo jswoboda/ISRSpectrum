@@ -12,7 +12,7 @@ Welcome to ISRSpectrum's documentation!
 
    intro
    modules
-   plugins
+   pluginfo
 
 
 Indices and tables

@@ -50,18 +50,21 @@ In order to create the spectrums, assuming the user installed the code, first im
 
 ```python
 import numpy as np
-import ISRSpectrum.ISRSpectrum as ISSnew
-from isrutilities.physConstants import v_Boltz, v_C_0, v_epsilon0, v_elemcharge, v_me, v_amu
+from ISRSpectrum import Specinit
+import scipy.constants as spconsts
 
-ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
+spfreq = 50e3
+nspec = 512
+ISS2 = Specinit(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=nspec, sampfreq=spfreq,dFlag=True)
+
 
 ti = 1e3
 te = 1e3
 Ne = 1e11
 Ni = 1e11
 mi = 16
-Ce = np.sqrt(v_Boltz*te/v_me)
-Ci = np.sqrt(v_Boltz*ti/(v_amu*mi))
+Ce = np.sqrt(spconst.Boltzmann*te/spconst.m_e)
+Ci = np.sqrt(spconst.Boltzmann*ti/(spconst.m_p*mi))
 
 datablock90 = np.array([[Ni,ti,0,1,mi,0],[Ne,te,0,1,1,0]])
 (omega,specorig,rcs) = ISS2.getspec(datablock90, rcsflag = True)
@@ -83,15 +86,19 @@ Using this interface quasi-neutrality is assumed so the number of positive ions 
 The user can get spectrum in the following way.
 
 ```python
-import ISRSpectrum.ISRSpectrum as ISSnew
-ISS2 = ISSnew.ISRSpectrum(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=129, sampfreq=50e3,dFlag=True)
+from ISRSpectrum import Specinit
+import numpy as np
+
+spfreq = 50e3
+nspec = 512
+ISS2 = Specinit(centerFrequency = 440.2*1e6, bMag = 0.4e-4, nspec=nspec, sampfreq=spfreq,dFlag=True)
 
 ti = 1e3
 te = 1e3
 Ne = 1e11
 Ni = 1e11
 vi = 0
-species = ['0+','e-']
+species = ['O+','e-']
 datablock = np.array([[Ni,ti],[Ne,te]])
 (omega,specorig,rcs) = ISS2.getspecsep(datablock,species,vi,90,rcsflag = True)
 ```

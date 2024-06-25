@@ -155,7 +155,7 @@ def collision_frequency():
  
 
 def species_vary():
-    """Creates a figure showing the affect of collision on the spectra. The base spectrum is from a 100% NO+ plasma, with electron density of 1e12, Ti=Te=500 K; the radar has a center frequency of 440MHz. The collision frequency varies from 10 Hz to 10 kHz
+    """Creates a figure showing the affect of different species of plasma spectra. The base spectrum is a mix of O+ and NO+ plasma, with electron density of 1e12, 2Ti=Te=3000 K; the radar has a center frequency of 440MHz. The collision frequency varies from species varies from all NO+ to all O+
     """
 
     nspec = 4096
@@ -204,6 +204,10 @@ def species_vary():
     
     plt.tight_layout()
     plt.savefig('compvary.png',dpi=300)
+ 
+
+
+
  
 if __name__== '__main__':
     temp_ratio()

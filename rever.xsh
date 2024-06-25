@@ -8,7 +8,8 @@ $ACTIVITIES = [
               #'conda_forge',  # Creates a PR into your package's feedstock
               #'ghrelease'  # Creates a Github release entry for the new tag
                ]
-$VERSION_BUMP_PATTERNS = [ ('setup.py', 'version\s*=.*,', "version='$VERSION',"),]
+$VERSION_BUMP_PATTERNS = [ ('setup.py', 'version\s*=.*,', "version='$VERSION',"),
+('docs/source/conf.py', 'release\s*=.*,', "release=='$VERSION',", 'version\s*=.*,', "version='$VERSION',")]
 
 $CHANGELOG_FILENAME = 'CHANGELOG.rst'  # Filename for the changelog
 $CHANGELOG_TEMPLATE = 'TEMPLATE.rst'  # Filename for the news template

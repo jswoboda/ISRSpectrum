@@ -3,7 +3,6 @@
 import numpy as np
 import scipy.special as sp
 import scipy.constants as spconst
-
 import scipy.special as sp_spec
 
 
@@ -16,9 +15,7 @@ class GordPlug:
         Parameters
         ----------
         dataline : ndarray
-            A numpy array of length that holds the plasma parameters needed
-            to create the spectrum.
-            Each row of the array will have the following set up.
+            A numpy array of length that holds the plasma parameters needed to create the spectrum. Each row of the array will have the following set up.
                 [Ns, Ts, Vs, qs, ms, nus]
                 Ns - The density of the species in m^-3
                 Ts - Temperature of the species in degrees K

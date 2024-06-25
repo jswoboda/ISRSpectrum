@@ -11,14 +11,13 @@ class GordPlug:
     def calcgordeyev(
         self, dataline, alpha, K, omeg, bMag, collfreqmin=1e-2, alphamax=30, dFlag=False
     ):
-        """Performs the Gordeyve integral calculation for main cases from the first Kudeki/Milla paper.
+        """
+        Performs the Gordeyve integral calculation for main cases from the first Kudeki/Milla paper.
 
         Parameters
         ----------
         dataline : ndarray
-            A numpy array of length that holds the plasma parameters needed
-            to create the spectrum.
-            Each row of the array will have the following set up.
+            A numpy array of length that holds the plasma parameters needed to create the spectrum. Each row of the array will have the following set up.
                 [Ns, Ts, Vs, qs, ms, nus]
                 Ns - The density of the species in m^-3
                 Ts - Temperature of the species in degrees K
@@ -53,14 +52,14 @@ class GordPlug:
             An array of the Doppler corrected radian frequency
         """
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
-        nur = np.pi*2*nus
+        nur = np.pi * 2 * nus
         C = np.sqrt(spconst.k * Ts / ms)
         omeg_s = omeg - K * Vs
         theta = omeg_s / (K * C * np.sqrt(2.0))
         Om = qs * bMag / ms
         # determine what integral is used
         magbool = alpha * 180.0 / np.pi < alphamax
-        collbool = collfreqmin * C*K < nur
+        collbool = collfreqmin * C * K < nur
 
         if not collbool and not magbool:
             # for case with no collisions or magnetic field just use analytic method
@@ -138,8 +137,8 @@ def magacf(tau, K, C, alpha, Om):
     Kperp = np.cos(alpha) * K
 
     par_ex = -np.power(C * Kpar * tau, 2.0) / 2.0
-    perp_ex = - 2.0 * np.power((Kperp * C * np.sin(Om * tau / 2.0)) / Om, 2.0)
-    spacf = np.exp(par_ex+perp_ex)
+    perp_ex = -2.0 * np.power((Kperp * C * np.sin(Om * tau / 2.0)) / Om, 2.0)
+    spacf = np.exp(par_ex + perp_ex)
     return spacf
 
 
@@ -162,7 +161,7 @@ def collacf(tau, K, C, nu):
     spacf : ndarray
         The single particle acf.
     """
-    spacf =  np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
+    spacf = np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
     return spacf
 
 

@@ -1,5 +1,9 @@
 #!python
 
+"""
+This is an example of a plugin that performs the basic dawsons integral which is a call to a scipy function. This is simply an example of a plugin that a user can follow as an example.
+"""
+
 import numpy as np
 import scipy.special as sp
 import scipy.constants as spconst

@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+
+"""
+This module will calcualte the Gordeyve integral for various cases, with collisions, with a magnetic field up to .1 degrees off of perp to B. This cut is controlled by an assert statement.
+"""
+
+
 import numpy as np
 import scipy.special as sp_spec
 import scipy.constants as spconst
@@ -51,6 +57,8 @@ class GordPlug:
         omeg_s : ndarray
             An array of the Doppler corrected radian frequency
         """
+
+        assert alpha>0.1, "Angle off of perp to B must be greater than .1 degrees otherwise integral will not converge."
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
         nur = np.pi * 2 * nus
         C = np.sqrt(spconst.k * Ts / ms)

@@ -1,37 +1,34 @@
 ISRSpectrum package
 ===================
 
-Subpackages
------------
+Classes
+-------
 
-.. toctree::
-   :maxdepth: 4
+The ``Specinit`` class
+***********************************
+.. autoclass:: ISRSpectrum.Specinit
+    :members:
+    :undoc-members:
 
-   ISRSpectrum.plugins
+
 
 Submodules
 ----------
 
-ISRSpectrum.ISRSpectrum module
-------------------------------
-
-.. automodule:: ISRSpectrum.ISRSpectrum
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-ISRSpectrum.collision\_calc module
-----------------------------------
+collision\_calc module
+**********************
 
 .. automodule:: ISRSpectrum.collision_calc
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
 
-.. automodule:: ISRSpectrum
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Included Plugins
+----------------
+
+.. toctree::
+   :maxdepth: 4
+
+   ISRSpectrum.plugins
+

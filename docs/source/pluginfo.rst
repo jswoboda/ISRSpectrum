@@ -1,5 +1,5 @@
-Plugins
-============
+Adding Your Own Plugins
+=======================
 
 The code archetecture allows for the additon of plugins to calculate the Gordeyev integral. The plugins are required to be in the "plugins" folder. The script find_gord_plugs.py can move the file to the correct folder. The plugin must have the following naming convention gord_<NAME>.py. 
 

@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ISRSpectrum.plugins package" href="ISRSpectrum.plugins.html" />
+    <link rel="next" title="Included Plugins" href="ISRSpectrum.plugins.html" />
     <link rel="prev" title="ISRSpectrum" href="modules.html" /> 
 </head>
 
@@ -49,19 +49,24 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">ISRSpectrum</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ISRSpectrum package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="ISRSpectrum.plugins.html">ISRSpectrum.plugins package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#the-specinit-class">The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum.ISRSpectrum">ISRSpectrum.ISRSpectrum module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum.collision_calc">ISRSpectrum.collision_calc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-ISRSpectrum.collision_calc">collision_calc module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#included-plugins">Included Plugins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ISRSpectrum.plugins.html">Included Plugins</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pluginfo.html">Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pluginfo.html">Adding Your Own Plugins</a></li>
 </ul>
 
         </div>
@@ -91,63 +96,19 @@
              
   <section id="isrspectrum-package">
 <h1>ISRSpectrum package<a class="headerlink" href="#isrspectrum-package" title="Permalink to this heading"></a></h1>
-<section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="ISRSpectrum.plugins.html">ISRSpectrum.plugins package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_default">ISRSpectrum.plugins.gord_default module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_simple">ISRSpectrum.plugins.gord_simple module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.mathutils">ISRSpectrum.plugins.mathutils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</section>
-<section id="module-ISRSpectrum.ISRSpectrum">
-<span id="isrspectrum-isrspectrum-module"></span><h2>ISRSpectrum.ISRSpectrum module<a class="headerlink" href="#module-ISRSpectrum.ISRSpectrum" title="Permalink to this heading"></a></h2>
-<p>Created on Tue Jul 15 16:12:05 2014</p>
-<p>&#64;author: John Swoboda
-ISRSpectrum.py
-This module will create ISR spectrums using plasma parameters. The code implements the
-method of calculation found in the following article.</p>
-<ol class="upperalpha simple" start="5">
-<li><p>Kudeki and M. A. Milla, 2011.</p></li>
-</ol>
-<p>The intent of the code is to be able to calculate an ISR spectrum in a number of
-different conditions except for a very low magnetic aspect angles (&lt;1deg).</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Islistofstr">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.ISRSpectrum.</span></span><span class="sig-name descname"><span class="pre">Islistofstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inlist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Islistofstr" title="Permalink to this definition"></a></dt>
-<dd><p>This function will determine if the input is a list of strings</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>inlist</strong> (<em>list</em>) – List to check for strings.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>isstrs</strong> – If all the list is strings.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h2>
+<section id="the-specinit-class">
+<h3>The <code class="docutils literal notranslate"><span class="pre">Specinit</span></code> class<a class="headerlink" href="#the-specinit-class" title="Permalink to this heading"></a></h3>
 <dl class="py class">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ISRSpectrum.ISRSpectrum.</span></span><span class="sig-name descname"><span class="pre">Specinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centerFrequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">440200000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bMag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampfreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collfreqmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dFlag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class to create the spectrum.</p>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ISRSpectrum.</span></span><span class="sig-name descname"><span class="pre">Specinit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">centerFrequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">440200000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bMag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nspec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampfreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collfreqmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphamax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dFlag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit" title="Permalink to this definition"></a></dt>
+<dd><p>Class to create the spectrum.</p>
 <p>The instance of the class will hold infomation on the radar system such as
 sample frequency, center frequency and number of points for the spectrum.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.bMag">
-<span class="sig-name descname"><span class="pre">bMag</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.bMag" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.bMag">
+<span class="sig-name descname"><span class="pre">bMag</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.bMag" title="Permalink to this definition"></a></dt>
 <dd><p>The magnetic field magnitude in Teslas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -157,8 +118,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.K">
-<span class="sig-name descname"><span class="pre">K</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.K" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.K">
+<span class="sig-name descname"><span class="pre">K</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.K" title="Permalink to this definition"></a></dt>
 <dd><p>The Bragg scattering vector magnitude corresponds to 1/2 radar wavelength.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -168,8 +129,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.f">
-<span class="sig-name descname"><span class="pre">f</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.f" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.f">
+<span class="sig-name descname"><span class="pre">f</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.f" title="Permalink to this definition"></a></dt>
 <dd><p>Vector holding the frequency values in Hz.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -179,8 +140,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.omeg">
-<span class="sig-name descname"><span class="pre">omeg</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.omeg" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.omeg">
+<span class="sig-name descname"><span class="pre">omeg</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.omeg" title="Permalink to this definition"></a></dt>
 <dd><p>Vector hold the frequency values in rad/s</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -190,8 +151,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.collfreqmin">
-<span class="sig-name descname"><span class="pre">collfreqmin</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.collfreqmin" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.collfreqmin">
+<span class="sig-name descname"><span class="pre">collfreqmin</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.collfreqmin" title="Permalink to this definition"></a></dt>
 <dd><p>Minimum collision frequency before they are taken into account in the Gordeyev integral calculation</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -201,8 +162,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.alphamax">
-<span class="sig-name descname"><span class="pre">alphamax</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.alphamax" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.alphamax">
+<span class="sig-name descname"><span class="pre">alphamax</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.alphamax" title="Permalink to this definition"></a></dt>
 <dd><p>The maximum aspect angle</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -212,8 +173,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.dFlag">
-<span class="sig-name descname"><span class="pre">dFlag</span></span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.dFlag" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.dFlag">
+<span class="sig-name descname"><span class="pre">dFlag</span></span><a class="headerlink" href="#ISRSpectrum.Specinit.dFlag" title="Permalink to this definition"></a></dt>
 <dd><p>A debug flag.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -223,8 +184,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.getspec">
-<span class="sig-name descname"><span class="pre">getspec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.getspec" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspec">
+<span class="sig-name descname"><span class="pre">getspec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">des_plug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspec" title="Permalink to this definition"></a></dt>
 <dd><p>Gives the spectrum and the frequency vectors.</p>
 <p>Get spectrum array given the block of data and the magnetic aspect angle.</p>
 <dl class="field-list simple">
@@ -251,8 +212,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.getspecsep">
-<span class="sig-name descname"><span class="pre">getspecsep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_datablock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.getspecsep" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspecsep">
+<span class="sig-name descname"><span class="pre">getspecsep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_datablock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspecsep" title="Permalink to this definition"></a></dt>
 <dd><p>This function is a different way of getting the spectrums.</p>
 <p>A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package</p>
 <dl class="field-list simple">
@@ -281,8 +242,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.Specinit.getspecsimple">
-<span class="sig-name descname"><span class="pre">getspecsimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Te</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionspecies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionfracs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.Specinit.getspecsimple" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspecsimple">
+<span class="sig-name descname"><span class="pre">getspecsimple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ne</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Te</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ti</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionspecies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ionfracs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspecsimple" title="Permalink to this definition"></a></dt>
 <dd><p>Creates a spectrum using electron physical parameters not in a data block.</p>
 <p>Assuming only the following ionspecies ‘O+’, ‘NO+’, ‘N2+’, ‘O2+’, ‘N+’, ‘H+’, ‘He+’</p>
 <dl class="field-list simple">
@@ -312,23 +273,12 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ISRSpectrum.ISRSpectrum.allin">
-<span class="sig-prename descclassname"><span class="pre">ISRSpectrum.ISRSpectrum.</span></span><span class="sig-name descname"><span class="pre">allin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reflist</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.ISRSpectrum.allin" title="Permalink to this definition"></a></dt>
-<dd><p>This function will determine if all of the strings in the list input are in the list reflist.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inp</strong> (<em>list</em>) – Input list of strings.</p></li>
-<li><p><strong>reflist</strong> (<em>list</em>) – List of strings that will be compared.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 <section id="module-ISRSpectrum.collision_calc">
-<span id="isrspectrum-collision-calc-module"></span><h2>ISRSpectrum.collision_calc module<a class="headerlink" href="#module-ISRSpectrum.collision_calc" title="Permalink to this heading"></a></h2>
+<span id="collision-calc-module"></span><h3>collision_calc module<a class="headerlink" href="#module-ISRSpectrum.collision_calc" title="Permalink to this heading"></a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="ISRSpectrum.collision_calc.e_neutral">
 <span class="sig-prename descclassname"><span class="pre">ISRSpectrum.collision_calc.</span></span><span class="sig-name descname"><span class="pre">e_neutral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Te</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.collision_calc.e_neutral" title="Permalink to this definition"></a></dt>
@@ -436,6 +386,22 @@ table 4.6 in Schunk and Nagy.</p>
 </dd></dl>
 
 </section>
+</section>
+<section id="included-plugins">
+<h2>Included Plugins<a class="headerlink" href="#included-plugins" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ISRSpectrum.plugins.html">Included Plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_default">gord_default module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_simple">gord_simple module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.mathutils">mathutils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 <section id="module-ISRSpectrum">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ISRSpectrum" title="Permalink to this heading"></a></h2>
 </section>
@@ -446,7 +412,7 @@ table 4.6 in Schunk and Nagy.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="modules.html" class="btn btn-neutral float-left" title="ISRSpectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="ISRSpectrum.plugins.html" class="btn btn-neutral float-right" title="ISRSpectrum.plugins package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="ISRSpectrum.plugins.html" class="btn btn-neutral float-right" title="Included Plugins" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

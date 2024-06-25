@@ -47,6 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
 </ul>
@@ -88,13 +89,19 @@
 </div></blockquote>
 <p>Like the model covered in the paper the software can calculate a spectra given, any magnetic aspect angle not perpendicular to B, any number of ion species, and the collision frequencies associated with those ion species. As the magnetic aspect angles get closer to perpendicular to B, usually &amp;lt; 1 degree perp to B, more and more calculations are needed for the Gordeyev to converge.</p>
 </div></blockquote>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<p>This module is made from pure Python, it can be installed via pip after downloading it from GitHub</p>
+</section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>There are a number of examples in the Examples directory that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.</p>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<p>This example shows how to use the Specinit class and then create a spectrum using the getspecsimple,  getspecsep and getspec. The two functions getspecsimple and getspecsep take the inputs different but calculate collision frequencies based off of the physical inputs, i.e. density, temperture, ion species. The method getspec takes as an input, in the datablock array, the collision frequency so the user can have more control over defining the frequency</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">spconsts</span>
 <span class="kn">from</span> <span class="nn">ISRSpectrum</span> <span class="kn">import</span> <span class="n">Specinit</span>
 
 
@@ -107,11 +114,16 @@
 <span class="n">Ne</span> <span class="o">=</span> <span class="mf">1e11</span>
 <span class="n">Ni</span> <span class="o">=</span> <span class="mf">1e11</span>
 <span class="n">vi</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">mi</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="n">species</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;O+&#39;</span><span class="p">,</span><span class="s1">&#39;e-&#39;</span><span class="p">]</span>
 
 <span class="n">omeg</span><span class="p">,</span><span class="n">spec</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspecsimple</span><span class="p">(</span><span class="n">Ne</span><span class="p">,</span><span class="n">te</span><span class="p">,</span><span class="n">ti</span><span class="p">,[</span><span class="s1">&#39;O+&#39;</span><span class="p">],[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">datablock</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Ni</span><span class="p">,</span><span class="n">ti</span><span class="p">],[</span><span class="n">Ne</span><span class="p">,</span><span class="n">te</span><span class="p">]])</span>
-<span class="p">(</span><span class="n">omega</span><span class="p">,</span><span class="n">specorig</span><span class="p">,</span><span class="n">rcs</span><span class="p">)</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspecs</span><span class="p">(</span><span class="n">datablock</span><span class="p">,</span><span class="n">species</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="n">rcsflag</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="p">(</span><span class="n">omega</span><span class="p">,</span><span class="n">specorig</span><span class="p">,</span><span class="n">rcs</span><span class="p">)</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspecsep</span><span class="p">(</span><span class="n">datablock</span><span class="p">,</span><span class="n">species</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="n">alphadeg</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">rcsflag</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">Nui</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Collision frequency of ions</span>
+<span class="n">Nue</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># Collision frequency of electrons</span>
+<span class="n">datablock90</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Ni</span><span class="p">,</span><span class="n">ti</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">mi</span><span class="p">,</span><span class="n">Nui</span><span class="p">],[</span><span class="n">Ne</span><span class="p">,</span><span class="n">te</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Nue</span><span class="p">]])</span>
+<span class="p">(</span><span class="n">omega</span><span class="p">,</span><span class="n">specorig</span><span class="p">,</span><span class="n">rcs</span><span class="p">)</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspec</span><span class="p">(</span><span class="n">datablock90</span><span class="p">,</span> <span class="n">rcsflag</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <figure class="align-default" id="id1">

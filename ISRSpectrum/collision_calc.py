@@ -65,9 +65,12 @@ def getionmass(ion):
     assert ioncheck([ion])
     return INFODICT[ion][-1]
 
-def get_collisionfreqs(datablock, species, Bstfile=None, Cinfile=None, n_datablock=None, n_species=None):
+
+def get_collisionfreqs(
+    datablock, species, Bstfile=None, Cinfile=None, n_datablock=None, n_species=None
+):
     """Calculate collision frequencies
-    
+
     Uses the methods shown in Schunk and Nagy (2009) chapter 4.
 
     Parameters
@@ -77,9 +80,9 @@ def get_collisionfreqs(datablock, species, Bstfile=None, Cinfile=None, n_datablo
     species : list
         A Nsp list of strings that label each species.
     Bstfile : str
-        CSV file holding Ion ion collision constants 
+        CSV file holding Ion ion collision constants
     Cinfile : ndarray
-        CSV file holding Ion neutral collision 
+        CSV file holding Ion neutral collision
     n_datablock : ndarray
         A numpy array of size Nnsp x2. The first element of the row is the density of the neutral species in m^-3 and the second element is the temperature in degrees K. If set to None then (Default=None)
     n_species : ndarray
@@ -103,7 +106,7 @@ def get_collisionfreqs(datablock, species, Bstfile=None, Cinfile=None, n_datablo
     curpath = Path(__file__).parent
     if Bstfile is None:
         Bstfile = str(curpath.joinpath("ion2ion.csv"))
-    
+
     Bst = pd.read_csv(Bstfile, index_col=0)
 
     if Cinfile is None:

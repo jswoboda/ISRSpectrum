@@ -16,8 +16,7 @@ from six import string_types
 import numpy as np
 import scipy.constants as spconst
 from .plugins import gordplugs
-from .collision_calc import get_collisionfreqs, getionmass,getionmass,INFODICT
-
+from .collision_calc import get_collisionfreqs, getionmass, getionmass, INFODICT
 
 
 class Specinit(object):
@@ -84,8 +83,6 @@ class Specinit(object):
         self.dFlag = dFlag
         self.collfreqmin = collfreqmin
         self.alphamax = alphamax
-     
-
 
         self.K = (
             2.0 * np.pi * 2 * centerFrequency / spconst.c
@@ -117,7 +114,7 @@ class Specinit(object):
         Parameters
         ----------
         datablock : ndarray
-            A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. The first two entries in each row must be the density and temperature. 
+            A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. The first two entries in each row must be the density and temperature.
         des_plug : str
             The desired pluggin for the Gordeyev integral
         alphadeg : float
@@ -130,7 +127,7 @@ class Specinit(object):
             Any extra inputs needed for the Gordeyev integrals.
         kwargs : dict
             Extra inputs for the Gordeyev integrals.
-       
+
         Returns
         -------
         f : ndarray
@@ -165,7 +162,6 @@ class Specinit(object):
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
 
-
         ionden = np.sum(ionstuff[:, 0])
         # normalize total ion density to be the same as electron density
         ionstuff[:, 0] = (estuff[0] / ionden) * ionstuff[:, 0]
@@ -181,7 +177,7 @@ class Specinit(object):
 
             (igord, Ti, Ni, qi, omeg_i) = plug.calcgordeyev(
                 iinfo,
-                alpha =alpha,
+                alpha=alpha,
                 K=self.K,
                 omeg=self.omeg,
                 bMag=self.bMag,
@@ -195,7 +191,7 @@ class Specinit(object):
             # can cause a divid by zero error.
             # temperature ratio
             mu = Ti / Te
-            qrot = np.abs(qi/qe)
+            qrot = np.abs(qi / qe)
             sig_i = (
                 (Ni / Ne) * (1j + omeg_i * igord) / (self.K**2 * mu * h_e**2 / qrot**2)
             )
@@ -263,7 +259,7 @@ class Specinit(object):
             If this flag is True then a third output of the rcs will be made. Default value is False
         seplines : bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
-            
+
         Returns
         -------
         f : ndarray
@@ -273,7 +269,6 @@ class Specinit(object):
         rcs : ndarray
             The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
         """
-
 
         assert Islistofstr(ionspecies), "Species needs to be a list of strings"
         assert allin(
@@ -400,5 +395,3 @@ def allin(inp, reflist):
         if item not in reflist:
             return False
     return True
-
-

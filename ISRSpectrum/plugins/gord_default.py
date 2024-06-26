@@ -54,6 +54,8 @@ class GordPlug:
             The Debye length in m.
         Ns : ndarray
             The density of the species in m^-3
+        qs : float
+            The charge of the species in elementary charges.
         omeg_s : ndarray
             An array of the Doppler corrected radian frequency
         """

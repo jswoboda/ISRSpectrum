@@ -11,8 +11,8 @@ Welcome to ISRSpectrum's documentation!
    :caption: Contents:
 
    intro
-   modules
    pluginfo
+   modules
 
 
 Indices and tables

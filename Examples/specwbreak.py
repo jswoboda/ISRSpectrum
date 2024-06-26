@@ -12,7 +12,7 @@ sns.set_context("talk",font_scale=1.25)
 #
 from ISRSpectrum import Specinit
 
-if __name__== '__main__':
+def plotspecwbreak():
 
     databloc = np.array([[1e11,1e3],[1e11,2.5e3]])
     f = np.linspace(3.03e6,3.034e6,256)
@@ -71,3 +71,7 @@ if __name__== '__main__':
     fig.subplots_adjust(top=0.80)
 
     fig.savefig('Specwbreaks.png',bbox_inches='tight')
+
+if __name__ == "__main__":
+
+    plotspecwbreak()

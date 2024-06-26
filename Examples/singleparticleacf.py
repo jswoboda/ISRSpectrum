@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """
-Created on Fri Apr 22 14:42:49 2016
-
-@author: John Swoboda
+This will create images of the signal particle ACFs using the default gordyev plugin
 """
 from pathlib import Path
 import numpy as np
@@ -15,9 +13,9 @@ from matplotlib import rc
 from ISRSpectrum.plugins.gord_default import magacf, collacf, magncollacf
 
 
-if __name__== '__main__':
 
 
+def singleparticalacfs():
     #%% Sim set up
     centerFrequency = 440.2*1e6
     nspec=129
@@ -122,3 +120,7 @@ if __name__== '__main__':
     cbar.ax.get_yaxis().labelpad = 15
     plt.title('Error between ideal ACF and with Collisions and B-field for '+pname)
     plt.savefig('ACFerr'+pname.replace(" ", "")+'.png')
+
+
+if __name__== '__main__':
+    singleparticalacfs()

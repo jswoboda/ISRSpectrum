@@ -12,8 +12,6 @@ The ``Specinit`` class
 
 
 
-
-
 Submodules
 ----------
 
@@ -34,10 +32,3 @@ Included Plugins
 
    ISRSpectrum.plugins
 
-Module contents
----------------
-
-.. automodule:: ISRSpectrum
-   :members:
-   :undoc-members: Specinit
-   :show-inheritance:

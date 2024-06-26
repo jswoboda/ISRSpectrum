@@ -58,8 +58,21 @@ class GordPlug:
             An array of the Doppler corrected radian frequency
         """
 
-        assert alpha>0.1, "Angle off of perp to B must be greater than .1 degrees otherwise integral will not converge."
+        assert (
+            alpha > 0.1
+        ), "Angle off of perp to B must be greater than .1 degrees otherwise integral will not converge."
+        assert (
+            len(dataline) >= 6
+        ), "The dataline input needs to be length of at least 6 elements."
         (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
+
+        if qs < 0:
+            qs = -spconst.e
+            ms = spconst.m_e
+        else:
+            qs = qs * spconst.e
+            ms = ms * spconst.m_p
+
         nur = np.pi * 2 * nus
         C = np.sqrt(spconst.k * Ts / ms)
         omeg_s = omeg - K * Vs
@@ -76,9 +89,10 @@ class GordPlug:
             )
             den_g = K * C * np.sqrt(2)
             gord = num_g / den_g
+
             if dFlag:
                 print("\t No collisions No magnetic field,again")
-            return (gord, Ts, Ns, omeg_s)
+            return (gord, Ts, Ns, qs, omeg_s)
 
         elif collbool and not magbool:
             if dFlag:
@@ -117,7 +131,7 @@ class GordPlug:
                 )
             )
 
-        return (gord, Ts, Ns, omeg_s)
+        return (gord, Ts, Ns, qs, omeg_s)
 
 
 def magacf(tau, K, C, alpha, Om):

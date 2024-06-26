@@ -117,7 +117,7 @@ class Specinit(object):
         Parameters
         ----------
         datablock : ndarray
-            A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. 
+            A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. The first two entries in each row must be the density and temperature. 
         des_plug : str
             The desired pluggin for the Gordeyev integral
         alphadeg : float
@@ -146,30 +146,26 @@ class Specinit(object):
         alpha = alphadeg * np.pi / 180
         estuff = datablock[-1]
         Nions = datablock.shape[0] - 1
-        estuff[3] = -spconst.e
-        estuff[4] = spconst.m_e
-        ionstuff = datablock[:-1]
 
+        ionstuff = datablock[:-1]
         if dFlag:
             print("Calculating Gordeyev int for electons")
         plug = self._plugins[des_plug]
-        (egord, Te, Ne, omeg_e) = plug.calcgordeyev(
+        (egord, Te, Ne, qe, omeg_e) = plug.calcgordeyev(
             estuff,
-            alpha,
-            self.K,
-            self.omeg,
-            self.bMag,
-            self.collfreqmin,
-            self.alphamax,
-            self.dFlag,
+            alpha=alpha,
+            K=self.K,
+            omeg=self.omeg,
+            bMag=self.bMag,
+            collfreqmin=self.collfreqmin,
+            alphamax=self.alphamax,
+            dFlag=self.dFlag,
         )
         h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
 
-        # adjust ion stuff
-        ionstuff[:, 3] = ionstuff[:, 3] * spconst.e
-        ionstuff[:, 4] = ionstuff[:, 4] * spconst.m_p
+
         ionden = np.sum(ionstuff[:, 0])
         # normalize total ion density to be the same as electron density
         ionstuff[:, 0] = (estuff[0] / ionden) * ionstuff[:, 0]
@@ -183,15 +179,15 @@ class Specinit(object):
             if dFlag:
                 print("Calculating Gordeyev int for ion species #{:d}".format(iion))
 
-            (igord, Ti, Ni, omeg_i) = plug.calcgordeyev(
+            (igord, Ti, Ni, qi, omeg_i) = plug.calcgordeyev(
                 iinfo,
-                alpha,
-                self.K,
-                self.omeg,
-                self.bMag,
-                self.collfreqmin,
-                self.alphamax,
-                self.dFlag,
+                alpha =alpha,
+                K=self.K,
+                omeg=self.omeg,
+                bMag=self.bMag,
+                collfreqmin=self.collfreqmin,
+                alphamax=self.alphamax,
+                dFlag=self.dFlag,
             )
             wevec[iion] = Ni / Ne
             Tivec[iion] = Ti
@@ -199,7 +195,7 @@ class Specinit(object):
             # can cause a divid by zero error.
             # temperature ratio
             mu = Ti / Te
-            qrot = qrotvec[iion]
+            qrot = np.abs(qi/qe)
             sig_i = (
                 (Ni / Ne) * (1j + omeg_i * igord) / (self.K**2 * mu * h_e**2 / qrot**2)
             )
@@ -314,7 +310,7 @@ class Specinit(object):
     ):
         """This function is a different way of getting the spectrums.
 
-        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package
+        A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package.
 
         Parameters
         ----------

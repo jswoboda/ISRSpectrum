@@ -47,6 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pluginfo.html">Adding Your Own Plugins</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">ISRSpectrum</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">ISRSpectrum package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a><ul>
@@ -61,12 +62,10 @@
 <li class="toctree-l4"><a class="reference internal" href="ISRSpectrum.plugins.html">Included Plugins</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-ISRSpectrum">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pluginfo.html">Adding Your Own Plugins</a></li>
 </ul>
 
         </div>
@@ -191,7 +190,7 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>datablock</strong> (<em>ndarray</em>) – A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons.</p></li>
+<li><p><strong>datablock</strong> (<em>ndarray</em>) – A numpy array of size 1+Nionsxa which is the size  that holds the plasma parameters needed to create the spectrum. The last row will hold the information for the electrons. The first two entries in each row must be the density and temperature.</p></li>
 <li><p><strong>des_plug</strong> (<em>str</em>) – The desired pluggin for the Gordeyev integral</p></li>
 <li><p><strong>alphadeg</strong> (<em>float</em>) – The magnetic aspect angle in degrees.</p></li>
 <li><p><strong>rcsflag</strong> (<em>float</em>) – A bool that will determine if the reflected power is returned as well. (default is False)</p></li>
@@ -215,7 +214,7 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 <dt class="sig sig-object py" id="ISRSpectrum.Specinit.getspecsep">
 <span class="sig-name descname"><span class="pre">getspecsep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datablock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphadeg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rcsflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_datablock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seplines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.Specinit.getspecsep" title="Permalink to this definition"></a></dt>
 <dd><p>This function is a different way of getting the spectrums.</p>
-<p>A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package</p>
+<p>A datablock is still used, (Nsp x 2) numpy array, but it is filled in by using the species listed as a string in the list speces. This function will also get the collision freuqencies for calculating the spectrum. The colision frequency calculations by default use the CSV files included with the package.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -279,6 +278,8 @@ sample frequency, center frequency and number of points for the spectrum.</p>
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 <section id="module-ISRSpectrum.collision_calc">
 <span id="collision-calc-module"></span><h3>collision_calc module<a class="headerlink" href="#module-ISRSpectrum.collision_calc" title="Permalink to this heading"></a></h3>
+<p>collision_calc.py</p>
+<p>This module is used to calculate collision frequencies.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="ISRSpectrum.collision_calc.e_neutral">
 <span class="sig-prename descclassname"><span class="pre">ISRSpectrum.collision_calc.</span></span><span class="sig-name descname"><span class="pre">e_neutral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Nn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Te</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ISRSpectrum.collision_calc.e_neutral" title="Permalink to this definition"></a></dt>
@@ -392,18 +393,13 @@ table 4.6 in Schunk and Nagy.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="ISRSpectrum.plugins.html">Included Plugins</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_default">gord_default module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.gord_simple">gord_simple module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins.mathutils">mathutils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ISRSpectrum.plugins.html#module-ISRSpectrum.plugins">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</section>
-<section id="module-ISRSpectrum">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ISRSpectrum" title="Permalink to this heading"></a></h2>
 </section>
 </section>
 

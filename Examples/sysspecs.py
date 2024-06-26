@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """
-This script will create plots of ISR spectra for different radar systems
+This script will create plots of ISR spectra for various radar systems. The ion acoustic frequencies will also be plotted.
 
-@author: John Swoboda
 """
 import numpy as np
 import scipy as sp
@@ -25,7 +24,7 @@ def main():
 
     Cia = np.sqrt(spconst.k*(Te+3.*Ti)/16./spconst.m_p)
 
-    #make list of dictionaries
+    #make list of dictionaries for the radar systems
     biglist = [{'name':'AMISR','Fo':449e6,'Fs':50e3,'alpha':70.},
         {'name':'Sondrestrom','Fo':1290e6,'Fs':100e3,'alpha':80.},
         {'name':'Haystack','Fo':440e6,'Fs':50e3,'alpha':65.},

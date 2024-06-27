@@ -4,6 +4,15 @@ ISRSpectrum Change Log
 
 .. current developments
 
+v4.0.2
+====================
+
+**Added:**
+
+* Workflow for anaconda publishing
+
+
+
 v4.0.1
 ====================
 

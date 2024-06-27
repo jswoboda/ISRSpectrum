@@ -22,7 +22,7 @@ config = dict(
     extras_require={
         "plot": ["matplotlib", "jupyter", "seaborn"],
     },
-    version='4.0.1',
+    version='4.0.2',
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
     name="ISRSpectrum",

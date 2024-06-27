@@ -13,8 +13,6 @@ on:
     types:
       - published
 
-name: release
-
 jobs:
   pypi:
     name: upload release to PyPI

@@ -13,6 +13,7 @@ Install
 
 This module is made from pure Python, it can be installed via pip after downloading it from GitHub
 
+
 Usage
 **********
 

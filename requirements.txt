@@ -4,4 +4,3 @@ numpy
 scipy 
 pandas 
 seaborn
-sphinx-rtd-theme

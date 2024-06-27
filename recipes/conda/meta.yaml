@@ -1,10 +1,10 @@
 package:
   name: isrspectrum
-  version: {{ data.get('version') }}
+  version: 4.0.0
 
 source:
   git_url: https://github.com/jswoboda/ISRSpectrum.git
-  git_rev: {{ data.get('version') }}
+  git_rev: 4.0.0
 
 build:
   noarch: python

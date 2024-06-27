@@ -1,0 +1,35 @@
+name: build and upload to anaconda
+
+on:
+  release:
+    types: ['released', 'prereleased']
+
+# workflow_dispatch:        # Un comment line if you also want to trigger action manually
+
+jobs:
+  conda_deployment_with_new_tag:
+    name: Conda deployment of package for platform ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macOS-latest, ubuntu-latest, windows-latest]
+        python-version: ["3.8", "3.9", "3.10", "3."]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Conda environment creation and activation
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          environment-file: devtools/conda-envs/build_env.yaml    # Path to the build conda environment
+          auto-update-conda: false
+          auto-activate-base: false
+          show-channel-urls: true
+      - name: Build and upload the conda packages
+        uses: uibcdf/action-build-and-upload-conda-packages@v1.3.0
+        with:
+          meta_yaml_dir: recipes/conda
+          python-version: ${{ matrix.python-version }} # Values previously defined in `matrix`
+          user: uibcdf
+          label: auto
+          token: ${{ secrets.ANACONDA_TOKEN }} # Replace with the right name of your secret

@@ -15,6 +15,7 @@ jobs:
       uses: TomographicImaging/conda-package-publish-action@v2
       with:
         subDir: 'recipes/conda'
+        channels: "{-c swoboj}"
         publish: true
         AnacondaToken: ${{ secrets.ANACONDA_TOKEN }}
 

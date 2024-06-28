@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - nose 
+  - six
+  - numpy 
+  - scipy 
+  - pandas 
+  - seaborn

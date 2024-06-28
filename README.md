@@ -25,6 +25,12 @@ The package can be installed through anaconda through the following command
 conda install -c swoboj isrspectrum
 ```
 
+The package is also avalible through pypi and using using pip
+
+```sh
+pip install isrspectrum
+```
+
 The user can also download the software and install it through pip or set up tools. It is suggested the software be installed locally as it can be updated.
 
 ```sh

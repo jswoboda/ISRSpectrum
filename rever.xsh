@@ -12,6 +12,7 @@ $VERSION_BUMP_PATTERNS = [ ('setup.py', 'version\s*=.*,', "version='$VERSION',")
 ('docs/source/conf.py', 'release\s*=*.*,', "release = '$VERSION' "),
 ('docs/source/conf.py', 'version\s*=*.*,', "version = '$VERSION' "),
 ('recipes/conda/meta.yaml',  r'version:\s*', "version: $VERSION"),
+('recipes/conda/meta.yaml',  r'git_rev:\s*', "git_rev: $VERSION"),
 ]
 
 $CHANGELOG_FILENAME = 'CHANGELOG.rst'  # Filename for the changelog

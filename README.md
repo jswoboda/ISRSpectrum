@@ -17,15 +17,6 @@ This is a Python module to calculate an incoherent scatter spectrum based off of
 
  Like the model covered in the paper the software can calculate a spectra given, any magnetic aspect angle not perpendicular to B, any number of ion species, and the collision frequencies associated with those ion species. As the magnetic aspect angles get closer to perpendicular to B, usually &lt; 1 degree perp to B, more and more calculations are needed for the Gordeyev to converge.
 
-## Suggestions
-
-It is highly suggested that the [Anaconda](https://www.continuum.io/downloads) platform be used as the package manager. All of the development and testing has been done using this package manager.
-Assuming the user has installed Anaconda a [set up bash script](https://github.com/jswoboda/AnacondaEnvUtilities), which can be used in Linux or Mac environments is available.
-
-The user can also take advantage of two different APIs to plot results using the SimISR.
-The first is in Python and is called [GeoDataPython](https://github.com/jswoboda/GeoDataPython).
-A MATLAB version of this API is also available called [GeoDataMATLAB](https://github.com/jswoboda/GeoDataMATLAB).
-
 ## Installation
 
 The package can be installed through anaconda through the following command

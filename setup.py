@@ -17,6 +17,7 @@ from setuptools import setup, find_packages
 config = dict(
     description="Creates ISR Spectrums",
     long_description=long_desc,
+    long_description_content_type='text/markdown',
     author="John Swoboda",
     url="https://github.com/jswoboda/ISRSpectrum",
     install_requires=req,

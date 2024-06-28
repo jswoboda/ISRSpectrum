@@ -1,10 +1,10 @@
 package:
   name: isrspectrum
-  version: 4.0.7
+  version: 4.0.8
 
 source:
   git_url: https://github.com/jswoboda/ISRSpectrum.git
-  git_rev: 4.0.7
+  git_rev: 4.0.8
 
 build:
   noarch: python

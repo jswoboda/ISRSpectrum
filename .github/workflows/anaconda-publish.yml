@@ -8,12 +8,16 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: publish-to-conda
-      uses: MichaelsJP/conda-package-publish-action@v1.0.0
+      uses: TomographicImaging/conda-package-publish-action@v2
       with:
         subDir: 'recipes/conda'
+        publish: true
         AnacondaToken: ${{ secrets.ANACONDA_TOKEN }}
-        platforms: 'all'
-        override: true
-        dry_run: true
+
+
+
+ 

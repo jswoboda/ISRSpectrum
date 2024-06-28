@@ -8,11 +8,15 @@ This is the setup file for the RadarDataSim python package
 with open('requirements.txt') as f:
     req = f.read().splitlines()
 
+with open('README.md', 'r') as f:
+    long_desc = f.read()
+
 import versioneer
 from setuptools import setup, find_packages
 
 config = dict(
     description="Creates ISR Spectrums",
+    long_description=long_desc,
     author="John Swoboda",
     url="https://github.com/jswoboda/ISRSpectrum",
     install_requires=req,

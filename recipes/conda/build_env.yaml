@@ -3,9 +3,11 @@ channels:
   - defaults
 
 dependencies:
-  - nose 
+  - python
+  - setuptools
+  - numpy
+  - scipy
   - six
-  - numpy 
-  - scipy 
-  - pandas 
+  - nose
+  - pandas
   - seaborn

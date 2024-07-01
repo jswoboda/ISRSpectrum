@@ -9,15 +9,33 @@ This is a Python module to calculate an incoherent scatter spectrum based off of
 
 
 Install
-**********
+*******
 
-This module is made from pure Python, it can be installed via pip after downloading it from GitHub
+The newest versions of the software are automatically uploaded to Anaconda.org and Pypi so 
+
+.. code-block:: bash
+    
+    # use conda or mamba to install
+    conda install swoboj::isrspectrum
+
+    # Using pip to download and install directly.
+    pip install isrspectrum
+
+
+The user can also create a local copy and use pip to install and run the software:
+
+.. code-block:: bash
+
+    # download and install code locally.
+    git clone https://github.com/jswoboda/ISRSpectrum.git
+    cd ISRSpectrum
+    pip install -e .
 
 
 Usage
 **********
 
-There are a number of examples in the Examples directory that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.
+The Examples directory has a number of cases that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.
 
 
 Example
@@ -51,6 +69,9 @@ This example shows how to use the Specinit class and then create a spectrum usin
     datablock_s = np.array([[Ni,ti,vi,1,mi,Nui],[Ne,te,vi,-1,1,Nue]])
     (omega,specorig,rcs) = ISS2.getspec(datablock_s, rcsflag = True)
 
+
+The exaample spctrum is shown below. This is the same across all of the different methods. 
+
 .. figure:: imgs/introexamplespec.png
    :class: with-border
 
@@ -61,8 +82,6 @@ Using Plugins
 *************
 
 Plugins can be used with the getspec method. All of the plugins should have an identifier which will be in the file name after ``gord_`` part in the filename. The example from above can be expanded, first lets increase the ion collision rate to 10kHz and use the default plugin for the Gordeyev integral calculation:
-
-
 
 .. code-block:: python
 
@@ -78,6 +97,9 @@ We can use a different plugin, labelled as simple, to perform the same calculati
 
     datablocksimp = np.array([[Ni,ti,vi,1, mi*spconst.m_p],[Ne,te,vi,-1, spconst.m_e]])
     (omega,specorig_simp,rcs) = ISS2.getspec(datablocksimp, des_plug='simple', rcsflag = True)
+
+
+The resulting spectra are shown below. As a general note the terms in the datablock numpy array are generally terms that can change across different species, e.g. density, temperature, mass, etc. Other inputs to the getspec method can include magnetic field angle, magnetic field strength etc. There is a kwargs input for the plugins so needed options are avalible.  
 
 .. figure:: imgs/pluginexample.png
    :class: with-border

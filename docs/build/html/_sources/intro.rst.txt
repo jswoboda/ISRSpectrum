@@ -9,9 +9,28 @@ This is a Python module to calculate an incoherent scatter spectrum based off of
 
 
 Install
-**********
+*******
 
-This module is made from pure Python, it can be installed via pip after downloading it from GitHub
+The newest versions of the software are automatically uploaded to Anaconda.org and Pypi so 
+
+.. code-block:: bash
+    
+    # use conda or mamba to install
+    conda install swoboj::isrspectrum
+
+    # Using pip to download and install directly.
+    pip install isrspectrum
+
+
+The user can also create a local copy and use pip to install and run the software:
+
+.. code-block:: bash
+
+    # download and install code locally.
+    git clone https://github.com/jswoboda/ISRSpectrum.git
+    cd ISRSpectrum
+    pip install -e .
+
 
 Usage
 **********

@@ -31,7 +31,7 @@ The package is also avalible through pypi and using using pip
 pip install isrspectrum
 ```
 
-The user can also download the software and install it through pip or set up tools. It is suggested the software be installed locally as it can be updated.
+The user can also download the software and install it through pip or set up tools if they prefer.
 
 ```sh
 git clone https://github.com/jswoboda/ISRSpectrum.git

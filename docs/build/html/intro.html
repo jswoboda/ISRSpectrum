@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; ISRSpectrum 3.2.2 documentation</title>
+  <title>Introduction &mdash; ISRSpectrum 4.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
 
@@ -36,6 +36,9 @@
           <a href="index.html" class="icon icon-home">
             ISRSpectrum
           </a>
+              <div class="version">
+                4.0.1
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -92,7 +95,21 @@
 </div></blockquote>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
-<p>This module is made from pure Python, it can be installed via pip after downloading it from GitHub</p>
+<p>The newest versions of the software are automatically uploaded to Anaconda.org and Pypi so</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># use conda or mamba to install</span>
+conda<span class="w"> </span>install<span class="w"> </span>swoboj::isrspectrum
+
+<span class="c1"># Using pip to download and install directly.</span>
+pip<span class="w"> </span>install<span class="w"> </span>isrspectrum
+</pre></div>
+</div>
+<p>The user can also create a local copy and use pip to install and run the software:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># download and install code locally.</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/jswoboda/ISRSpectrum.git
+<span class="nb">cd</span><span class="w"> </span>ISRSpectrum
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>

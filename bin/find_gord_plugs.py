@@ -70,7 +70,7 @@ def findthegord(files=None):
     files : list
         Files that will be moved into the plugin folder.
     """
-    pathstr = f"Pluggin directory: {str(ISRSpectrum.__pluginpath__)}\n"
+    pathstr = f"Plugin directory: {str(ISRSpectrum.__pluginpath__)}\n"
 
     str_list = [pathstr]
 

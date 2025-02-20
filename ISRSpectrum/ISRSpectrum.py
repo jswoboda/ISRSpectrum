@@ -120,7 +120,7 @@ class Specinit(object):
         alphadeg : float
             The magnetic aspect angle in degrees.
         rcsflag : float
-            A bool that will determine if the reflected power is returned as well. (default is False)
+            A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
         seplines :bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
         args : list
@@ -135,7 +135,7 @@ class Specinit(object):
         spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
         rcs : ndarray
-            The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
+            The scaled density needed to calculate the RCS in m^{-3}.
         """
         # perform a copy of the object to avoid it being written over with incorrect.
         datablock = datablock.copy()
@@ -256,7 +256,7 @@ class Specinit(object):
         alphadeg : float
             The angle offset from the magnetic field in degrees, default is 90.0
         rcsflag : bool
-            If this flag is True then a third output of the rcs will be made. Default value is False
+            A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
         seplines : bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
 
@@ -267,7 +267,7 @@ class Specinit(object):
         spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
         rcs : ndarray
-            The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
+            The scaled density needed to calculate the RCS in m^{-3}.
         """
 
         assert Islistofstr(ionspecies), "Species needs to be a list of strings"
@@ -318,7 +318,7 @@ class Specinit(object):
         alphadeg : float
             The angle offset from the magnetic field in degrees, default is 90.0
         rcsflag : bool
-            If this flag is True then a third output of the rcs will be made. Default value is False
+            A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
         col_calc : bool
             If this flag is true then collisions will be calculated. (Default= False)
         n_datablock : ndarray
@@ -335,7 +335,7 @@ class Specinit(object):
         spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
         rcs : ndarray
-            The RCS from the parcle of plasma for the given parameters. The RCS is in m^2.
+            The scaled density needed to calculate the RCS in m^{-3}.
         """
         assert Islistofstr(species), "Species needs to be a list of strings"
         assert allin(

@@ -69,7 +69,7 @@ class Specinit(object):
             (Default 1e-2) The minimum collision frequency needed to incorporate it into Gordeyev integral calculations in units of K*sqrt(Kb*Ts/ms) for each ion species.
         alphamax : float
             (Default 30)  The maximum magnetic aspect angle in which the B-field will be taken into account.
-        dFlag : float
+        dFlag : bool
             A debug flag, if set true will output debug text. Default is false.
         f : ndarray
             Array of frequeny points, in Hz, the spectrum will be formed over. Default is None, at that point the frequency vector will be formed using the number of points for the spectrum and the sampling frequency to create a linearly sampled frequency vector.
@@ -103,6 +103,7 @@ class Specinit(object):
         des_plug="default",
         alphadeg=90.0,
         rcsflag=False,
+        heflag=False,
         seplines=False,
         *args,
         **kwargs
@@ -119,8 +120,10 @@ class Specinit(object):
             The desired pluggin for the Gordeyev integral
         alphadeg : float
             The magnetic aspect angle in degrees.
-        rcsflag : float
+        rcsflag : bool
             A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
+        heflag : bool
+            A bool that will determine if the debye length is one of the ouptuts. (default is False)
         seplines :bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
         args : list
@@ -134,8 +137,10 @@ class Specinit(object):
             A numpy array that holds the frequency vector associated with the spectrum, in Hz.
         spec : ndarray
             The resulting ISR spectrum from the parameters with the max value set to 1.
-        rcs : ndarray
+        rcs : float
             The scaled density needed to calculate the RCS in m^{-3}.
+        he : float
+            The debye length in m.
         """
         # perform a copy of the object to avoid it being written over with incorrect.
         datablock = datablock.copy()
@@ -158,7 +163,7 @@ class Specinit(object):
             alphamax=self.alphamax,
             dFlag=self.dFlag,
         )
-        h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e * spconst.e))
+        h_e = np.sqrt(spconst.epsilon_0 * spconst.k * Te / (Ne * spconst.e**2))
         sig_e = (1j + omeg_e * egord) / (self.K**2 * h_e**2)
         nte = 2 * Ne * np.real(egord)
 
@@ -215,13 +220,15 @@ class Specinit(object):
         else:
             spec = iline + eline
 
+        outlist = [self.f, spec]
         if rcsflag:
             Tr = Te / np.sum(wevec * Tivec)
             rcs = Ne / ((1 + self.K**2 * h_e**2) * (1 + self.K**2 * h_e**2 + Tr))
 
-            return (self.f, spec, rcs)
-        else:
-            return (self.f, spec)
+            outlist.append(rcs)
+        if heflag:
+            outlist.append(h_e)
+        return tuple(outlist)
 
     def getspecsimple(
         self,
@@ -233,6 +240,7 @@ class Specinit(object):
         vel=0.0,
         alphadeg=90.0,
         rcsflag=False,
+        heflag=False,
         seplines=False,
     ):
         """Creates a spectrum using electron physical parameters not in a data block.
@@ -257,6 +265,8 @@ class Specinit(object):
             The angle offset from the magnetic field in degrees, default is 90.0
         rcsflag : bool
             A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
+        heflag : bool
+            A bool that will determine if the debye length is one of the ouptuts. (default is False)
         seplines : bool
             A bool that will change the output, spec to a list of numpy arrays that include return from the electron line and ion lines seperatly.
 
@@ -289,7 +299,7 @@ class Specinit(object):
         datablock[-1, 0] = Ne
         datablock[-1, 1] = Te
         species = ionspecies + ["e-"]
-        return self.getspecsep(datablock, species, vel, alphadeg, rcsflag, seplines)
+        return self.getspecsep(datablock, species, vel, alphadeg, rcsflag, heflag, seplines)
 
     def getspecsep(
         self,
@@ -298,6 +308,7 @@ class Specinit(object):
         vel=0.0,
         alphadeg=90.0,
         rcsflag=False,
+        heflag=False,
         col_calc=False,
         n_datablock=None,
         n_species=None,
@@ -319,6 +330,8 @@ class Specinit(object):
             The angle offset from the magnetic field in degrees, default is 90.0
         rcsflag : bool
             A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
+        heflag : bool
+            A bool that will determine if the debye length is one of the ouptuts. (default is False)
         col_calc : bool
             If this flag is true then collisions will be calculated. (Default= False)
         n_datablock : ndarray
@@ -356,7 +369,7 @@ class Specinit(object):
                 datablocknew[nspec, 6] = nuparr[nspec]
 
         return self.getspec(
-            datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, seplines=seplines
+            datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, heflag=heflag, seplines=seplines
         )
 
 

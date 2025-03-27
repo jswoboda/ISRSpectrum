@@ -113,7 +113,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>There are a number of examples in the Examples directory that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.</p>
+<p>The Examples directory has a number of cases that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.</p>
 </section>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
@@ -143,6 +143,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="p">(</span><span class="n">omega</span><span class="p">,</span><span class="n">specorig</span><span class="p">,</span><span class="n">rcs</span><span class="p">)</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspec</span><span class="p">(</span><span class="n">datablock_s</span><span class="p">,</span> <span class="n">rcsflag</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The exaample spctrum is shown below. This is the same across all of the different methods.</p>
 <figure class="align-default" id="id1">
 <img alt="_images/introexamplespec.png" class="with-border" src="_images/introexamplespec.png" />
 <figcaption>
@@ -163,6 +164,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <span class="p">(</span><span class="n">omega</span><span class="p">,</span><span class="n">specorig_simp</span><span class="p">,</span><span class="n">rcs</span><span class="p">)</span> <span class="o">=</span> <span class="n">ISS2</span><span class="o">.</span><span class="n">getspec</span><span class="p">(</span><span class="n">datablocksimp</span><span class="p">,</span> <span class="n">des_plug</span><span class="o">=</span><span class="s1">&#39;simple&#39;</span><span class="p">,</span> <span class="n">rcsflag</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The resulting spectra are shown below. As a general note the terms in the datablock numpy array are generally terms that can change across different species, e.g. density, temperature, mass, etc. Other inputs to the getspec method can include magnetic field angle, magnetic field strength etc. There is a kwargs input for the plugins so needed options are avalible.</p>
 <figure class="align-default" id="id2">
 <img alt="_images/pluginexample.png" class="with-border" src="_images/pluginexample.png" />
 <figcaption>

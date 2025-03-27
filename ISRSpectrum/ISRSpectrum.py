@@ -171,8 +171,6 @@ class Specinit(object):
         # normalize total ion density to be the same as electron density
         ionstuff[:, 0] = (estuff[0] / ionden) * ionstuff[:, 0]
 
-        # ratio of charges between ion species and electrons
-        qrotvec = ionstuff[:, 3] / estuff[3]
         firstion = True
         wevec = np.zeros(Nions)
         Tivec = np.zeros(Nions)
@@ -194,8 +192,10 @@ class Specinit(object):
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
             # can cause a divid by zero error.
+
             # temperature ratio
             mu = Ti / Te
+            # ratio of charges between ion species and electrons
             qrot = np.abs(qi / qe)
             sig_i = (
                 (Ni / Ne) * (1j + omeg_i * igord) / (self.K**2 * mu * h_e**2 / qrot**2)

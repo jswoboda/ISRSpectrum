@@ -80,7 +80,39 @@ class PLspecinit(object):
 
         self.cfreqvec = np.fft.fftshift(np.fft.fftfreq(n_fpfb, 1 / c_bw))
 
-    def get_ul_spec(self, data_vec, v_d, bMag, alphadeg=90.0, rcsflag=False, Tpe=1.0):
+    def get_ul_spec(self, data_vec, v_d, alphadeg=90.0, rcsflag=False, freqflag = False, Tpe=1.0):
+        """Gets the upper and lower plasma line spectra.
+
+        Parameters
+        ----------
+        data_vec : ndarray
+            A numpy array of Nsx2 array of densities and temperatures.
+        v_d : float
+            Doppler velocity in m/s
+        bMag : float
+            Magnetic field in Teslas
+        alphadeg : float
+            The magnetic aspect angle in degrees.
+        rcsflag : bool
+            A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
+        Tpe : float
+            The ratio between plasma line temperature and electron temperature. Default is 1.0.
+
+        Returns
+        -------
+        f_lo : list
+            List of frequency vectors parameterizing the lower plasma line spectra in Hz.
+        spec_low : list
+            List of lower plasma line spectra.
+        f_hi : list
+            List of frequency vectors parameterizing the upper plasma line spectra in Hz.
+        spec_hi : list
+            List of upper plasma line spectra.
+        rcs_p : float
+            The scaled density needed to calculate the RCS in m^{-3}.
+        freqlist : list
+            Center frequencies in of lower and upper plasma lines in Hz.
+        """
 
         Ne = data_vec[-1, 0]
         Te = data_vec[-1, -1]
@@ -91,7 +123,7 @@ class PLspecinit(object):
 
         rcs_p = Tpe * Ne * self.K * 2 * lamb_d2 / 2
 
-        frp, frm = get_freqs_default(Ne, Te, v_d, self.K, bMag, alphadeg)
+        frp, frm = get_pl_freqs_default(Ne, Te, v_d, self.K, self.bMag, alphadeg)
 
         # Lower plasma line Spectrum
         f_0m = frm
@@ -124,7 +156,8 @@ class PLspecinit(object):
         outlist = [f_lo, spec_low, f_hi, spec_hi]
         if rcsflag:
             outlist.append(rcs_p)
-
+        if freqflag:
+            outlist.append([frm,frp])
         return tuple(outlist)
 
 
@@ -150,7 +183,7 @@ def make_pl_spec_default(freq, f_0, gam):
     return lore
 
 
-def get_freqs_default(
+def get_pl_freqs_default(
     Ne,
     Te,
     v_d,
@@ -193,9 +226,9 @@ def get_freqs_default(
     # thermal speed squared
     f_th2 = lamb_d2 * f_p2
 
-    alphrad = alphadeg * np.pi / 2
+    phirad = np.abs(90-alphadeg) * np.pi / 180
     # plasma frequency squared+3 *thermal frequency *K**2 + (fc*sinalph)**2
-    fr_2 = f_p2 + 3 * k_num**2 * f_th2 + (f_c * np.sin(alphrad)) ** 2
+    fr_2 = f_p2 + 3 * k_num**2 * f_th2 + (f_c * np.sin(phirad)) ** 2
     fr = np.sqrt(fr_2)
     f_o = k_num * sconst.c / (4 * np.pi)
 
@@ -203,11 +236,11 @@ def get_freqs_default(
     km = (twopi / sconst.c) * (f_o + f_o - fr)
 
     # upper plasma line squared
-    frp2 = f_p2 + 3 * kp**2 * f_th2 + (f_c * np.sin(alphrad)) ** 2
+    frp2 = f_p2 + 3 * kp**2 * f_th2 + (f_c * np.sin(phirad)) ** 2
     # upper plasma line with doppler
     frp = np.sqrt(frp2) + (kp * v_d / (twopi))
     # lower plasma line squared
-    frm2 = f_p2 + 3 * km**2 * f_th2 + (f_c * np.sin(alphrad)) ** 2
+    frm2 = f_p2 + 3 * km**2 * f_th2 + (f_c * np.sin(phirad)) ** 2
     # lower plasma line with doppler
     frm = -1 * np.sqrt(frm2) - (kp * v_d / (twopi))
     return frp, frm

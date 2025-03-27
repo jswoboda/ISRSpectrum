@@ -10,7 +10,11 @@ The ``Specinit`` class
     :members:
     :undoc-members:
 
-
+The ``PLspecinit`` class
+***********************************
+.. autoclass:: ISRSpectrum.PLspecinit
+    :members:
+    :undoc-members:
 
 Submodules
 ----------
@@ -31,4 +35,3 @@ Included Plugins
    :maxdepth: 4
 
    ISRSpectrum.plugins
-

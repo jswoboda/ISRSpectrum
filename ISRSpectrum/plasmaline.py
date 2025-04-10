@@ -80,7 +80,9 @@ class PLspecinit(object):
 
         self.cfreqvec = np.fft.fftshift(np.fft.fftfreq(n_fpfb, 1 / c_bw))
 
-    def get_ul_spec(self, data_vec, v_d, alphadeg=90.0, rcsflag=False, freqflag = False, Tpe=1.0):
+    def get_ul_spec(
+        self, data_vec, v_d, alphadeg=90.0, rcsflag=False, freqflag=False, Tpe=1.0
+    ):
         """Gets the upper and lower plasma line spectra.
 
         Parameters
@@ -157,7 +159,7 @@ class PLspecinit(object):
         if rcsflag:
             outlist.append(rcs_p)
         if freqflag:
-            outlist.append([frm,frp])
+            outlist.append([frm, frp])
         return tuple(outlist)
 
 
@@ -226,7 +228,7 @@ def get_pl_freqs_default(
     # thermal speed squared
     f_th2 = lamb_d2 * f_p2
 
-    phirad = np.abs(90-alphadeg) * np.pi / 180
+    phirad = np.abs(90 - alphadeg) * np.pi / 180
     # plasma frequency squared+3 *thermal frequency *K**2 + (fc*sinalph)**2
     fr_2 = f_p2 + 3 * k_num**2 * f_th2 + (f_c * np.sin(phirad)) ** 2
     fr = np.sqrt(fr_2)

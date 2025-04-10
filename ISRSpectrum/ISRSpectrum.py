@@ -299,7 +299,9 @@ class Specinit(object):
         datablock[-1, 0] = Ne
         datablock[-1, 1] = Te
         species = ionspecies + ["e-"]
-        return self.getspecsep(datablock, species, vel, alphadeg, rcsflag, heflag, seplines)
+        return self.getspecsep(
+            datablock, species, vel, alphadeg, rcsflag, heflag, seplines
+        )
 
     def getspecsep(
         self,
@@ -369,7 +371,11 @@ class Specinit(object):
                 datablocknew[nspec, 6] = nuparr[nspec]
 
         return self.getspec(
-            datablocknew, alphadeg=alphadeg, rcsflag=rcsflag, heflag=heflag, seplines=seplines
+            datablocknew,
+            alphadeg=alphadeg,
+            rcsflag=rcsflag,
+            heflag=heflag,
+            seplines=seplines,
         )
 
 

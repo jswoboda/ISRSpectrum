@@ -1,3 +1,5 @@
+from xmlrpc.client import boolean
+
 #!/usr/bin/env python
 """plasmaline.py
 
@@ -67,9 +69,8 @@ class PLspecinit(object):
             2.0 * np.pi * 2 * centerFrequency / sconst.c
         )  # The Bragg scattering vector, corresponds to half the radar wavelength.
         self.bMag = bMag
-        nchans = 250
         c_bw = fs / nchans
-        n_fpfb = 1024
+        n_fpfb = nfreq_pfb
         c_bw = fs / nchans
 
         self.freq_vec = np.fft.fftshift(np.fft.fftfreq(nchans, 1 / fs))
@@ -77,11 +78,22 @@ class PLspecinit(object):
         bw2 = fs / nchans / 2
         self.freq_l = self.freq_vec - bw2
         self.freq_h = self.freq_vec + bw2
-
+        m_m = -((n_fpfb - 1) // -2)  # trick to get ceiling command with operators
+        m_p = (n_fpfb - 1) // 2
+        self.pos_dict = {
+            ichan: (ichan * n_fpfb, (ichan + 1) * n_fpfb) for ichan in self.freq_ind
+        }
         self.cfreqvec = np.fft.fftshift(np.fft.fftfreq(n_fpfb, 1 / c_bw))
 
     def get_ul_spec(
-        self, data_vec, v_d, alphadeg=90.0, rcsflag=False, freqflag=False, Tpe=1.0
+        self,
+        data_vec,
+        v_d,
+        alphadeg=90.0,
+        rcsflag=False,
+        freqflag=False,
+        Tpe=1.0,
+        posflag=False,
     ):
         """Gets the upper and lower plasma line spectra.
 
@@ -99,6 +111,8 @@ class PLspecinit(object):
             A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
         Tpe : float
             The ratio between plasma line temperature and electron temperature. Default is 1.0.
+        posflag : bool
+            A flag to give out the position within the full frequency space of the spectra.
 
         Returns
         -------
@@ -118,7 +132,9 @@ class PLspecinit(object):
 
         Ne = data_vec[-1, 0]
         Te = data_vec[-1, -1]
+        # HACK half with half maximum in Hz set to 10 kHz.
         gam = 10000
+        # Skirt is FWHM
         skirt = gam * 2
 
         lamb_d2 = sconst.epsilon_0 * sconst.k * Te / (sconst.e**2 * Ne)
@@ -135,11 +151,13 @@ class PLspecinit(object):
         outlist = [frp, frm]
         f_lo = []
         spec_low = []
+        pos_low = []
         for bin_i in cur_bin:
             cf_i = self.freq_vec[bin_i]
             f_lo.append(self.cfreqvec + cf_i)
             spec_i = make_pl_spec_default(self.cfreqvec + cf_i, f_0m, gam)
             spec_low.append(spec_i)
+            pos_low.append(np.arange(*self.pos_dict[bin_i], dtype=int))
 
         # Upper plasma line spectrum.
         f_0p = frp
@@ -149,22 +167,27 @@ class PLspecinit(object):
         outlist = [frp, frm]
         f_hi = []
         spec_hi = []
+        pos_hi = []
         for bin_i in cur_bin:
             cf_i = self.freq_vec[bin_i]
             f_hi.append(self.cfreqvec + cf_i)
             spec_i = make_pl_spec_default(self.cfreqvec + cf_i, f_0p, gam)
             spec_hi.append(spec_i)
+            pos_hi.append(np.arange(*self.pos_dict[bin_i], dtype=int))
 
         outlist = [f_lo, spec_low, f_hi, spec_hi]
         if rcsflag:
             outlist.append(rcs_p)
         if freqflag:
             outlist.append([frm, frp])
+        if posflag:
+            outlist.append(pos_low)
+            outlist.append(pos_hi)
         return tuple(outlist)
 
 
 def make_pl_spec_default(freq, f_0, gam):
-    """Creates a Lorentzian function
+    """Creates a Lorentzian function using the center frequency and half width at half maximum (HWHM) parameters in Hz.
 
     Parameters
     ----------
@@ -173,7 +196,7 @@ def make_pl_spec_default(freq, f_0, gam):
     f_0 : float
         Center of Loerentzian in Hz.
     gam : float
-        The HWHM of the function
+        The HWHM of the function in Hz.
 
     Returns
     -------

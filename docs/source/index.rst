@@ -11,11 +11,9 @@ Welcome to ISRSpectrum's documentation!
    :caption: Contents:
 
    intro
-   
    pluginfo
-
    modules
-
+   notebooks/plnotebook
 
 Indices and tables
 ==================

@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Introduction &mdash; ISRSpectrum 4.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=977c7dfd"></script>
+        <script src="_static/doctools.js?v=9bcbadda"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -85,7 +86,7 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
 <p>This is a Python module to calculate an incoherent scatter spectrum based off of Kudeki and Milla’s 2011 IEEE Geophysics paper.</p>
 <blockquote>
 <div><blockquote>
@@ -94,7 +95,7 @@
 <p>Like the model covered in the paper the software can calculate a spectra given, any magnetic aspect angle not perpendicular to B, any number of ion species, and the collision frequencies associated with those ion species. As the magnetic aspect angles get closer to perpendicular to B, usually &amp;lt; 1 degree perp to B, more and more calculations are needed for the Gordeyev to converge.</p>
 </div></blockquote>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Link to this heading"></a></h2>
 <p>The newest versions of the software are automatically uploaded to Anaconda.org and Pypi so</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># use conda or mamba to install</span>
 conda<span class="w"> </span>install<span class="w"> </span>swoboj::isrspectrum
@@ -112,15 +113,15 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </div>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>The Examples directory has a number of cases that show how to use the software. The basic way to use the code is to import the Specinit object. Then the object can then call one of three different methods depending on how your parameters are defined. For example the getspecsimple method takes physical electron density, temperature, ion temperature, velocity and the species along with their concenterations. The getspecsep and getspec methods uses a numpy array to hold physical information about the spectra. See the documentation for more details.</p>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <p>This example shows how to use the Specinit class and then create a spectrum using the getspecsimple,  getspecsep and getspec. The two functions getspecsimple and getspecsep take the inputs different but calculate collision frequencies based off of the physical inputs, i.e. density, temperture, ion species. The method getspec takes as an input, in the datablock array, the collision frequency so the user can have more control over defining the frequency</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.constants</span> <span class="k">as</span> <span class="nn">spconst</span>
-<span class="kn">from</span> <span class="nn">ISRSpectrum</span> <span class="kn">import</span> <span class="n">Specinit</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">spconst</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ISRSpectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Specinit</span>
 
 <span class="n">spfreq</span> <span class="o">=</span> <span class="mf">50e3</span>
 <span class="n">nspec</span> <span class="o">=</span> <span class="mi">512</span>
@@ -147,12 +148,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <figure class="align-default" id="id1">
 <img alt="_images/introexamplespec.png" class="with-border" src="_images/introexamplespec.png" />
 <figcaption>
-<p><span class="caption-text">Example output spectrum</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example output spectrum</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>
 <section id="using-plugins">
-<h2>Using Plugins<a class="headerlink" href="#using-plugins" title="Permalink to this heading"></a></h2>
+<h2>Using Plugins<a class="headerlink" href="#using-plugins" title="Link to this heading"></a></h2>
 <p>Plugins can be used with the getspec method. All of the plugins should have an identifier which will be in the file name after <code class="docutils literal notranslate"><span class="pre">gord_</span></code> part in the filename. The example from above can be expanded, first lets increase the ion collision rate to 10kHz and use the default plugin for the Gordeyev integral calculation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Nui</span> <span class="o">=</span> <span class="mf">10e3</span>
 <span class="n">datablockdefault</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">Ni</span><span class="p">,</span><span class="n">ti</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">mi</span><span class="p">,</span><span class="n">Nui</span><span class="p">],[</span><span class="n">Ne</span><span class="p">,</span><span class="n">te</span><span class="p">,</span><span class="n">vi</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">Nue</span><span class="p">]])</span>
@@ -168,7 +169,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 <figure class="align-default" id="id2">
 <img alt="_images/pluginexample.png" class="with-border" src="_images/pluginexample.png" />
 <figcaption>
-<p><span class="caption-text">Example using different plugins</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+<p><span class="caption-text">Example using different plugins</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 </section>

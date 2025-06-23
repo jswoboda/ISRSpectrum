@@ -23,9 +23,9 @@ copyright = "2024, John Swoboda"
 author = "John Swoboda"
 
 # The full version, including alpha/beta/rc tags
-release = "4.0.1"
+release = "4.2.0"
 
-version = "4.0.1"
+version = "4.2.0"
 
 # -- General configuration ---------------------------------------------------
 

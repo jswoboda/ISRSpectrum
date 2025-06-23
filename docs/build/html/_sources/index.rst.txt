@@ -14,6 +14,7 @@ Welcome to ISRSpectrum's documentation!
    pluginfo
    modules
    notebooks/plnotebook
+   notebooks/Specslider
 
 Indices and tables
 ==================

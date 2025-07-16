@@ -4,8 +4,7 @@ Created on Tue Jul 15 16:12:05 2014
 
 @author: John Swoboda
 ISRSpectrum.py
-This module will create ISR spectrums using plasma parameters. The code implements the
-method of calculation found in the following article.
+This module will create ISR spectrums using plasma parameters. The code implements the method of calculation found in the following article.
 
 E. Kudeki and M. A. Milla, 2011.
 

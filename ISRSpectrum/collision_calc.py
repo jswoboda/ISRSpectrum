@@ -14,6 +14,7 @@ import pandas as pd
 # AMU for important molicules.
 INFODICT = {
     "O+": np.array([1, 16]),
+    "MA31+":np.array([1,31]),
     "NO+": np.array([1, 30]),
     "N2+": np.array([1, 28]),
     "O2+": np.array([1, 32]),

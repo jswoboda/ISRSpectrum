@@ -187,6 +187,7 @@ class Specinit(object):
                 alphamax=self.alphamax,
                 dFlag=self.dFlag,
             )
+
             wevec[iion] = Ni / Ne
             Tivec[iion] = Ti
             # sub out ion debye length because zero density of ion species
@@ -196,6 +197,9 @@ class Specinit(object):
             mu = Ti / Te
             # ratio of charges between ion species and electrons
             qrot = np.abs(qi / qe)
+
+            if Ni == 0:
+                continue
             sig_i = (
                 (Ni / Ne) * (1j + omeg_i * igord) / (self.K**2 * mu * h_e**2 / qrot**2)
             )

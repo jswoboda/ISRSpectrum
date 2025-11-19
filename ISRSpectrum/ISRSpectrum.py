@@ -138,7 +138,7 @@ class Specinit(object):
             The resulting ISR spectrum from the parameters with the max value set to 1.
         rcs : float
             The scaled density needed to calculate the RCS in m^{-3}.
-        he : float
+        h_e : float
             The debye length in m.
         """
         # perform a copy of the object to avoid it being written over with incorrect.

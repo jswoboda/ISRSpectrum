@@ -94,6 +94,8 @@ class PLspecinit(object):
         freqflag=False,
         Tpe=1.0,
         posflag=False,
+        chanflag=False,
+        heflag=False,
     ):
         """Gets the upper and lower plasma line spectra.
 
@@ -111,9 +113,13 @@ class PLspecinit(object):
             A bool that will determine if the scaled density needed for RCS calculation is returned as well. (default is False)
         Tpe : float
             The ratio between plasma line temperature and electron temperature. Default is 1.0.
+        chanflag : bool
+            A bool that will determine if the channel entries are of the ouptuts. (default is False)
         posflag : bool
             A flag to give out the position within the full frequency space of the spectra.
-
+        heflag : bool
+            A bool that will determine if the debye length is one of the ouptuts. (default is False)
+            
         Returns
         -------
         f_lo : list
@@ -126,8 +132,12 @@ class PLspecinit(object):
             List of upper plasma line spectra.
         rcs_p : float
             The scaled density needed to calculate the RCS in m^{-3}.
+        h_e : float
+             The debye length in m.
         freqlist : list
             Center frequencies in of lower and upper plasma lines in Hz.
+        chan_nums_l : list
+            List of channels that are assoicated with the output
         """
 
         Ne = data_vec[-1, 0]
@@ -147,18 +157,21 @@ class PLspecinit(object):
         f_0m = frm
         lb = self.freq_ind[f_0m - skirt > self.freq_l][-1]
         ub = self.freq_ind[f_0m + skirt < self.freq_h][0]
+        # Find the bins that have data in them
         cur_bin = self.freq_ind[lb : ub + 1]
         outlist = [frp, frm]
         f_lo = []
         spec_low = []
         pos_low = []
+        chan_nums_l = []
         for bin_i in cur_bin:
             cf_i = self.freq_vec[bin_i]
             f_lo.append(self.cfreqvec + cf_i)
             spec_i = make_pl_spec_default(self.cfreqvec + cf_i, f_0m, gam)
             spec_low.append(spec_i)
             pos_low.append(np.arange(*self.pos_dict[bin_i], dtype=int))
-
+            chan_nums_l.append(bin_i)
+            
         # Upper plasma line spectrum.
         f_0p = frp
         lb = self.freq_ind[f_0p - skirt > self.freq_l][-1]
@@ -168,21 +181,29 @@ class PLspecinit(object):
         f_hi = []
         spec_hi = []
         pos_hi = []
+        chan_nums_h = []
         for bin_i in cur_bin:
             cf_i = self.freq_vec[bin_i]
             f_hi.append(self.cfreqvec + cf_i)
             spec_i = make_pl_spec_default(self.cfreqvec + cf_i, f_0p, gam)
             spec_hi.append(spec_i)
             pos_hi.append(np.arange(*self.pos_dict[bin_i], dtype=int))
-
+            chan_nums_h.append(bin_i)
+            
         outlist = [f_lo, spec_low, f_hi, spec_hi]
         if rcsflag:
             outlist.append(rcs_p)
+        if heflag:
+            outlist.append(np.sqrt(lamb_d2))
         if freqflag:
             outlist.append([frm, frp])
+        if chanflag: 
+            outlist.append(chan_nums_l)
+            outlist.append(chan_nums_h)
         if posflag:
             outlist.append(pos_low)
             outlist.append(pos_hi)
+
         return tuple(outlist)
 
 

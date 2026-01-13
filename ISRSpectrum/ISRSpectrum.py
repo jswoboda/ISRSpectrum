@@ -11,11 +11,13 @@ E. Kudeki and M. A. Milla, 2011.
 The intent of the code is to be able to calculate an ISR spectrum in a number of
 different conditions except for a very low magnetic aspect angles (<1deg).
 """
-from six import string_types
+
 import numpy as np
 import scipy.constants as spconst
+from six import string_types
+
+from .collision_calc import INFODICT, get_collisionfreqs, getionmass
 from .plugins import gordplugs
-from .collision_calc import get_collisionfreqs, getionmass, getionmass, INFODICT
 
 
 class Specinit(object):
@@ -47,7 +49,7 @@ class Specinit(object):
         bMag=0.4e-4,
         nspec=64,
         sampfreq=50e3,
-        collfreqmin=1e-2,
+        collfreqmin=1e-6,
         alphamax=30.0,
         dFlag=False,
         f=None,
@@ -105,7 +107,7 @@ class Specinit(object):
         heflag=False,
         seplines=False,
         *args,
-        **kwargs
+        **kwargs,
     ):
         """Gives the spectrum and the frequency vectors.
 
@@ -170,6 +172,8 @@ class Specinit(object):
         # normalize total ion density to be the same as electron density
         ionstuff[:, 0] = (estuff[0] / ionden) * ionstuff[:, 0]
 
+        ikeep = ionstuff[:, 0] / estuff[0] > 1e-4
+        ionstuff = ionstuff[ikeep]
         firstion = True
         wevec = np.zeros(Nions)
         Tivec = np.zeros(Nions)
@@ -284,12 +288,12 @@ class Specinit(object):
         """
 
         assert Islistofstr(ionspecies), "Species needs to be a list of strings"
-        assert allin(
-            ionspecies, list(INFODICT.keys())
-        ), "Have unnamed species in the list."
-        assert len(ionspecies) == len(
-            ionfracs
-        ), "Length of species names and fractions need to be same length"
+        assert allin(ionspecies, list(INFODICT.keys())), (
+            "Have unnamed species in the list."
+        )
+        assert len(ionspecies) == len(ionfracs), (
+            "Length of species names and fractions need to be same length"
+        )
 
         nspec = len(ionspecies) + 1
         datablock = np.zeros((nspec, 2))
@@ -356,13 +360,13 @@ class Specinit(object):
             The scaled density needed to calculate the RCS in m^{-3}.
         """
         assert Islistofstr(species), "Species needs to be a list of strings"
-        assert allin(
-            species, list(INFODICT.keys())
-        ), "Have unnamed species in the list."
+        assert allin(species, list(INFODICT.keys())), (
+            "Have unnamed species in the list."
+        )
         nspec = datablock.shape[0]
-        datablocknew = np.zeros((nspec, 7))
+        datablocknew = np.zeros((nspec, 8))
 
-        (nuparr, nuperp) = get_collisionfreqs(
+        (nuparr, nuperp, nuneu) = get_collisionfreqs(
             datablock, species, n_datablock=n_datablock, n_species=n_species
         )
         for nspec, ispec in enumerate(species):
@@ -372,6 +376,7 @@ class Specinit(object):
             if col_calc:
                 datablocknew[nspec, 5] = nuparr[nspec]
                 datablocknew[nspec, 6] = nuparr[nspec]
+                datablocknew[nspec, 7] = nuneu[nspec]
 
         return self.getspec(
             datablocknew,

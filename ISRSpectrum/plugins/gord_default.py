@@ -4,18 +4,15 @@
 This module will calcualte the Gordeyve integral for various cases, with collisions, with a magnetic field up to .1 degrees off of perp to B. This cut is controlled by an assert statement.
 """
 
-
 import numpy as np
-import scipy.special as sp_spec
 import scipy.constants as spconst
-import numpy as np
 import scipy.fftpack as fftsy
+import scipy.special as sp_spec
 
 
 class GordPlug:
-
     def calcgordeyev(
-        self, dataline, alpha, K, omeg, bMag, collfreqmin=1e-2, alphamax=30, dFlag=False
+        self, dataline, alpha, K, omeg, bMag, collfreqmin=1e-6, alphamax=30, dFlag=False
     ):
         """
         Performs the Gordeyve integral calculation for main cases from the first Kudeki/Milla paper.
@@ -30,7 +27,9 @@ class GordPlug:
                 Vs - The Doppler velocity in m/s.
                 qs - The charge of the species in elementary charges. (Value will be replaced for the electrons)
                 ms - Mass of the species in AMU. (Value will be replaced for the electrons)
-                nus - Collision frequency for species in s^-1.
+                nuparr - Parallel collision frequency for species in s^-1.
+                nuperp - Perpendicular collision frequency for species in s^-1
+                nuneu - Neutral collision frequency for species in s^-1
         alphadeg : float
             The magnetic aspect angle in radians.
         K : float
@@ -60,71 +59,86 @@ class GordPlug:
             An array of the Doppler corrected radian frequency
         """
 
-        assert (
-            alpha > 0.1
-        ), "Angle off of perp to B must be greater than .1 degrees otherwise integral will not converge."
-        assert (
-            len(dataline) >= 6
-        ), "The dataline input needs to be length of at least 6 elements."
-        (Ns, Ts, Vs, qs, ms, nus) = dataline[:6]
+        assert alpha > 0.1 * np.pi / 180.0, (
+            "Angle off of perp to B must be greater than .1 degrees otherwise integral will not converge."
+        )
+        assert len(dataline) >= 8, (
+            "The dataline input needs to be length of at least 8 elements."
+        )
+        (Ns, Ts, Vs, qs, ms, nuparr, nuperp, nuneu) = dataline
 
+        # if ms == 16:
+        #     import ipdb
+
+        #     ipdb.set_trace()
         if qs < 0:
             qs = -spconst.e
             ms = spconst.m_e
         else:
             qs = qs * spconst.e
             ms = ms * spconst.m_p
-
-        nur = np.pi * 2 * nus
+        # Thermal Speed
         C = np.sqrt(spconst.k * Ts / ms)
+        # Normalization Term
+        o_norm = K * C * np.sqrt(2)
+        nuparr_n = nuparr / o_norm
+        nuperp_n = nuperp / o_norm
+        nuneu_n = nuneu / o_norm
+
         omeg_s = omeg - K * Vs
         theta = omeg_s / (K * C * np.sqrt(2.0))
         Om = qs * bMag / ms
+        Om_n = Om / o_norm
         # determine what integral is used
         magbool = alpha * 180.0 / np.pi < alphamax
-        collbool = collfreqmin * C * K < nur
+        # colminrad = collfreqmin * C * K
+        collbool = (
+            (nuparr_n + nuperp_n) > collfreqmin
+        )  # colminrad < nuparr_r or colminrad < nuperp_r or colminrad < nuneu_r
 
+        # if Ts > 1500:
+        #     import ipdb
+
+        #     ipdb.set_trace()
         if not collbool and not magbool:
             # for case with no collisions or magnetic field just use analytic method
             num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
                 theta
             )
-            den_g = K * C * np.sqrt(2)
+            den_g = o_norm
             gord = num_g / den_g
 
             if dFlag:
                 print("\t No collisions No magnetic field,again")
             return (gord, Ts, Ns, qs, omeg_s)
 
-        elif collbool and not magbool:
-            if dFlag:
-                print("\t With collisions No magnetic field")
-            gordfunc = collacf
-            exparams = (K, C, nur)
-        elif not collbool and magbool:
-            if dFlag:
-                print("\t No collisions with magnetic field")
-            gordfunc = magacf
-            exparams = (K, C, alpha, Om)
+        # elif collbool and not magbool:
+        #     if dFlag:
+        #         print("\t With collisions No magnetic field")
+        #     gordfunc = collacf
+        #     exparams = (nuparr_n, nuperp_n, nuneu_n)
+        # elif not collbool and magbool:
+        #     if dFlag:
+        #         print("\t No collisions with magnetic field")
+        #     gordfunc = magacf
+        #     exparams = (alpha, Om_n)
         else:
             if dFlag:
                 print("\t With collisions with magnetic field")
             gordfunc = magncollacf
-            exparams = (K, C, alpha, Om, nur)
+            exparams = (alpha, Om_n, nuparr_n, nuperp_n, nuneu_n)
 
-        maxf = np.abs(omeg / (2 * np.pi)).max()
+        maxf = np.abs(theta / (2 * np.pi)).max()
         T_s = 1.0 / (2.0 * maxf)
 
-        #        N_somm = 2**15
-        #        b1 = 10.0/(K*C*np.sqrt(2.0))
-        # changed ot sample grid better
-        N_somm = 2**10
+        N_somm = 100
         b1 = T_s * N_somm
-        #        b1 = interval/10.
-        #        N_somm=np.minimum(2**10,np.ceil(b1/T_s))
-        (gord, flag_c, outrep) = sommerfelderfrep(
-            gordfunc, N_somm, omeg_s, b1, Lmax=500, errF=1e-7, exparams=exparams
+
+        (Gn, flag_c, outrep) = sommerfelderfrep(
+            gordfunc, N_somm, theta, b1, Lmax=500, errF=1e-6, exparams=exparams
         )
+        # If there are neutral collision it is neccesary to to normalize by (1-nuneu*Gn) from Milla and Kudeki's 2009 paper
+        gord = Gn / (1 - nuneu_n * Gn) / o_norm
         if dFlag:
             yna = ["No", "Yes"]
             print(
@@ -136,97 +150,124 @@ class GordPlug:
         return (gord, Ts, Ns, qs, omeg_s)
 
 
-def magacf(tau, K, C, alpha, Om):
+def simpacf(tt):
+    """Single particle ACF for case with no collisions and magnetic field. Used to make sure numerical integration is correct.
+
+    Parameters
+    ----------
+    tt : ndarray
+        The time vector for the acf in sqrt(2)*K*C seconds.
+
+    Returns
+    -------
+    spacf : ndarray
+        The single particle acf.
+    """
+    return np.exp(-(tt**2) / 4.0)
+
+
+def magacf(tt, alpha, Om):
     """Create a single particle acf for a species with magnetic field but no collisions.
 
     Parameters
     ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
+    tt : ndarray
+        The time vector for the acf in sqrt(2)*K*C seconds.
     alpha : float
         Magnetic aspect angle in radians.
     Om : float
-        The gyrofrequency of the particle.
+        The gyrofrequency of the particle normalized by sqrt(2)*K*C.
 
     Returns
     -------
     spacf : ndarray
         The single particle acf.
     """
-    Kpar = np.sin(alpha) * K
-    Kperp = np.cos(alpha) * K
+    par = np.sin(alpha)
+    perp = np.cos(alpha)
 
-    par_ex = -np.power(C * Kpar * tau, 2.0) / 2.0
-    perp_ex = -2.0 * np.power((Kperp * C * np.sin(Om * tau / 2.0)) / Om, 2.0)
+    par_ex = -np.power(par * tt, 2.0) / 4.0
+    perp_ex = -1.0 * np.power((perp * np.sin(Om * tt / 2.0)) / Om, 2.0)
     spacf = np.exp(par_ex + perp_ex)
     return spacf
 
 
-def collacf(tau, K, C, nu):
+def collacf(tt, nuparr, nuperp, nuneu):
     """Create a single particle acf for a species with collisions, no magnetic field. See equation 48 in Kudeki and milla 2011.
 
     Parameters
     ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
-    nu : float
-        The collision frequency in collisions*radians/sec
+    tt : ndarray
+        The time vector for the acf in sqrt(2)*K*C seconds.
+    nuparr : float
+        The parallel collision frequency normalized by sqrt(2)*K*C
+    nuperp : float
+        The perpendicular collision frequency normalized by sqrt(2)*K*C
+    nuneu : float
+        The neutral collision frequency normalized by sqrt(2)*K*C
 
     Returns
     -------
     spacf : ndarray
         The single particle acf.
     """
-    spacf = np.exp(-np.power(K * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
-    return spacf
+
+    if nuparr + nuperp > 1e-6:
+        spacf = np.exp(
+            -2.0 * (nuparr * tt - 1 + np.exp(-nuparr * tt)) / np.power(nuparr, 2.0)
+        )
+    else:
+        spacf = np.exp(-np.power(tt, 2) / 4)
+
+    neu_acf = np.exp(-nuneu * tt)
+    return spacf * neu_acf
 
 
-def magncollacf(tau, K, C, alpha, Om, nu):
+def magncollacf(tt, alpha, Om, nuparr, nuperp, nuneu):
     """Create a single particle acf for a species with magnetic field and collisions.
 
     Parameters
     ----------
-    tau : ndarray
-        The time vector for the acf.
-    K : float
-        Bragg scatter vector magnetude.
-    C : float
-        Thermal speed of the species.
+    tt : ndarray
+        The time vector for the acf in sqrt(2)*K*C seconds.
     alpha : float
         Magnetic aspect angle in radians.
     Om : float
-        The gyrofrequency of the particle.
-    nu : float
-        The collision frequency in collisions*radians/sec
+        The gyrofrequency of the particle normalized by sqrt(2)*K*C.
+    nuparr : float
+        The parallel collision frequency normalized by sqrt(2)*K*C
+    nuperp : float
+        The perpendicular collision frequency normalized by sqrt(2)*K*C
+    nuneu : float
+        The neutral collision frequency normalized by sqrt(2)*K*C
 
     Returns
     -------
     acf : ndarray
         The single particle acf.
     """
-    Kpar = np.sin(alpha) * K
-    Kperp = np.cos(alpha) * K
-    gam = np.arctan(nu / Om)
-
-    deltl = np.exp(-np.power(Kpar * C / nu, 2.0) * (nu * tau - 1 + np.exp(-nu * tau)))
-    deltp = np.exp(
-        -np.power(C * Kperp, 2.0)
-        / (Om * Om + nu * nu)
-        * (
-            np.cos(2 * gam)
-            + nu * tau
-            - np.exp(-nu * tau) * (np.cos(Om * tau - 2.0 * gam))
+    par = np.sin(alpha)
+    perp = np.cos(alpha)
+    gam = np.arctan(nuperp / Om)
+    neu_acf = np.exp(-nuneu * tt)
+    if nuparr + nuperp > 1e-6:
+        deltl = np.exp(
+            -np.power(par / nuparr, 2.0) * (nuparr * tt - 1.0 + np.exp(-nuparr * tt))
         )
-    )
-    return deltl * deltp
+        deltp = np.exp(
+            -np.power(perp, 2.0)
+            / (Om**2 + nuperp**2)
+            * (
+                np.cos(2 * gam)
+                + nuperp * tt
+                - np.exp(-nuperp * tt) * (np.cos(Om * tt - 2.0 * gam))
+            )
+        )
+    else:
+        deltl = np.exp(-np.power(par * tt, 2.0) / 4.0)
+        deltp = np.exp(-1.0 * np.power((perp * np.sin(Om * tt / 2.0)) / Om, 2.0))
+
+    return deltl * deltp * neu_acf
 
 
 def chirpz(Xn, A, W, M):
@@ -336,7 +377,6 @@ def sommerfeldchirpz(
     flag_c = False
 
     for irep in range(Lmax):
-
         fk = func(k + N * dk * irep, *exparams)
         Xkold = Xk
         Xk = chirpz(fk * wk, A_0, W_0, M) * np.power(W_0, N * dk * irep * freqm) + Xk
@@ -388,8 +428,8 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
     """
     Xk = np.zeros_like(omega) * (1 + 1j)
     flag_c = False
-    for irep in range(Lmax):
 
+    for irep in range(Lmax):
         Xktemp = sommerfelderf(func, N, omega, b1 * irep, b1 * (irep + 1), exparams)
         Xkdiff = Xktemp.real**2 + Xktemp.imag**2
         Xk = Xk + Xktemp
@@ -399,6 +439,7 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
         #        Xk = Xk+Xktemp
         outrep = irep + 1
         # check for convergence
+
         if np.sum(Xkdiff / Xkpow) < errF:
             flag_c = True
             outrep = irep

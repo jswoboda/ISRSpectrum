@@ -4,8 +4,10 @@ collision_calc.py
 
 This module is used to calculate collision frequencies.
 """
-import numpy as np
+
 from pathlib import Path
+
+import numpy as np
 import pandas as pd
 
 # %% Collision frequencies
@@ -95,11 +97,15 @@ def get_collisionfreqs(
         A Nsp length numpy array that holds the parrallel collision frequencies in s^-1.
     nuperp : ndarray
         A Nsp length numpy array that holds the perpendictular collision frequencies in s^-1.
+    nuneu : ndarray
+        A Nsp length numpy array that holds the neutral collision frequencies in s^-1.
     """
 
     nuperp = np.zeros((datablock.shape[0]))
     nuparr = np.zeros_like(nuperp)
+    nuneu = np.zeros_like(nuperp)
 
+    # Translate densities to cm^-3 from m^-3 since all the constants are in cgs units.
     Ni = datablock[:-1, 0] * 1e-6
     Ti = datablock[:-1, 1]
     Ne = datablock[-1, 0] * 1e-6
@@ -124,7 +130,6 @@ def get_collisionfreqs(
     # ionion collisions
     for si, s in enumerate(species[:-1]):
         for ti, t in enumerate(species[:-1]):
-
             nuparr[si] = nuparr[si] + Bst[s][t] * Ni[ti] / np.power(Ti[ti], 1.5)
 
     if (n_datablock is not None) and (n_species is not None):
@@ -133,24 +138,21 @@ def get_collisionfreqs(
         # ion neutral collisions
         for si, s in enumerate(species[:-1]):
             for ti, t in enumerate(n_species):
-
                 curCin = Cin[s][t]
 
                 if np.isnan(curCin):
                     neuts = r_ion_neutral(s, t, Ni[si], Nn[ti], Ti[si], Tn[ti])
                 else:
-                    neuts = curCin * Ni[si]
-                nuparr[si] = nuparr[si] + neuts
+                    neuts = curCin * Nn[ti] * 1e-10
+                nuneu[si] += neuts
         # electron neutral collision frequencies
         for ti, t in enumerate(n_species):
-            nueneu = e_neutral(t, Nn[ti], Te)
-            nuperp[-1] = nuperp[-1] + nueneu
-            nuparr[-1] = nuparr[-1] + nueneu
+            nuneu[-1] += e_neutral(t, Nn[ti], Te)
 
     # according to milla and kudeki the collision for perpendicular and parrallel
     # directions only matter for the electrons
     nuperp[:-1] = nuparr[:-1]
-    return (nuparr, nuperp)
+    return (nuparr, nuperp, nuneu)
 
 
 def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
@@ -194,7 +196,6 @@ def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
     A = nudict[sp1][0]
     B = nudict[sp1][1]
     if sp1 == ("O+", "H"):
-
         nu_ineu = A * Nn * np.power(Ti / 16.0 + Tn, 0.5)
     elif sp1 == ("H+", "O"):
         nu_ineu = A * Nn * np.power(Ti, 0.5) * (1 - B * np.log10(Ti)) ** 2
@@ -204,8 +205,7 @@ def r_ion_neutral(s, t, Ni, Nn, Ti, Tn):
 
 
 def e_neutral(t, Nn, Te):
-    """This will calculate electron - neutral reactions collision frequencies. See
-    table 4.6 in Schunk and Nagy.
+    """This will calculate electron - neutral reactions collision frequencies. See table 4.6 in Schunk and Nagy.
 
     Parameters
     ----------

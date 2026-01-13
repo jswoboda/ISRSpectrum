@@ -1,9 +1,8 @@
+from . import _version
+from .collision_calc import INFODICT, get_collisionfreqs, getionmass, ioncheck
 from .ISRSpectrum import Specinit
-from .plasmaline import PLspecinit, make_pl_spec_default, get_pl_freqs_default
-from .collision_calc import ioncheck, getionmass, get_collisionfreqs
+from .plasmaline import PLspecinit, get_pl_freqs_default, make_pl_spec_default
 from .plugins import dirpath as __pluginpath__
 from .plugins import gordplugs
-
-from . import _version
 
 __version__ = _version.get_versions()["version"]

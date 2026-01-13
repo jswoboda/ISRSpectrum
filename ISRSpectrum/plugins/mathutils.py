@@ -3,6 +3,7 @@
 """
 A number of mathematical tools needed to calculate the spectra.
 """
+
 import numpy as np
 import scipy.fftpack as fftsy
 import scipy.special
@@ -115,7 +116,6 @@ def sommerfeldchirpz(
     flag_c = False
 
     for irep in range(Lmax):
-
         fk = func(k + N * dk * irep, *exparams)
         Xkold = Xk
         Xk = chirpz(fk * wk, A_0, W_0, M) * np.power(W_0, N * dk * irep * freqm) + Xk
@@ -132,7 +132,7 @@ def sommerfeldchirpz(
     return (Xk, flag_c, outrep)
 
 
-def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
+def sommerfelderfrep(func, N, omega, b1, Lmax=100, errF=1e-6, exparams=()):
     """Numerically integrate Sommerfeld like integral using erf transform function loop.
 
     This function will numerically integrate a Sommerfeld like integral, int(exp(-jwk)f(k),k=0..inf) using the ERF transform and 2N+1 samples and at most Lmax loops. If the normalized difference between the previous estimate of the output Xk is less then the parameter errF then the loop stops and a flag that represents convergence is set to true. A number of loops is also output as well.
@@ -168,7 +168,6 @@ def sommerfelderfrep(func, N, omega, b1, Lmax=1, errF=0.1, exparams=()):
     Xk = np.zeros_like(omega) * (1 + 1j)
     flag_c = False
     for irep in range(Lmax):
-
         Xktemp = sommerfelderf(func, N, omega, b1 * irep, b1 * (irep + 1), exparams)
         Xkdiff = Xktemp.real**2 + Xktemp.imag**2
         Xk = Xk + Xktemp
@@ -201,7 +200,7 @@ def sommerfelderf(func, N, omega, a, b, exparams=()):
     a : float
         Lower bound of the integral.
     b : float
-        Upper bound of teh integral.
+        Upper bound of the integral.
     exparams :tuple
         Any extra params other then k to create f(k), default ().
 

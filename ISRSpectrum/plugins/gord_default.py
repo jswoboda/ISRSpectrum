@@ -92,14 +92,8 @@ class GordPlug:
         # determine what integral is used
         magbool = alpha * 180.0 / np.pi < alphamax
         # colminrad = collfreqmin * C * K
-        collbool = (
-            (nuparr_n + nuperp_n) > collfreqmin
-        )  # colminrad < nuparr_r or colminrad < nuperp_r or colminrad < nuneu_r
+        collbool = (nuparr_n + nuperp_n) > collfreqmin
 
-        # if Ts > 1500:
-        #     import ipdb
-
-        #     ipdb.set_trace()
         if not collbool and not magbool:
             # for case with no collisions or magnetic field just use analytic method
             num_g = np.sqrt(np.pi) * np.exp(-(theta**2)) - 1j * 2.0 * sp_spec.dawsn(
@@ -112,16 +106,6 @@ class GordPlug:
                 print("\t No collisions No magnetic field,again")
             return (gord, Ts, Ns, qs, omeg_s)
 
-        # elif collbool and not magbool:
-        #     if dFlag:
-        #         print("\t With collisions No magnetic field")
-        #     gordfunc = collacf
-        #     exparams = (nuparr_n, nuperp_n, nuneu_n)
-        # elif not collbool and magbool:
-        #     if dFlag:
-        #         print("\t No collisions with magnetic field")
-        #     gordfunc = magacf
-        #     exparams = (alpha, Om_n)
         else:
             if dFlag:
                 print("\t With collisions with magnetic field")

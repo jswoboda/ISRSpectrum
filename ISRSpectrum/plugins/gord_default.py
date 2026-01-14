@@ -232,14 +232,16 @@ def magncollacf(tt, alpha, Om, nuparr, nuperp, nuneu):
     """
     par = np.sin(alpha)
     perp = np.cos(alpha)
-    gam = np.arctan(nuperp / Om)
+
     neu_acf = np.exp(-nuneu * tt)
     if nuparr + nuperp > 1e-6:
+        gam = np.arctan(nuperp / Om)
         deltl = np.exp(
             -np.power(par / nuparr, 2.0) * (nuparr * tt - 1.0 + np.exp(-nuparr * tt))
         )
         deltp = np.exp(
-            -np.power(perp, 2.0)
+            -0.5
+            * np.power(perp, 2.0)
             / (Om**2 + nuperp**2)
             * (
                 np.cos(2 * gam)

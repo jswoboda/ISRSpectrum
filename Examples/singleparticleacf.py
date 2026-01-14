@@ -4,6 +4,7 @@ This will create images of the signal particle ACFs using the default gordyev pl
 """
 
 from pathlib import Path
+from webbrowser import MacOSX
 
 import matplotlib.pylab as plt
 import numpy as np
@@ -134,7 +135,7 @@ def singleparticalacfs():
     Kperp = np.cos(d2r * almat) * K
 
     #    gordmag = np.exp(-np.power(C*Kpar*taumat,2.0)/2.0-2.0*np.power(Kperp*C*np.sin(Om*taumat/2.0)/Om,2.0))
-    gordmag = magacf(taumat, K, C, d2r * almat, Om)
+    gordmag = magacf(taumat, d2r * almat, Om)
     plt.figure()
     plt.plot(tau, gordnn, linestyle="--", color="b", linewidth=4, label="No B-field")
 
@@ -151,6 +152,45 @@ def singleparticalacfs():
     plt.legend()
     plt.savefig("ACFwmag" + pname.replace(" ", "") + ".png")
 
+    # Make fig 10 from original paper
+
+    K_p = 2 * np.pi * 2 * 50e6 / spconst.c
+    C_i = np.sqrt(spconst.k * 1000 / (16 * spconst.m_p))
+    Om_i = spconst.e * 25e-6 / (16 * spconst.m_p)
+    Om_in = Om_i / (K_p * C_i / np.sqrt(2))
+    C_e = np.sqrt(spconst.k * 1000 / (spconst.m_e))
+    Om_e = spconst.e * 25e-6 / (spconst.m_e)
+    Om_en = Om_e / (K_p * C_e / np.sqrt(2))
+    tt_m = np.linspace(0, 2.5, 1000)
+    tt_em = np.linspace(0, 40, 1000)
+    tt_i = tt_m / (Om_in / (2 * np.pi))
+    tt_e = tt_em / (Om_en / (2 * np.pi))
+    a = K_p * C_i / Om_i
+    # spa_nu0a = magacf(tt_a, 0, Om_in)
+    spa_nu0 = magncollacf(tt_i, 0, Om_in, 0, 0, 0)
+    spa_nu0d30b = magncollacf(tt_i, 0, Om_in, Om_in / 30, Om_in / 30, 0)
+    fig, ax = plt.subplots(2, 1, figsize=(6, 10))
+
+    ax[0].plot(tt_m, spa_nu0, "b-", linewidth=2, label=r"$\nu=0$")
+    ax[0].plot(tt_m, spa_nu0d30b, "r-", linewidth=2, label=r"$\nu=\Omega/30$")
+    ax[0].set_xlabel(r"$\Omega\tau/2\pi$")
+    ax[0].set_ylabel("Ion ACF")
+    ax[0].legend()
+    ax[0].set_xlim([0.0, 2.5])
+    ax[0].set_ylim([0.0, 1.0])
+    spe_nu0 = magncollacf(tt_e, 0, Om_en, 0, 0, 0)
+    spe_nu0d30b = magncollacf(tt_e, 0, Om_en, Om_in / 30, Om_en / 30, 0)
+
+    ax[1].plot(tt_em, spe_nu0, "b-", linewidth=2, label=r"$\nu=0$")
+    ax[1].plot(tt_em, spe_nu0d30b, "r-", linewidth=2, label=r"$\nu=\Omega/30$")
+    ax[1].set_xlabel(r"$\Omega\tau/2\pi$")
+    ax[1].set_ylabel("Electron ACF")
+    ax[1].set_xlim([0.0, 40.0])
+    ax[1].set_ylim([0.8, 1.0])
+    ax[1].legend()
+    fig.tight_layout()
+    plt.savefig("kmfig102011.png", dpi=300)
+    plt.close(fig)
     # # %% Error surface with both
     # almat3d = np.tile(alpha[:, np.newaxis, np.newaxis], (1, len(nuvec), len(tau)))
     # numat3d = np.tile(nuvec[np.newaxis, :, np.newaxis], (len(alpha), 1, len(tau)))

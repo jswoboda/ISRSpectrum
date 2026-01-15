@@ -152,7 +152,7 @@ def singleparticalacfs():
     plt.legend()
     plt.savefig("ACFwmag" + pname.replace(" ", "") + ".png")
 
-    # Make fig 10 from original paper
+    # Make fig 10 from Kudeki and Milla 2011.
 
     K_p = 2 * np.pi * 2 * 50e6 / spconst.c
     C_i = np.sqrt(spconst.k * 1000 / (16 * spconst.m_p))
